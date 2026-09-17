@@ -1,0 +1,60 @@
+package eu.ww86.digits
+
+class DigitsSuite extends munit.FunSuite:
+
+  test("digit root collapses to a single digit") {
+    assertEquals(Digits.root(9), 9)
+    assertEquals(Digits.root(32), 5)
+    assertEquals(Digits.root(41), 5)
+  }
+
+  test("sums split vowels from consonants") {
+    assertEquals(Digits.sums("SCALA"), Sums(vowels = 2, consonants = 7))
+    assertEquals(Digits.sums("SCALA").total, 9)
+    assertEquals(Digits.sums("SCALA").roots, Roots(2, 7, 9))
+  }
+
+  test("a name is the sum of its words") {
+    val words = List("SCALA", "LAMINAR")
+    assertEquals(Digits.sumsOfWords(words), Sums(vowels = 13, consonants = 28))
+    assertEquals(Digits.sumsOfWords(words).roots, Roots(4, 1, 5))
+  }
+
+  test("diacritics count as their base letter") {
+    assertEquals(Digits.sums("ŁÓDŹ"), Digits.sums("LODZ"))
+    assertEquals(Digits.sums("ŻÓŁW"), Sums(vowels = 6, consonants = 16))
+  }
+
+  test("letters outside the table are ignored") {
+    assertEquals(Digits.sums("SCALA 3!"), Digits.sums("SCALA"))
+  }
+
+  // Scala.js and the JVM disagree on locale-sensitive upper casing, so this runs on both platforms.
+  test("normalise upper cases and splits on anything that is not a letter") {
+    assertEquals(Words.normalise("scala laminar"), List("SCALA", "LAMINAR"))
+    assertEquals(Words.normalise("  jvm-js  "), List("JVM", "JS"))
+    assertEquals(Words.normalise("łódź"), List("ŁÓDŹ"))
+  }
+
+  test("digit counts add up to the number of letters") {
+    val counts = Digits.digitCounts(List("SCALA"))
+    assertEquals(counts.values.sum, 5)
+    assertEquals(counts.get(1), Some(3))
+    assertEquals(counts.get(3), Some(2))
+  }
+
+  test("highlights report every label a word hits") {
+    val highlights = Highlights(Map("a" -> Set(9), "b" -> Set(2), "c" -> Set(99)))
+    assertEquals(highlights.matching(Digits.sums("SCALA")), Set("a", "b"))
+    assertEquals(Highlights.none.matching(Digits.sums("SCALA")), Set.empty[String])
+  }
+
+  test("candidates keep only words hitting a highlight") {
+    val pool = List("SCALA", "LAMINAR", "ŻÓŁW")
+    assertEquals(Candidates.matching(pool, Highlights(Map("x" -> Set(11)))), List("LAMINAR"))
+  }
+
+  test("variants group by their roots") {
+    val grouped = Candidates.byRoots(List(List("SCALA"), List("LAMINAR")))
+    assertEquals(grouped.keySet, Set(Roots(2, 7, 9), Roots(2, 3, 5)))
+  }

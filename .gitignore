@@ -1,0 +1,8 @@
+target/
+project/project/
+project/target/
+.bsp/
+.bloop/
+.metals/
+.scala-build/
+.idea/
