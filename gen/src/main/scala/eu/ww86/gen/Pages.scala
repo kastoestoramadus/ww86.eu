@@ -6,44 +6,58 @@ import scalatags.Text.tags2.{main as mainTag, nav, section, title as titleTag}
 
 private val footerTag = tag("footer")
 
+/** Where a page sits in the site, so every internal link can be relative.
+  *
+  * Relative links keep the site working at a domain root, under a path prefix (which is what GitHub
+  * Pages serves before the custom domain is switched on) and straight from `file://`.
+  */
+private final case class At(depth: Int):
+  /** `path` is given from the site root, without a leading slash. */
+  def apply(path: String): String = "../" * depth + path
+
 /** Every page of the hub. Plain HTML: the pages work without JavaScript, widgets are opt-in. */
 object Pages:
 
-  def landing: String = layout("Waldemar Wosiński", Site.description)(
-    section(cls := "hero")(
-      h1(Site.author),
-      p(cls := "tagline")(Site.tagline),
-      p(cls := "links")(
-        a(href := Site.blogUrl)("Blog"),
-        a(href := "/lab/")("Lab"),
-        a(href := Site.githubUrl)("GitHub"),
-        a(href := Site.linkedInUrl)("LinkedIn")
-      )
-    ),
-    section(cls := "cards-section")(
-      h2("From the lab"),
-      p(cls := "muted")("Small things I built, each one a page you can open."),
-      div(cls := "cards")(Catalog.featured.map(card)),
-      p(cls := "more")(a(href := "/lab/")("All lab pages →"))
-    ),
-    aboutSection
-  )
-
-  def labIndex: String = layout("Lab", "Demos, tools and experiments by Waldemar Wosiński.")(
-    section(cls := "cards-section")(
-      h1("Lab"),
-      p(cls := "muted")(
-        "Working pages rather than screenshots. Some are hand-written, some were built with an AI assistant and kept exactly as they came out - the notes on each page say which."
+  def landing: String =
+    val at = At(0)
+    layout("Waldemar Wosiński", Site.description, at)(
+      section(cls := "hero")(
+        h1(Site.author),
+        p(cls := "tagline")(Site.tagline),
+        p(cls := "links")(
+          a(href := Site.blogUrl)("Blog"),
+          a(href := at("lab/index.html"))("Lab"),
+          a(href := Site.githubUrl)("GitHub"),
+          a(href := Site.linkedInUrl)("LinkedIn")
+        )
       ),
-      div(cls := "cards")(Catalog.items.map(card))
+      section(cls := "cards-section")(
+        h2("From the lab"),
+        p(cls := "muted")("Small things I built, each one a page you can open."),
+        div(cls := "cards")(Catalog.featured.map(card(_, at))),
+        p(cls := "more")(a(href := at("lab/index.html"))("All lab pages →"))
+      ),
+      aboutSection
     )
-  )
+
+  def labIndex: String =
+    val at = At(1)
+    layout("Lab", "Demos, tools and experiments by Waldemar Wosiński.", at)(
+      section(cls := "cards-section")(
+        h1("Lab"),
+        p(cls := "muted")(
+          "Working pages rather than screenshots. Some are hand-written, some were built with an AI assistant and kept exactly as they came out - the notes on each page say which."
+        ),
+        div(cls := "cards")(Catalog.items.map(card(_, at)))
+      )
+    )
 
   def digits: String =
+    val at   = At(2)
     val item = Catalog.items.find(_.slug == "digits").get
-    layout(item.title, item.blurb, withScript = true)(
+    layout(item.title, item.blurb, at, withScript = true)(
       section(cls := "page")(
-        p(cls := "breadcrumb")(a(href := "/lab/")("← Lab")),
+        p(cls := "breadcrumb")(a(href := at("lab/index.html"))("← Lab")),
         h1(item.title),
         p(cls := "muted")(item.blurb),
         div(id := "digits-widget")(
@@ -62,8 +76,8 @@ object Pages:
       )
     )
 
-  private def card(item: LabItem): Frag =
-    a(cls := "card", href := item.url)(
+  private def card(item: LabItem, at: At): Frag =
+    a(cls := "card", href := at(item.path))(
       h3(item.title),
       p(item.blurb),
       p(cls := "tech")(item.tech.mkString(" · "), span(cls := "year")(item.year.toString))
@@ -86,7 +100,7 @@ object Pages:
       )
     )
 
-  private def layout(pageTitle: String, pageDescription: String, withScript: Boolean = false)(
+  private def layout(pageTitle: String, pageDescription: String, at: At, withScript: Boolean = false)(
       sections: Frag*
   ): String =
     val fullTitle = if pageTitle == Site.author then pageTitle else s"$pageTitle · ${Site.domain}"
@@ -98,16 +112,16 @@ object Pages:
           titleTag(fullTitle),
           meta(name := "description", content := pageDescription),
           meta(name := "author", content := Site.author),
-          link(rel := "icon", href := "/favicon.svg", `type` := "image/svg+xml"),
-          link(rel := "stylesheet", href := "/css/site.css"),
-          if withScript then script(src := "/js/main.js", attr("defer").empty) else frag()
+          link(rel := "icon", href := at("favicon.svg"), `type` := "image/svg+xml"),
+          link(rel := "stylesheet", href := at("css/site.css")),
+          if withScript then script(src := at("js/main.js"), attr("defer").empty) else frag()
         ),
         body(
           nav(cls := "top")(
-            a(cls := "brand", href := "/")(Site.domain),
+            a(cls := "brand", href := at("index.html"))(Site.domain),
             span(cls := "top-links")(
-              a(href := "/lab/")("Lab"),
-              a(href := "/#about")("About"),
+              a(href := at("lab/index.html"))("Lab"),
+              a(href := at("index.html#about"))("About"),
               a(href := Site.blogUrl)("Blog")
             )
           ),

@@ -5,7 +5,7 @@ build, deployment, dependencies, conventions or discover a new gotcha, update th
 
 ## What this is
 
-Source of https://ww86.eu - Waldemar Wosiński's hub: a landing page, an "about me" section and the
+Source of the hub that will live at https://ww86.eu (today: https://blog.ww86.eu/ww86.eu/) - a landing page, an "about me" section and the
 **lab**, one page per thing built. Static output, no server, no database.
 
 The blog is a separate repository (Jekyll) published at https://blog.ww86.eu. This site links to it and
@@ -33,25 +33,22 @@ sbt "~core/testQuick"    # fast loop while changing logic
 python3 -m http.server -d target/site 4001   # preview on http://127.0.0.1:4001
 ```
 
-`buildSite` deletes `target/site`, copies `static/`, every subdirectory of `lab/` and `CNAME`, links
+`buildSite` deletes `target/site`, copies `static/` and every subdirectory of `lab/`, links
 `web` with `fullLinkJS` into `js/main.js`, then runs `eu.ww86.gen.generate` to write the pages.
 
 ## Deployment pipeline
 
 ```plaintext
 master → .github/workflows/deploy.yml → sbt test buildSite → upload-pages-artifact
-       → deploy-pages (GITHUB_TOKEN, no secrets) → GitHub Pages, custom domain ww86.eu
+       → deploy-pages (GITHUB_TOKEN, no secrets) → GitHub Pages, today at blog.ww86.eu/ww86.eu/
 ```
 
-DNS: apex `ww86.eu` on GitHub Pages A records (185.199.108-111.153); `www.ww86.eu` stays a registrar
-redirect to the apex, because the `kastoestoramadus.github.io` host already serves `blog.ww86.eu`.
+DNS: see [DNS.md](DNS.md) for the current records, the switch to the apex and the rollback.
 
-**The custom domain lives in the Pages settings, not in the `CNAME` file**: a workflow-published site
-ignores the file, so the domain was set with
-`gh api -X PUT repos/kastoestoramadus/ww86.eu/pages -f cname=ww86.eu`. The file is kept only so a
-branch-built fallback would still know the domain. Until the apex A records point at GitHub, the
-deploy succeeds but the domain does not resolve to it; enable `https_enforced` once GitHub has issued
-the certificate.
+**The custom domain lives in the Pages settings, not in a `CNAME` file** - a workflow-published site
+ignores that file, which is why the repository has none. The apex is not switched over yet, so the site
+is served at `https://blog.ww86.eu/ww86.eu/`: project sites live under the account's user site, and that
+one owns `blog.ww86.eu`. The whole procedure, both directions, is in [DNS.md](DNS.md).
 
 ## Conventions
 
@@ -65,6 +62,8 @@ the certificate.
   and about page (Scala & Big Data engineer, Warsaw, 15+ years, banking/fintech/public sector).
 - Adding a lab page: see [lab/README.md](lab/README.md), then add a `LabItem` to
   `core/src/main/scala/eu/ww86/site/Catalog.scala` (newest first).
+- **All internal links and assets are relative**, built through `At(depth)` in `gen/.../Pages.scala`, so
+  the site works at a domain root, under a path prefix and from `file://`. Never hardcode a leading `/`.
 - Every pure function in `core` gets a test. Tests are munit and must pass on both platforms.
 - Pinned versions live in `build.sbt` and `project/plugins.sbt`; bump them deliberately, one at a time.
 

@@ -14,7 +14,8 @@ final case class LabItem(
     generated: Boolean = false,
     postUrl: Option[String] = None
 ):
-  def url: String = s"/lab/$slug/"
+  /** Path from the site root, so pages can link to it relatively. */
+  def path: String = s"lab/$slug/index.html"
 
 object Catalog:
 

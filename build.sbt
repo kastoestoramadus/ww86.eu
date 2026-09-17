@@ -56,7 +56,6 @@ lazy val root = project
       IO.createDirectory(out / "js")
       IO.copyDirectory(baseDirectory.value / "static", out)
       IO.copyFile(script, out / "js" / "main.js")
-      IO.copyFile(baseDirectory.value / "CNAME", out / "CNAME")
 
       // Every subdirectory of lab/ is a self-contained artifact, copied verbatim.
       (baseDirectory.value / "lab").listFiles.toSeq.filter(_.isDirectory).foreach { artifact =>
