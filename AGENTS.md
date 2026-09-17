@@ -46,6 +46,13 @@ master → .github/workflows/deploy.yml → sbt test buildSite → upload-pages-
 DNS: apex `ww86.eu` on GitHub Pages A records (185.199.108-111.153); `www.ww86.eu` stays a registrar
 redirect to the apex, because the `kastoestoramadus.github.io` host already serves `blog.ww86.eu`.
 
+**The custom domain lives in the Pages settings, not in the `CNAME` file**: a workflow-published site
+ignores the file, so the domain was set with
+`gh api -X PUT repos/kastoestoramadus/ww86.eu/pages -f cname=ww86.eu`. The file is kept only so a
+branch-built fallback would still know the domain. Until the apex A records point at GitHub, the
+deploy succeeds but the domain does not resolve to it; enable `https_enforced` once GitHub has issued
+the certificate.
+
 ## Conventions
 
 - **English, both code and copy.** Identifiers, comments, commit messages, page text.
