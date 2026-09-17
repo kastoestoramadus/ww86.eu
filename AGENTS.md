@@ -77,3 +77,9 @@ redirect to the apex, because the `kastoestoramadus.github.io` host already serv
 - Do not touch the blog's URLs from here, and do not add a second copy of the blog's content: Disqus
   threads and RSS GUIDs over there are keyed by URL.
 - The generated site is `target/site`; nothing is committed into `docs/` and Pages is built by the workflow.
+- **The `github-pages` environment has a branch policy.** Enabling Pages created it for `main` while this
+  repo's default branch is `master`, so the first deploy failed instantly with no steps and only an
+  annotation: *Branch "master" is not allowed to deploy to github-pages*. Fixed by adding the branch:
+  `gh api -X POST repos/kastoestoramadus/ww86.eu/environments/github-pages/deployment-branch-policies -f name=master`.
+  A `deploy` job that fails in seconds with zero steps is an environment problem, not a build problem -
+  the message is in the check-run annotations, not in the logs.
