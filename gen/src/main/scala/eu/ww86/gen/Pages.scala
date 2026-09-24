@@ -77,11 +77,21 @@ object Pages:
     )
 
   private def card(item: LabItem, at: At): Frag =
-    val hreflang = item.languageNote.map(_ => attr("hreflang") := item.language.code).toSeq
-    a(cls := "card", href := at(item.path), hreflang)(
-      h3(item.title, item.languageNote.map(note => span(cls := "lang")(note))),
+    a(cls := "card", href := at(item.path), attr("hreflang") := item.language.code)(
+      h3(item.title),
       p(item.blurb),
-      p(cls := "tech")(item.tech.mkString(" · "), span(cls := "year")(item.year.toString))
+      p(cls := "tech")(
+        item.tech.mkString(" · "),
+        span(cls := "meta")(
+          img(
+            cls   := "flag",
+            src   := at(s"flags/${item.language.flag}.svg"),
+            alt   := item.languageLabel,
+            title := item.languageLabel
+          ),
+          span(cls := "year")(item.year.toString)
+        )
+      )
     )
 
   private def aboutSection: Frag =
