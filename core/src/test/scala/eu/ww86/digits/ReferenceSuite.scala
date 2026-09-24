@@ -62,6 +62,14 @@ class ReferenceSuite extends munit.FunSuite:
     }
   }
 
+  test("a name is special on the sums of its words added up, not on its words") {
+    def special(text: String) = SpecialSums.in(Digits.sumsOfWords(Words.normalise(text)))
+    // both words special, the name not
+    assertEquals(List("MARIA", "JÓZEFA", "MARIA JÓZEFA").map(special), List(List(11, 13), List(27), Nil))
+    // no word special, the name is
+    assertEquals(List("ANNA", "JAN", "ANNA JAN").map(special), List(Nil, Nil, List(16, 19)))
+  }
+
   test("special sums come in the reference's four groups") {
     assertEquals(
       SpecialSums.groups,
