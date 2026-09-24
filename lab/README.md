@@ -8,7 +8,8 @@ To publish one:
 
 1. `mkdir lab/<slug>` and put `index.html` (plus assets) inside.
 2. Add a `LabItem` for it in `core/src/main/scala/eu/ww86/site/Catalog.scala`. Title and blurb are in
-   English; if the page is not, set `language` and the card says so.
+   English; set `language` to the page's language, whose flag the card shows (a new language needs
+   `static/flags/<flag>.svg`).
 3. `sbt buildSite` and open `target/site/lab/<slug>/index.html`.
 
 Files directly in `lab/` (like this README) are not copied. Slugs written by the generator are marked

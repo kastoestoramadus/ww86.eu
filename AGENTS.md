@@ -53,8 +53,8 @@ ignores that file, which is why the repository has none. Without the custom doma
 ## Conventions
 
 - **English, both code and copy.** Identifiers, comments, commit messages, page text. The one exception
-  is a lab page written in another language: the page stays as it is, its card is in English and names
-  the language through `LabItem.language`.
+  is a lab page written in another language: the page stays as it is, its card is in English and
+  shows the flag of the page's language (`LabItem.language`, files in `static/flags/`).
 - **No personal data of third parties**, anywhere, including test fixtures: no real names of private
   people, no readings computed for them. This repository is public.
 - **The lab carries no interpretations.** `core` computes numbers and ships no labels for what they mean;
