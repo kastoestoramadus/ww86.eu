@@ -91,17 +91,31 @@ table.sums th, table.sums td { padding: 0.35rem 0.5rem; text-align: right; borde
 table.sums thead th { font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); font-weight: 500; }
 table.sums tbody th { text-align: left; font-weight: 500; }
 table.sums tr.total th, table.sums tr.total td { color: var(--accent); }
-table.sums td.special {
-  font-weight: 600;
-  background: color-mix(in srgb, var(--accent) 22%, transparent);
-  box-shadow: inset 0 0 0 3px var(--surface);
-}
+table.sums td.special, .sum.special { font-weight: 600; background: color-mix(in srgb, var(--accent) 22%, transparent); }
+table.sums td.special { box-shadow: inset 0 0 0 3px var(--surface); }
+.sum.special { padding: 0 0.25rem; border-radius: 3px; }
 table.counts { margin-top: 1.4rem; }
 table.counts tbody th { overflow-wrap: anywhere; }
 table.counts th, table.counts td { padding-left: 0.3rem; padding-right: 0.3rem; }
 table.counts thead th:first-child { text-align: left; }
 table.counts td.zero, table.counts tr.total td.zero { color: var(--muted); }
 .summary { margin-top: 0.8rem; font-size: 0.95rem; color: var(--muted); }
+
+.search { margin-top: 1.8rem; padding-top: 1.1rem; border-top: 1px solid var(--border); }
+.search h3 { margin: 0 0 0.8rem; font-size: 1.05rem; }
+.filters { display: flex; flex-wrap: wrap; gap: 0.45rem 1.2rem; margin: 0.9rem 0 0.4rem; font-size: 0.9rem; color: var(--muted); }
+.filters label { display: inline-flex; align-items: center; gap: 0.3rem; }
+.filters input { accent-color: var(--accent); }
+.filters select {
+  font: inherit;
+  color: var(--text);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 0.15rem 0.3rem;
+}
+table.found thead th:first-child { text-align: left; }
+table.found td:last-child { white-space: nowrap; }
 
 footer {
   max-width: var(--max);

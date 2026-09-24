@@ -22,6 +22,12 @@ definition and one set of tests, run on both platforms.
 `web` with `fullLinkJS` into `js/main.js`, runs `eu.ww86.gen.generate` to write the pages, then
 `eu.ww86.gen.checkLinks`, which fails the build on a link from the site root (see [DEPLOY.md](DEPLOY.md)).
 
+Data a widget needs goes the same way: `gen` reads it from its resources and `generate` writes it next to the
+page, where the widget fetches it by a relative path. The digits search reads `lab/digits/names.csv`, copied
+from `gen/src/main/resources/pesel-names.csv`, which `scripts/pesel-names` rebuilds from the PESEL register.
+Browsers refuse such a fetch from `file://`: there the search says it could not load the names and the rest of
+the page works; serve the site to try it.
+
 ## Gotchas
 
 - **Scala.js has no classpath resources.** `getClass.getResourceAsStream` and `io.Source.fromFile` do not

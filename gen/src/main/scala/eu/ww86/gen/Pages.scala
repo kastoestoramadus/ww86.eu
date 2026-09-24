@@ -77,6 +77,26 @@ object Pages:
           "The second table counts the letters that carry each digit, word by word and for the whole name; ",
           "a 0 marks a digit that no letter carries."
         ),
+        h2("Adding a name"),
+        p(
+          "The search adds one first name to the typed name and keeps the names that give the whole name the wanted roots, ",
+          "most common first. Only 81 of the 729 triples of digits can come out: the total root is the root of the other two added up."
+        ),
+        p(
+          "The names are those of living people in the PESEL register as of 20 January 2026, ",
+          a(href := "https://dane.gov.pl/pl/dataset/1667")("published on dane.gov.pl"),
+          " under CC0, with the number of people who bear each one as the first and as the second name; ",
+          "names borne first by fewer than 20 people are left out. Three filters, each one can be switched off, keep to names that read as Polish:"
+        ),
+        ul(
+          li("a minimum number of people who bear the name first;"),
+          li(
+            "also a second name: at least one person in 20 of those who bear it first has it as the second name. ",
+            "This drops transliterations such as OLEKSANDR or TETIANA, common first names in the register and hardly ever second ones; ",
+            "of the Polish names it drops TYMON;"
+          ),
+          li("Polish alphabet: no Q, V or X, which also drops XAWERY and VIOLETTA.")
+        ),
         p(
           "The arithmetic lives in a cross-compiled module, so the same code and the same tests run on the JVM and in the browser. ",
           "It carries no interpretation of the numbers: what a sum is supposed to mean is the caller's business, not the calculator's."

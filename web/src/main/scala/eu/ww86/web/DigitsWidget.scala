@@ -24,7 +24,8 @@ object DigitsWidget:
       child <-- words.map {
         case Nil  => p(cls := "muted", "Type something to see its sums.")
         case list => results(list)
-      }
+      },
+      NameSearch(words)
     )
 
   private def results(list: List[String]): HtmlElement =
