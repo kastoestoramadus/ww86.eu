@@ -50,7 +50,7 @@ object Catalog:
     LabItem(
       slug = "ursus-by-train",
       title = "Out of Warsaw by train, from Ursus",
-      blurb = "A day out west of Warsaw with no car and no change of trains: museums, cinemas, monuments and parks by the stations of two commuter lines, with filters and a walking route from each platform. Timetable details as of September 2026.",
+      blurb = "A day out of Warsaw with no car and no change of trains: museums, cinemas, monuments and parks by the stations of three lines from Ursus, two heading west and one east to Otwock, with filters and a walking route from each platform. Timetable details as of September 2026.",
       tech = List("JavaScript", "drafted with Claude"),
       year = 2026,
       language = Language.Polish
