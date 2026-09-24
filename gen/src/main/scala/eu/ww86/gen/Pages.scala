@@ -1,5 +1,6 @@
 package eu.ww86.gen
 
+import eu.ww86.digits.SpecialSums
 import eu.ww86.site.{Catalog, LabItem, Site}
 import scalatags.Text.all.*
 import scalatags.Text.tags2.{main as mainTag, nav, section, title as titleTag}
@@ -66,6 +67,11 @@ object Pages:
         p(
           "Each letter carries a digit from the 1-9 cycle, with Polish diacritics folded onto their base letter. ",
           "Vowels and consonants are summed separately, then each sum is reduced by repeated digit sum until one digit is left."
+        ),
+        p(
+          "A vowel, consonant or total sum is marked as special when it falls in one of these groups: ",
+          SpecialSums.groups.map(_.mkString(" ")).mkString(" · "),
+          ". The groups are numbers only; the page does not say what they stand for."
         ),
         p(
           "The second table counts the letters that carry each digit, word by word and for the whole name; ",
