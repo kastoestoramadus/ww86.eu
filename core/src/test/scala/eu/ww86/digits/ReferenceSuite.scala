@@ -77,6 +77,23 @@ class ReferenceSuite extends munit.FunSuite:
     )
   }
 
+  test("names completing LAMINAR to 4/3/7 come in the reference's order, most frequent first") {
+    // counts from the PESEL register as of 2026-01-20; the reference ran on the whole list of women's names
+    val pool = List(
+      GivenName("ANNA", Sex.Female, 1063756, 896075),
+      GivenName("GRAŻYNA", Sex.Female, 223100, 94852),
+      GivenName("HANNA", Sex.Female, 231647, 36833),
+      GivenName("JADWIGA", Sex.Female, 218462, 191318),
+      GivenName("KAMILA", Sex.Female, 111676, 31311),
+      GivenName("MAJA", Sex.Female, 188657, 23981),
+      GivenName("MARTYNA", Sex.Female, 143235, 20485)
+    )
+    assertEquals(
+      Candidates.completing(List("LAMINAR"), Roots(4, 3, 7), pool).map(_.name),
+      List("HANNA", "GRAŻYNA", "MARTYNA", "KAMILA")
+    )
+  }
+
   test("every letter of the table is covered") {
     val covered = reference.flatMap((name, _, _, _, _) => name.filterNot(_ == ' ')).toSet
     assertEquals(LetterTable.polish.values.keySet -- covered, Set.empty[Char])
