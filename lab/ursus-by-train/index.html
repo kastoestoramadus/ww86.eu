@@ -7,7 +7,7 @@
 :root{
   --bg:#F3F4EF; --surface:#FFFFFF; --surface-2:#E8EAE3; --ink:#17201C; --muted:#58625C; --rule:#D3D8CE;
   --r1:#B9531A; --r1-soft:#F5E2D4; --r3:#136B75; --r3-soft:#D5EBED; --s1:#2D5BA8; --s1-soft:#DCE5F5;
-  --c-kultura:#6A4C93; --c-rozrywka:#B23A48; --c-zabytki:#86662A; --c-natura:#3A7636;
+  --c-kultura:#6A4C93; --c-rozrywka:#B23A48; --c-zabytki:#86662A; --c-natura:#3A7636; --c-aktywnie:#1C78A8;
   --link:#136B75; --focus:#136B75;
   --display:"Barlow Condensed","Arial Narrow",system-ui,sans-serif;
   --body:"Source Sans 3",system-ui,-apple-system,"Segoe UI",sans-serif;
@@ -17,14 +17,14 @@
   :root:not([data-theme="light"]){
     --bg:#0F1311; --surface:#161B18; --surface-2:#1F2622; --ink:#E3E8E4; --muted:#9BA69F; --rule:#2B332E;
     --r1:#E88A4F; --r1-soft:#37241A; --r3:#4DB3BD; --r3-soft:#132E2F; --s1:#86A8E6; --s1-soft:#1A2438;
-    --c-kultura:#B6A0DD; --c-rozrywka:#EE8C96; --c-zabytki:#D6B46B; --c-natura:#8CC580;
+    --c-kultura:#B6A0DD; --c-rozrywka:#EE8C96; --c-zabytki:#D6B46B; --c-natura:#8CC580; --c-aktywnie:#6DBBE6;
     --link:#6CC3CC; --focus:#6CC3CC;
   }
 }
 :root[data-theme="dark"]{
   --bg:#0F1311; --surface:#161B18; --surface-2:#1F2622; --ink:#E3E8E4; --muted:#9BA69F; --rule:#2B332E;
   --r1:#E88A4F; --r1-soft:#37241A; --r3:#4DB3BD; --r3-soft:#132E2F; --s1:#86A8E6; --s1-soft:#1A2438;
-  --c-kultura:#B6A0DD; --c-rozrywka:#EE8C96; --c-zabytki:#D6B46B; --c-natura:#8CC580;
+  --c-kultura:#B6A0DD; --c-rozrywka:#EE8C96; --c-zabytki:#D6B46B; --c-natura:#8CC580; --c-aktywnie:#6DBBE6;
   --link:#6CC3CC; --focus:#6CC3CC;
 }
 *{box-sizing:border-box}
@@ -65,7 +65,7 @@ section.east{margin-top:32px;display:grid;grid-template-columns:repeat(auto-fit,
 .chip:hover{border-color:var(--muted)}
 .chip[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
 .dot{width:8px;height:8px;border-radius:50%;display:inline-block;flex:none}
-.dot.kultura{background:var(--c-kultura)} .dot.rozrywka{background:var(--c-rozrywka)} .dot.zabytki{background:var(--c-zabytki)} .dot.natura{background:var(--c-natura)}
+.dot.kultura{background:var(--c-kultura)} .dot.rozrywka{background:var(--c-rozrywka)} .dot.zabytki{background:var(--c-zabytki)} .dot.natura{background:var(--c-natura)} .dot.aktywnie{background:var(--c-aktywnie)}
 .count{font-family:var(--mono);font-size:12px;color:var(--muted);margin-left:auto}
 
 /* Lines */
@@ -135,6 +135,7 @@ footer p{margin:0;max-width:90ch}
       <button class="chip" id="f-cat-all" data-cat="all" aria-pressed="true">Wszystko</button>
       <button class="chip" id="f-cat-kultura" data-cat="kultura" aria-pressed="false"><span class="dot kultura"></span>Kultura</button>
       <button class="chip" id="f-cat-rozrywka" data-cat="rozrywka" aria-pressed="false"><span class="dot rozrywka"></span>Rozrywka</button>
+      <button class="chip" id="f-cat-aktywnie" data-cat="aktywnie" aria-pressed="false"><span class="dot aktywnie"></span>Aktywnie</button>
       <button class="chip" id="f-cat-zabytki" data-cat="zabytki" aria-pressed="false"><span class="dot zabytki"></span>Zabytki i historia</button>
       <button class="chip" id="f-cat-natura" data-cat="natura" aria-pressed="false"><span class="dot natura"></span>Zieleń</button>
     </div>
@@ -195,7 +196,7 @@ footer p{margin:0;max-width:90ch}
 (function(){
   var gm = function(q){ return 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(q); };
   var walk = function(from, to){ return 'https://www.google.com/maps/dir/?api=1&origin=' + encodeURIComponent(from) + '&destination=' + encodeURIComponent(to) + '&travelmode=walking'; };
-  var CAT = {kultura:'Kultura', rozrywka:'Rozrywka', zabytki:'Zabytki i historia', natura:'Zieleń'};
+  var CAT = {kultura:'Kultura', rozrywka:'Rozrywka', aktywnie:'Aktywnie', zabytki:'Zabytki i historia', natura:'Zieleń'};
 
   // dist: "at" = przy stacji, "walk" = spacer, "far" = rower/autobus, null = sprawdź trasę
   var LINES = [
@@ -210,7 +211,7 @@ footer p{margin:0;max-width:90ch}
         { n:'Muzeum Dulag 121', q:'Muzeum Dulag 121, 3 Maja 8a, Pruszków', c:'zabytki', d:null, t:'Obóz przejściowy, przez który Niemcy przepędzili mieszkańców Warszawy po Powstaniu 1944. We wtorki wstęp wolny.' },
         { n:'Muzeum Starożytnego Hutnictwa Mazowieckiego', q:'Muzeum Starożytnego Hutnictwa Mazowieckiego, pl. Jana Pawła II 2, Pruszków', c:'kultura', d:null, t:'Archeologia: dymarki i hutnictwo żelaza sprzed 2 tys. lat. Wt–pt 9–15, weekendy 11–17.' },
         { n:'Park Potulickich', q:'Park Potulickich, Pruszków', c:'natura', d:null, t:'Zabytkowy park w centrum miasta.' },
-        { n:'Arena Pruszków', q:'Arena Pruszków, Andrzeja 1, Pruszków', c:'rozrywka', d:null, t:'Kryty tor kolarski — zawody, a także wypożyczalnia rowerów torowych.' }
+        { n:'Arena Pruszków', q:'Arena Pruszków, Andrzeja 1, Pruszków', c:'aktywnie', d:null, t:'Kryty tor kolarski — zawody, a także wypożyczalnia rowerów torowych.' }
       ]},
       { n:'Parzniew', q:'Parzniew stacja kolejowa', minor:true },
       { n:'Brwinów', q:'Brwinów stacja kolejowa', places:[
@@ -230,8 +231,8 @@ footer p{margin:0;max-width:90ch}
         { n:'Park Skarbków', q:'Park Skarbków, Grodzisk Mazowiecki', c:'natura', d:null, t:'Park dawnego dworu Skarbków: Stawy Goliana i stare dęby — pomniki przyrody.' },
         { n:'Willa Foksal', q:'Willa Foksal, Grodzisk Mazowiecki', c:'zabytki', d:null, t:'Dawny dworzec Kolei Warszawsko-Wiedeńskiej z 1846 r.' },
         { n:'Kościół św. Anny', q:'Kościół św. Anny, Grodzisk Mazowiecki', c:'zabytki', d:null, t:'Świątynia budowana etapami przez ok. 200 lat; parafia wzmiankowana już w 1355 r.' },
-        { n:'Stawy Walczewskiego', q:'Stawy Walczewskiego, Grodzisk Mazowiecki', c:'natura', d:null, t:'Tereny rekreacyjne z miejskim kąpieliskiem (w sezonie).' },
-        { n:'Pływalnia Wodnik 2000', q:'Pływalnia Wodnik 2000, Grodzisk Mazowiecki', c:'rozrywka', d:null, t:'Miejski basen OSiR.' }
+        { n:'Stawy Walczewskiego', q:'Stawy Walczewskiego, Grodzisk Mazowiecki', c:'aktywnie', d:null, t:'Tereny rekreacyjne z miejskim kąpieliskiem (w sezonie).' },
+        { n:'Pływalnia Wodnik 2000', q:'Pływalnia Wodnik 2000, Grodzisk Mazowiecki', c:'aktywnie', d:null, t:'Miejski basen OSiR.' }
       ]},
       { n:'Jaktorów', q:'Jaktorów stacja kolejowa', places:[
         { n:'Pomnik ostatniego tura', q:'Pomnik tura, Jaktorów', c:'zabytki', d:null, t:'Głaz z 1972 r. w miejscu, gdzie w 1627 r. padła ostatnia turzyca na świecie. Kawałek pieszo od stacji, przy drodze 719.' },
@@ -248,7 +249,7 @@ footer p{margin:0;max-width:90ch}
         { n:'Kościół Matki Bożej Pocieszenia', q:'Kościół Matki Bożej Pocieszenia, Żyrardów', c:'zabytki', d:null, t:'Neogotycka świątynia z dwiema ok. 70-metrowymi wieżami i secesyjnymi witrażami.' },
         { n:'Stara Przędzalnia i lofty', q:'Stara Przędzalnia, Żyrardów', c:'zabytki', d:null, t:'Zrewitalizowane hale przędzalni — dziś sklepy, hotel i mieszkania.' },
         { n:'Park Dittricha', q:'Park Dittricha, Żyrardów', c:'natura', d:null, t:'Angielski park krajobrazowy nad Pisią Gągoliną: kaskady, mostki, stawy.' },
-        { n:'Aqua Żyrardów', q:'Aqua Żyrardów, Pileckiego 25, Żyrardów', c:'rozrywka', d:null, t:'Kryta pływalnia miejska.' }
+        { n:'Aqua Żyrardów', q:'Aqua Żyrardów, Pileckiego 25, Żyrardów', c:'aktywnie', d:null, t:'Kryta pływalnia miejska.' }
       ]}
     ]},
     { id:'r3', badge:'R3', title:'Ursus Północny → Sochaczew', from:'Z przystanku Warszawa Ursus Północny · R3 Koleje Mazowieckie', stops:[
