@@ -63,5 +63,3 @@ object Catalog:
       language = Language.Polish
     )
   )
-
-  def featured: List[LabItem] = items.take(3)
