@@ -23,7 +23,7 @@ object NameSearch:
 
     div(
       cls := "search",
-      h3("Add one name"),
+      h3("Find a name in the PESEL database that will change my profile to:"),
       label(
         cls := "field",
         span("Wanted roots of the whole name: vowels/consonants/total"),
