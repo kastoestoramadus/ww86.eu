@@ -83,6 +83,34 @@ class DigitsSuite extends munit.FunSuite:
     assertEquals(SpecialSums.in(Digits.sumsOfWords(Words.normalise(" - 3 "))), Nil)
   }
 
+  test("roots are read as three digits from 1 to 9 separated by slashes") {
+    assertEquals(Roots.parse("7/3/1"), Some(Roots(7, 3, 1)))
+    assertEquals(Roots.parse(" 7 / 3 / 1 "), Some(Roots(7, 3, 1)))
+    assertEquals(List("7/3", "7/3/1/1", "7/3/10", "0/3/3", "a/b/c", "").map(Roots.parse), List.fill(6)(None))
+  }
+
+  test("the total root follows from the vowel and consonant roots") {
+    assertEquals(Roots.totalOf(7, 3), 1)
+    assert(Roots(7, 3, 1).isPossible)
+    assert(!Roots(7, 3, 5).isPossible)
+  }
+
+  test("the page offers every possible triple of roots, in order, and nothing else") {
+    val all = Roots.possible
+    assertEquals(all.size, 81)
+    assertEquals(all.distinct, all)
+    assert(all.forall(_.isPossible))
+    assertEquals(all.take(3), List(Roots(1, 1, 2), Roots(1, 2, 3), Roots(1, 3, 4)))
+    assertEquals(all.last, Roots(9, 9, 9))
+  }
+
+  test("a name already among the words, or with a letter outside the table, is not offered") {
+    val anna = GivenName("ANNA", Sex.Female, 2, 1)
+    val jose = GivenName("JOSÉ", Sex.Male, 2, 1)
+    assertEquals(Candidates.completing(List("ANNA"), Digits.sumsOfWords(List("ANNA", "ANNA")).roots, List(anna)), Nil)
+    assertEquals(Candidates.completing(Nil, Digits.sums("JOS").roots, List(jose)), Nil)
+  }
+
   test("highlights report every label a word hits") {
     val highlights = Highlights(Map("a" -> Set(9), "b" -> Set(2), "c" -> Set(99)))
     assertEquals(highlights.matching(Digits.sums("SCALA")), Set("a", "b"))

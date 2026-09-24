@@ -36,6 +36,27 @@ object Sums:
 final case class Roots(vowels: Int, consonants: Int, total: Int):
   override def toString: String = s"$vowels/$consonants/$total"
 
+  /** Whether any name can have these roots. */
+  def isPossible: Boolean = total == Roots.totalOf(vowels, consonants)
+
+object Roots:
+  /** Roots written as the page shows them, "7/3/1": three digits from 1 to 9, spaces around them allowed. */
+  def parse(text: String): Option[Roots] =
+    text.split("/", -1).map(_.trim).toList match
+      case List(v, c, t) if List(v, c, t).forall(d => d.length == 1 && d.head >= '1' && d.head <= '9') =>
+        Some(Roots(v.toInt, c.toInt, t.toInt))
+      case _ => None
+
+  /** The total root is not free: sums add up, and so do their roots. */
+  def totalOf(vowels: Int, consonants: Int): Int = Digits.root(vowels + consonants)
+
+  /** Every triple a name can have, by vowel root and then consonant root: 81 of the 729. */
+  val possible: List[Roots] =
+    for
+      vowels     <- (1 to 9).toList
+      consonants <- (1 to 9).toList
+    yield Roots(vowels, consonants, totalOf(vowels, consonants))
+
 object Digits:
 
   /** Repeated digit sum: 162 -> 1+6+2 = 9. */
@@ -119,3 +140,21 @@ object Candidates:
       table: LetterTable = LetterTable.polish
   ): Seq[String] =
     pool.filter(word => table.covers(word) && highlights.matching(Digits.sums(word, table)).nonEmpty)
+
+  /** Names from `pool` that, added to `words`, give the whole name the `wanted` roots; most frequent first.
+    * A name already among the words is not offered again.
+    */
+  def completing(
+      words: Seq[String],
+      wanted: Roots,
+      pool: Seq[GivenName],
+      table: LetterTable = LetterTable.polish
+  ): List[GivenName] =
+    val base = Digits.sumsOfWords(words, table)
+    pool
+      .filter { candidate =>
+        table.covers(candidate.name) && !words.contains(candidate.name) &&
+        (base + Digits.sums(candidate.name, table)).roots == wanted
+      }
+      .sortBy(candidate => (-candidate.asFirst, candidate.name))
+      .toList
