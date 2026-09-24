@@ -27,7 +27,7 @@ definition and one set of tests, run on both platforms.
 ## Commands
 
 ```bash
-sbt test                 # core tests on the JVM and on Scala.js
+sbt test                 # core tests on the JVM and on Scala.js, gen tests on the JVM
 sbt buildSite            # whole site into target/site
 sbt buildPreview         # the same plus a noindex copy in target/preview, as a PR gets it
 sbt "~core/testQuick"    # fast loop while changing logic
