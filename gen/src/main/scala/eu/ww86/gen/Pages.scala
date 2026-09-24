@@ -46,7 +46,7 @@ object Pages:
       section(cls := "cards-section")(
         h1("Lab"),
         p(cls := "muted")(
-          "Working pages rather than screenshots. Some are hand-written, some were built with an AI assistant and kept exactly as they came out - the notes on each page say which."
+          "Working pages rather than screenshots. Some are hand-written; the ones drafted with an AI assistant were edited for readers and say so on their card."
         ),
         div(cls := "cards")(Catalog.items.map(card(_, at)))
       )
