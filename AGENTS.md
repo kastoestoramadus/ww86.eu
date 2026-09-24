@@ -46,7 +46,7 @@ python3 -m http.server -d target/site 4001   # serve it on http://127.0.0.1:4001
   people, no readings computed for them. This repository is public.
 - **The lab carries no interpretations.** `core` computes numbers and ships no labels for what they mean;
   anything that reads meaning into a result belongs to a different site. See `Highlights`, which takes
-  its labels from the caller.
+  its labels from the caller, and `SpecialSums`, whose groups are bare numbers with no names.
 - Shared texts and links live in `eu.ww86.site.Site`; keep them consistent with the blog's `_config.yml`
   and about page (Scala & Big Data engineer, Warsaw, 15+ years, banking/fintech/public sector).
 - **All internal links and assets are relative**, built through `At(depth)` in `gen/.../Pages.scala`, so

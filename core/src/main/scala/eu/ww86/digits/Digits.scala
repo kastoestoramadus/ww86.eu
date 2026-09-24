@@ -86,6 +86,23 @@ final case class Highlights(byLabel: Map[String, Set[Int]]):
 object Highlights:
   val none: Highlights = Highlights(Map.empty)
 
+/** Sums worth marking, in the groups the old scratchpad checked them in.
+  *
+  * Numbers only, like [[Highlights]]: the groups carry no names, and nothing here says what they stand for.
+  */
+object SpecialSums:
+  val groups: List[List[Int]] = List(
+    List(11, 22, 33, 44, 55, 66, 77, 88, 99, 111, 222),
+    List(13, 14, 16, 19, 26),
+    List(17, 41),
+    List(27)
+  )
+
+  def isSpecial(sum: Int): Boolean = groups.exists(_.contains(sum))
+
+  /** The special ones among the vowel, consonant and total sums, in that order, each value once. */
+  def in(sums: Sums): List[Int] = List(sums.vowels, sums.consonants, sums.total).filter(isSpecial).distinct
+
 object Candidates:
 
   /** Groups whole name variants by their triple of digit roots. */

@@ -1,7 +1,7 @@
 package eu.ww86.web
 
 import com.raquo.laminar.api.L.{*, given}
-import eu.ww86.digits.{Digits, Sums, Words}
+import eu.ww86.digits.{Digits, SpecialSums, Sums, Words}
 
 object DigitsWidget:
 
@@ -44,6 +44,12 @@ object DigitsWidget:
         strong(whole.roots.toString),
         s" from ${whole.vowels} + ${whole.consonants} = ${whole.total}."
       ),
+      p(
+        cls := "summary",
+        SpecialSums.in(whole) match
+          case Nil     => "No special sum in the whole name."
+          case special => s"Special sums of the whole name: ${special.mkString(", ")}."
+      ),
       table(
         cls := "sums counts",
         thead(tr(th("letters per digit"), (1 to 9).map(digit => th(digit.toString)))),
@@ -59,11 +65,14 @@ object DigitsWidget:
     tr(
       cls("total") := isTotal,
       th(word),
-      td(sums.vowels.toString),
-      td(sums.consonants.toString),
-      td(sums.total.toString),
+      sumCell(sums.vowels),
+      sumCell(sums.consonants),
+      sumCell(sums.total),
       td(sums.roots.toString)
     )
+
+  private def sumCell(sum: Int): HtmlElement =
+    td(cls("special") := SpecialSums.isSpecial(sum), sum.toString)
 
   private def countsRow(word: String, counts: List[(Int, Int)], isTotal: Boolean = false): HtmlElement =
     tr(

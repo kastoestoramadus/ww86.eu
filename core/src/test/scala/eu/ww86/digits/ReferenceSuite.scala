@@ -41,6 +41,42 @@ class ReferenceSuite extends munit.FunSuite:
     }
   }
 
+  // name, its special sums, the groups they fall in; the groups are the scratchpad's four checks, run unchanged
+  private val special = List(
+    ("ANNA", Nil, Set.empty[Int]),
+    ("AGNIESZKA", List(16), Set(1)),
+    ("KATARZYNA", List(33), Set(0)),
+    ("PIOTR", List(33), Set(0)),
+    ("MARIA", List(11, 13), Set(0, 1)),
+    ("ANDRZEJ", List(27, 33), Set(0, 3)),
+    ("JULIA", List(13, 17), Set(1, 2)),
+    ("ZOFIA ANNA MARIA", List(66), Set(0)),
+    ("MARIA JÓZEFA", Nil, Set.empty[Int])
+  )
+
+  special.foreach { (name, sums, groups) =>
+    test(s"$name has the special sums the reference finds") {
+      val marked = SpecialSums.in(Digits.sumsOfWords(Words.normalise(name)))
+      assertEquals(marked, sums)
+      assertEquals(SpecialSums.groups.indices.filter(i => SpecialSums.groups(i).exists(marked.contains)).toSet, groups)
+    }
+  }
+
+  test("a name is special on the sums of its words added up, not on its words") {
+    def special(text: String) = SpecialSums.in(Digits.sumsOfWords(Words.normalise(text)))
+    // both words special, the name not
+    assertEquals(List("MARIA", "JÓZEFA", "MARIA JÓZEFA").map(special), List(List(11, 13), List(27), Nil))
+    // no word special, the name is
+    assertEquals(List("ANNA", "JAN", "ANNA JAN").map(special), List(Nil, Nil, List(16, 19)))
+  }
+
+  test("special sums come in the reference's four groups") {
+    assertEquals(
+      SpecialSums.groups,
+      List(List(11, 22, 33, 44, 55, 66, 77, 88, 99, 111, 222), List(13, 14, 16, 19, 26), List(17, 41), List(27))
+    )
+  }
+
   test("every letter of the table is covered") {
     val covered = reference.flatMap((name, _, _, _, _) => name.filterNot(_ == ' ')).toSet
     assertEquals(LetterTable.polish.values.keySet -- covered, Set.empty[Char])
