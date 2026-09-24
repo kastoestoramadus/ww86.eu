@@ -75,7 +75,7 @@ p { margin: 0.6rem 0; }
 }
 .field { display: block; }
 .field span { display: block; font-size: 0.85rem; color: var(--muted); margin-bottom: 0.35rem; }
-.field input {
+.field input, .field select {
   width: 100%;
   padding: 0.55rem 0.7rem;
   font-size: 1rem;
@@ -84,7 +84,7 @@ p { margin: 0.6rem 0; }
   border: 1px solid var(--border);
   border-radius: 4px;
 }
-.field input:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
+.field input:focus, .field select:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
 
 table.sums { width: 100%; border-collapse: collapse; margin-top: 1.1rem; font-variant-numeric: tabular-nums; }
 table.sums th, table.sums td { padding: 0.35rem 0.5rem; text-align: right; border-bottom: 1px solid var(--border); }
@@ -114,7 +114,9 @@ table.counts td.zero, table.counts tr.total td.zero { color: var(--muted); }
   border-radius: 4px;
   padding: 0.15rem 0.3rem;
 }
+table.found th, table.found td { padding-left: 0.3rem; padding-right: 0.3rem; }
 table.found thead th:first-child { text-align: left; }
+table.found tbody th { overflow-wrap: anywhere; }
 table.found td:last-child { white-space: nowrap; }
 
 footer {

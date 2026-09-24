@@ -34,4 +34,4 @@ object NameFilter:
 
   val foreignLetters: Set[Char] = Set('Q', 'V', 'X')
 
-  val default: NameFilter = NameFilter(Sex.Female, minBearers = 500, alsoSecond = true, polishAlphabet = true)
+  val default: NameFilter = NameFilter(Sex.Female, minBearers = 100, alsoSecond = true, polishAlphabet = true)

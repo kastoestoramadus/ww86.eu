@@ -50,6 +50,13 @@ object Roots:
   /** The total root is not free: sums add up, and so do their roots. */
   def totalOf(vowels: Int, consonants: Int): Int = Digits.root(vowels + consonants)
 
+  /** Every triple a name can have, by vowel root and then consonant root: 81 of the 729. */
+  val possible: List[Roots] =
+    for
+      vowels     <- (1 to 9).toList
+      consonants <- (1 to 9).toList
+    yield Roots(vowels, consonants, totalOf(vowels, consonants))
+
 object Digits:
 
   /** Repeated digit sum: 162 -> 1+6+2 = 9. */

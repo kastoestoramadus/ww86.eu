@@ -79,8 +79,8 @@ object Pages:
         ),
         h2("Adding a name"),
         p(
-          "The search adds one first name to the typed name and keeps the names that give the whole name the wanted roots, ",
-          "most common first. Only 81 of the 729 triples of digits can come out: the total root is the root of the other two added up."
+          "The search adds one first name to the typed name and keeps the names that give the whole name the chosen roots, ",
+          "most common first. The list offers the 81 triples a name can have out of 729: the total root is the root of the other two added up."
         ),
         p(
           "The names are those of living people in the PESEL register as of 20 January 2026, ",

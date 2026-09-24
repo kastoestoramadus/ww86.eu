@@ -11,7 +11,7 @@ object NameSearch:
   private val bearerSteps = List(20, 100, 500, 1000, 10000)
 
   def apply(words: Signal[List[String]]): HtmlElement =
-    val wanted = Var("")
+    val wanted = Var(Option.empty[Roots])
     val filter = Var(NameFilter.default)
     // written next to the page by the generator, fetched once when the widget mounts
     val names: Signal[Option[Try[List[GivenName]]]] =
@@ -27,11 +27,11 @@ object NameSearch:
       label(
         cls := "field",
         span("Wanted roots of the whole name: vowels/consonants/total"),
-        input(
-          tpe         := "text",
-          placeholder := "7/3/1",
-          value <-- wanted,
-          onInput.mapToValue --> wanted
+        select(
+          option(value := "", s"choose one of the ${Roots.possible.size} a name can have"),
+          Roots.possible.map(roots => option(value := roots.toString, roots.toString)),
+          value <-- wanted.signal.map(_.fold("")(_.toString)),
+          onChange.mapToValue --> (text => wanted.set(Roots.parse(text)))
         )
       ),
       filters(filter),
@@ -81,23 +81,14 @@ object NameSearch:
 
   private def outcome(
       words: List[String],
-      text: String,
+      wanted: Option[Roots],
       filter: NameFilter,
       names: Option[Try[List[GivenName]]]
   ): HtmlElement =
-    (Roots.parse(text), names) match
-      case _ if text.trim.isEmpty => p(cls := "muted", "Type the roots the whole name should have, for example 7/3/1.")
-      case (None, _) =>
-        p(cls := "muted", "Roots are three digits from 1 to 9 with slashes between them, for example 7/3/1.")
-      case (Some(wanted), _) if !wanted.isPossible =>
-        val total = Roots.totalOf(wanted.vowels, wanted.consonants)
-        p(
-          cls := "muted",
-          s"No name has the roots $wanted: the total root is the root of the other two added up, " +
-            s"so ${wanted.vowels}/${wanted.consonants} comes with $total, as in ${wanted.vowels}/${wanted.consonants}/$total."
-        )
-      case (_, None)                     => p(cls := "muted", "Loading the names…")
-      case (_, Some(Failure(_)))         => p(cls := "muted", "The names could not be loaded.")
+    (wanted, names) match
+      case (None, _)                          => p(cls := "muted", "Choose the roots the whole name should have.")
+      case (_, None)                          => p(cls := "muted", "Loading the names…")
+      case (_, Some(Failure(_)))              => p(cls := "muted", "The names could not be loaded.")
       case (Some(wanted), Some(Success(all))) => results(words, wanted, all.filter(filter.keeps))
 
   private def results(words: List[String], wanted: Roots, pool: List[GivenName]): HtmlElement =
