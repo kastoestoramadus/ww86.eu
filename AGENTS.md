@@ -22,6 +22,7 @@ URLs from here either: Disqus threads and RSS GUIDs over there are keyed by URL.
 | Adding or editing a lab page | [lab/README.md](lab/README.md) |
 | The workflows, `scripts/`, `gh-pages`, a preview or production that looks wrong | [DEPLOY.md](DEPLOY.md) |
 | The domain, DNS records, `www` | [DNS.md](DNS.md) |
+| Opening a PR, or telling the user about one | [PULL_REQUESTS.md](PULL_REQUESTS.md) |
 
 Link topic files, never import them with `@file`: an import loads them into every session again.
 
@@ -58,15 +59,3 @@ python3 -m http.server -d target/site 4001   # serve it on http://127.0.0.1:4001
 - **Work in a `git worktree` of your own.** Several agent sessions use this checkout at once; a
   `git checkout` in it switches the branch under all of them, and another session's next commit lands
   on your branch. It happened on 2026-09-24.
-
-## Pull requests
-
-- **Every PR links its preview in the description.** The number exists only once the PR does, so open it,
-  then edit the body. Link each page the PR changes next to the same page in production, so before and
-  after are one click apart:
-  `https://ww86.eu/lab/<slug>/index.html` → `https://ww86.eu/preview/pr-<N>/lab/<slug>/index.html`.
-  A PR that changes no page links the preview root and says the output is unchanged.
-- Open the link only when the `preview` job is done *and* Pages has deployed the `gh-pages` commit it made;
-  how to check, and why an early 404 lingers: [DEPLOY.md](DEPLOY.md).
-- `gh pr edit` fails here (gh 2.45) with a GraphQL error about Projects (classic); edit the body through
-  REST instead: `gh api -X PATCH repos/kastoestoramadus/ww86.eu/pulls/<N> -F body=@body.md`.
