@@ -46,7 +46,7 @@ object Pages:
       section(cls := "cards-section")(
         h1("Lab"),
         p(cls := "muted")(
-          "Working pages rather than screenshots. Some are hand-written, some were built with an AI assistant and kept exactly as they came out - the notes on each page say which."
+          "Working pages rather than screenshots. Some are hand-written; the ones drafted with an AI assistant were edited for readers and say so on their card."
         ),
         div(cls := "cards")(Catalog.items.map(card(_, at)))
       )
@@ -77,8 +77,9 @@ object Pages:
     )
 
   private def card(item: LabItem, at: At): Frag =
-    a(cls := "card", href := at(item.path))(
-      h3(item.title),
+    val hreflang = item.languageNote.map(_ => attr("hreflang") := item.language.code).toSeq
+    a(cls := "card", href := at(item.path), hreflang)(
+      h3(item.title, item.languageNote.map(note => span(cls := "lang")(note))),
       p(item.blurb),
       p(cls := "tech")(item.tech.mkString(" · "), span(cls := "year")(item.year.toString))
     )

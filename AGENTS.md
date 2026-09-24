@@ -52,7 +52,9 @@ ignores that file, which is why the repository has none. Without the custom doma
 
 ## Conventions
 
-- **English, both code and copy.** Identifiers, comments, commit messages, page text.
+- **English, both code and copy.** Identifiers, comments, commit messages, page text. The one exception
+  is a lab page written in another language: the page stays as it is, its card is in English and names
+  the language through `LabItem.language`.
 - **No personal data of third parties**, anywhere, including test fixtures: no real names of private
   people, no readings computed for them. This repository is public.
 - **The lab carries no interpretations.** `core` computes numbers and ships no labels for what they mean;
@@ -61,7 +63,11 @@ ignores that file, which is why the repository has none. Without the custom doma
 - Shared texts and links live in `eu.ww86.site.Site`; keep them consistent with the blog's `_config.yml`
   and about page (Scala & Big Data engineer, Warsaw, 15+ years, banking/fintech/public sector).
 - Adding a lab page: see [lab/README.md](lab/README.md), then add a `LabItem` to
-  `core/src/main/scala/eu/ww86/site/Catalog.scala` (newest first).
+  `core/src/main/scala/eu/ww86/site/Catalog.scala` (newest first). Pages drafted in a chat with an AI
+  assistant were written for one reader and need the editing pass described there before they land.
+- **Not every artifact belongs in the lab.** Screen claude.ai artifacts before proposing them: nothing
+  that locates the author's home, nothing from job applications or interview processes, nothing copied
+  from someone else's published work.
 - **All internal links and assets are relative**, built through `At(depth)` in `gen/.../Pages.scala`, so
   the site works at a domain root, under a path prefix and from `file://`. Never hardcode a leading `/`.
 - Every pure function in `core` gets a test. Tests are munit and must pass on both platforms.
