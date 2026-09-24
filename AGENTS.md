@@ -65,7 +65,8 @@ Rules of the pipeline:
   at workflow level.
 - Previews exist only for PRs from this repo, not for forks and not for Dependabot: their token is
   read-only. A preview is live about a minute after the job (Pages has to build the branch) and
-  disappears when the PR is closed.
+  disappears when the PR is closed. It is built from the PR merged into master as master stood at the
+  PR's last push, so it goes stale when master moves: rebase and push to refresh it.
 - A preview is `target/site` copied as it is, plus `<meta name="robots" content="noindex, nofollow">` on
   every page (`buildPreview`, `eu.ww86.gen.Preview`); `static/robots.txt` disallows `/preview/`. Nothing is
   rebuilt for the other path because every link is relative, and `buildSite` keeps it that way: it fails
@@ -112,8 +113,22 @@ under the account's user site, which owns `blog.ww86.eu`), and the relative link
   from someone else's published work.
 - **All internal links and assets are relative**, built through `At(depth)` in `gen/.../Pages.scala`, so
   the site works at a domain root, under a path prefix and from `file://`. Never hardcode a leading `/`.
-- Every pure function in `core` gets a test. Tests are munit and must pass on both platforms.
+- Every pure function in `core` gets a test, which must pass on both platforms. `gen` has JVM-only tests
+  for what the generator writes. All tests are munit.
 - Pinned versions live in `build.sbt` and `project/plugins.sbt`; bump them deliberately, one at a time.
+
+## Pull requests
+
+- **Every PR links its preview in the description.** The number exists only once the PR does, so open it,
+  then edit the body. Link each page the PR changes next to the same page in production, so before and
+  after are one click apart:
+  `https://ww86.eu/lab/<slug>/index.html` → `https://ww86.eu/preview/pr-<N>/lab/<slug>/index.html`.
+  A PR that changes no page links the preview root and says the output is unchanged.
+- Open the link only when the `preview` job is done *and* Pages has built the `gh-pages` commit it made
+  (`gh api repos/kastoestoramadus/ww86.eu/pages/builds/latest`, status `built`). A 404 fetched before
+  that is cached by the CDN for a minute or two.
+- `gh pr edit` fails here (gh 2.45) with a GraphQL error about Projects (classic); edit the body through
+  REST instead: `gh api -X PATCH repos/kastoestoramadus/ww86.eu/pulls/<N> -F body=@body.md`.
 
 ## Gotchas
 
@@ -138,10 +153,21 @@ under the account's user site, which owns `blog.ww86.eu`), and the relative link
 - Branch-based Pages rebuilds after every push to `gh-pages`, preview or not, and has a soft limit of
   10 builds per hour; a burst of pushes to a PR can delay its preview. Changing the Pages *source* does
   not build the branch: request a build with `gh api -X POST repos/kastoestoramadus/ww86.eu/pages/builds`.
+- **The CDN caches 404s** for a minute or two and ignores the query string, so `?x=1` does not get past it.
+  To see what Pages serves right now, percent-encode one character of the path: `/preview/pr-%32/` is a
+  cache miss for `/preview/pr-2/`.
+- Two pushes to `gh-pages` seconds apart cancel the first Pages build. The builds API reports it as
+  `errored`, "Page build failed.", the `pages-build-deployment` run as `cancelled`; only the last build
+  counts.
+- Saving the custom domain in the Pages settings commits a `CNAME` straight to `gh-pages` ("Delete CNAME",
+  "Create CNAME"). The next master publish rewrites it from `static/CNAME`, so a domain change goes there.
 - Every publish adds a commit to `gh-pages`; the history only grows (the site limit is 1 GB, previews
   count towards it). Squash it by recreating the branch (recipe above) if it ever matters.
 - **A job that fails in seconds with zero steps is an environment problem**, not a build problem: the
   message is in the check-run annotations, not in the logs. It happened with the `github-pages`
   environment, created with a branch policy for `main` while this repo uses `master`.
 - Until 2026-09-24 the site was published by `actions/deploy-pages` (Pages build type "workflow"), which
-  ignores a `CNAME` file and keeps the domain in the Pages settings only.
+  ignores a `CNAME` file and keeps the domain in the Pages settings only. Such a deployment still wins
+  over the branch when it is the newest: during the switch a master push that ran the old workflow
+  replaced the site and hid every preview until the next push to `gh-pages`. Never bring `deploy-pages`
+  back next to the branch source.
