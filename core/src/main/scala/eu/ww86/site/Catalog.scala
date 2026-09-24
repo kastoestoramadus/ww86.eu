@@ -41,7 +41,7 @@ object Catalog:
     LabItem(
       slug = "digits",
       title = "Letter sums and digit roots",
-      blurb = "Splits a name into vowels and consonants, adds up their letter values and reduces each sum to a single digit. The arithmetic is a pure Scala module, cross-compiled to the browser.",
+      blurb = "Splits a name into vowels and consonants, adds up their letter values, reduces each sum to a single digit and counts how many letters carry each digit. The arithmetic is a pure Scala module, cross-compiled to the browser.",
       tech = List("Scala 3", "Scala.js", "Laminar"),
       year = 2026,
       generated = true

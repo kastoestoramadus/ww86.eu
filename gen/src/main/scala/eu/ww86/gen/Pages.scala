@@ -68,6 +68,10 @@ object Pages:
           "Vowels and consonants are summed separately, then each sum is reduced by repeated digit sum until one digit is left."
         ),
         p(
+          "The second table counts the letters that carry each digit, word by word and for the whole name; ",
+          "a 0 marks a digit that no letter carries."
+        ),
+        p(
           "The arithmetic lives in a cross-compiled module, so the same code and the same tests run on the JVM and in the browser. ",
           "It carries no interpretation of the numbers: what a sum is supposed to mean is the caller's business, not the calculator's."
         ),

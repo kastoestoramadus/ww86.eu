@@ -59,6 +59,11 @@ object Digits:
   def digitCounts(words: Seq[String], table: LetterTable = LetterTable.polish): Map[Int, Int] =
     words.flatten.flatMap(table.digit).groupMapReduce(identity)(_ => 1)(_ + _)
 
+  /** [[digitCounts]] for every digit from 1 to 9 in order, so a digit no letter carries shows as 0. */
+  def countsPerDigit(words: Seq[String], table: LetterTable = LetterTable.polish): List[(Int, Int)] =
+    val counts = digitCounts(words, table)
+    (1 to 9).map(digit => digit -> counts.getOrElse(digit, 0)).toList
+
 /** Turns free-form input into the upper-case words the tables expect. */
 object Words:
   // Character.isLetter instead of a \p{L} regex: unicode property escapes need ES2018 in Scala.js.

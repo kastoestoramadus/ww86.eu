@@ -43,6 +43,14 @@ class DigitsSuite extends munit.FunSuite:
     assertEquals(counts.get(3), Some(2))
   }
 
+  test("counts per digit list all nine digits in order, zeros included") {
+    assertEquals(
+      Digits.countsPerDigit(List("SCALA")),
+      List(1 -> 3, 2 -> 0, 3 -> 2, 4 -> 0, 5 -> 0, 6 -> 0, 7 -> 0, 8 -> 0, 9 -> 0)
+    )
+    assertEquals(Digits.countsPerDigit(Nil).map(_._2), List.fill(9)(0))
+  }
+
   test("highlights report every label a word hits") {
     val highlights = Highlights(Map("a" -> Set(9), "b" -> Set(2), "c" -> Set(99)))
     assertEquals(highlights.matching(Digits.sums("SCALA")), Set("a", "b"))
