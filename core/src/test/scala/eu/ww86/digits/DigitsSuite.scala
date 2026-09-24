@@ -51,6 +51,17 @@ class DigitsSuite extends munit.FunSuite:
     assertEquals(Digits.countsPerDigit(Nil).map(_._2), List.fill(9)(0))
   }
 
+  test("special sums are looked for among the vowel, consonant and total sums, each value once") {
+    assertEquals(SpecialSums.in(Sums(vowels = 2, consonants = 7)), Nil)
+    assertEquals(SpecialSums.in(Sums(vowels = 13, consonants = 9)), List(13, 22))
+    assertEquals(SpecialSums.in(Sums(vowels = 11, consonants = 11)), List(11, 22))
+    assertEquals(SpecialSums.in(Sums(vowels = 4, consonants = 23)), List(27))
+  }
+
+  test("special sums reach past two digits only with 111 and 222") {
+    assertEquals(List(111, 222, 333, 12, 0).map(SpecialSums.isSpecial), List(true, true, false, false, false))
+  }
+
   test("highlights report every label a word hits") {
     val highlights = Highlights(Map("a" -> Set(9), "b" -> Set(2), "c" -> Set(99)))
     assertEquals(highlights.matching(Digits.sums("SCALA")), Set("a", "b"))
