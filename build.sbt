@@ -21,7 +21,10 @@ lazy val gen = project
   .dependsOn(core.jvm)
   .settings(
     name := "gen",
-    libraryDependencies += "com.lihaoyi" %% "scalatags" % scalatagsVersion
+    libraryDependencies ++= Seq(
+      "com.lihaoyi"   %% "scalatags" % scalatagsVersion,
+      "org.scalameta" %% "munit"     % munitVersion % Test
+    )
   )
 
 // Browser code: Laminar widgets mounted into containers of the generated pages.
