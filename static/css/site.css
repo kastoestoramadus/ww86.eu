@@ -91,6 +91,11 @@ table.sums th, table.sums td { padding: 0.35rem 0.5rem; text-align: right; borde
 table.sums thead th { font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); font-weight: 500; }
 table.sums tbody th { text-align: left; font-weight: 500; }
 table.sums tr.total th, table.sums tr.total td { color: var(--accent); }
+table.counts { margin-top: 1.4rem; }
+table.counts tbody th { overflow-wrap: anywhere; }
+table.counts th, table.counts td { padding-left: 0.3rem; padding-right: 0.3rem; }
+table.counts thead th:first-child { text-align: left; }
+table.counts td.zero { color: var(--muted); }
 .summary { margin-top: 0.8rem; font-size: 0.95rem; color: var(--muted); }
 
 footer {

@@ -43,6 +43,15 @@ object DigitsWidget:
         "Digit roots: ",
         strong(whole.roots.toString),
         s" from ${whole.vowels} + ${whole.consonants} = ${whole.total}."
+      ),
+      table(
+        cls := "sums counts",
+        thead(tr(th("letters per digit"), (1 to 9).map(digit => th(digit.toString)))),
+        tbody(
+          list.map(word => countsRow(word, Digits.countsPerDigit(List(word)))),
+          if list.sizeIs > 1 then countsRow(list.mkString(" "), Digits.countsPerDigit(list), isTotal = true)
+          else emptyNode
+        )
       )
     )
 
@@ -54,4 +63,11 @@ object DigitsWidget:
       td(sums.consonants.toString),
       td(sums.total.toString),
       td(sums.roots.toString)
+    )
+
+  private def countsRow(word: String, counts: List[(Int, Int)], isTotal: Boolean = false): HtmlElement =
+    tr(
+      cls("total") := isTotal,
+      th(word),
+      counts.map((_, count) => td(cls("zero") := count == 0, count.toString))
     )
