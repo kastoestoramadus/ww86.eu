@@ -55,6 +55,9 @@ python3 -m http.server -d target/site 4001   # serve it on http://127.0.0.1:4001
 - Pinned versions live in `build.sbt` and `project/plugins.sbt`; bump them deliberately, one at a time.
 - The generated site is `target/site`, the preview `target/preview`; nothing built is committed to
   `master`.
+- **Work in a `git worktree` of your own.** Several agent sessions use this checkout at once; a
+  `git checkout` in it switches the branch under all of them, and another session's next commit lands
+  on your branch. It happened on 2026-09-24.
 
 ## Pull requests
 
