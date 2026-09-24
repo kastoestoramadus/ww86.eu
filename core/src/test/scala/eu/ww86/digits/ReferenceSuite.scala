@@ -37,6 +37,7 @@ class ReferenceSuite extends munit.FunSuite:
       assertEquals(Digits.sumsOfWords(words), Sums(vowels, consonants))
       assertEquals(Digits.sumsOfWords(words).roots, roots)
       assertEquals(Digits.digitCounts(words), counts)
+      assertEquals(Digits.countsPerDigit(words), (1 to 9).map(digit => digit -> counts.getOrElse(digit, 0)).toList)
     }
   }
 
