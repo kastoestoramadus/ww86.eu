@@ -108,9 +108,6 @@ under the account's user site, which owns `blog.ww86.eu`), and the relative link
 - Adding a lab page: see [lab/README.md](lab/README.md), then add a `LabItem` to
   `core/src/main/scala/eu/ww86/site/Catalog.scala` (newest first). Pages drafted in a chat with an AI
   assistant were written for one reader and need the editing pass described there before they land.
-- **Not every artifact belongs in the lab.** Screen claude.ai artifacts before proposing them: nothing
-  that locates the author's home, nothing from job applications or interview processes, nothing copied
-  from someone else's published work.
 - **All internal links and assets are relative**, built through `At(depth)` in `gen/.../Pages.scala`, so
   the site works at a domain root, under a path prefix and from `file://`. Never hardcode a leading `/`.
 - Every pure function in `core` gets a test, which must pass on both platforms. `gen` has JVM-only tests
