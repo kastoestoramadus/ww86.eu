@@ -95,7 +95,7 @@ table.counts { margin-top: 1.4rem; }
 table.counts tbody th { overflow-wrap: anywhere; }
 table.counts th, table.counts td { padding-left: 0.3rem; padding-right: 0.3rem; }
 table.counts thead th:first-child { text-align: left; }
-table.counts td.zero { color: var(--muted); }
+table.counts td.zero, table.counts tr.total td.zero { color: var(--muted); }
 .summary { margin-top: 0.8rem; font-size: 0.95rem; color: var(--muted); }
 
 footer {
