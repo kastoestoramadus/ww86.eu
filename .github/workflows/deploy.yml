@@ -11,10 +11,11 @@ permissions:
 
 concurrency:
   group: hub-${{ github.ref }}
-  # never cancel a running deploy of master, only superseded PR builds
+  # never cancel a running publish of master, only superseded PR builds
   cancel-in-progress: ${{ github.ref != 'refs/heads/master' }}
 
 jobs:
+  # Runs all the code of the PR with a read-only token; the publishing jobs below only copy its output.
   build:
     runs-on: ubuntu-latest
     steps:
@@ -28,26 +29,104 @@ jobs:
 
       - uses: sbt/setup-sbt@v1
 
-      - name: Test and assemble the site
-        run: sbt test buildSite
+      # buildPreview runs buildSite first: target/site for https://ww86.eu, target/preview for /preview/pr-N/
+      - name: Test and assemble the site and its preview
+        run: sbt test buildPreview
 
-      - name: Upload site for GitHub Pages
+      # the script that publishes with a write token after the merge: better to find out here that it is broken
+      - name: Test the publish script
+        run: ./scripts/test-publish-pages
+
+      - name: Upload site
         if: github.event_name != 'pull_request' && github.ref == 'refs/heads/master'
-        uses: actions/upload-pages-artifact@v5
+        uses: actions/upload-artifact@v7
         with:
+          name: site
           path: target/site
+          if-no-files-found: error
+          retention-days: 1
+          overwrite: true
 
-  # Every commit that lands on master is published to https://ww86.eu (no secrets needed)
-  deploy:
+      - name: Upload preview
+        if: github.event_name == 'pull_request'
+        uses: actions/upload-artifact@v7
+        with:
+          name: preview
+          path: target/preview
+          if-no-files-found: error
+          retention-days: 1
+          overwrite: true
+
+  # Every commit that lands on master is published to https://ww86.eu: the built site goes to the root of the
+  # gh-pages branch, which GitHub Pages serves. No secrets, GITHUB_TOKEN only; contents: write on this job only.
+  # Own concurrency groups, one per target: a group holds one running and one *pending* job and a newer pending job
+  # cancels the older one, so a shared group would let a preview publish cancel a queued master publish. Races between
+  # groups (master vs. a preview) are handled by the rebase-and-retry in the script.
+  publish:
     if: github.event_name != 'pull_request' && github.ref == 'refs/heads/master'
     needs: build
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     permissions:
-      pages: write
-      id-token: write
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+      contents: write
+    concurrency:
+      group: pages-publish-master
+      cancel-in-progress: false
     steps:
-      - id: deployment
-        uses: actions/deploy-pages@v5
+      - uses: actions/checkout@v7
+        with:
+          path: src
+          persist-credentials: false
+      - uses: actions/checkout@v7
+        with:
+          ref: gh-pages
+          path: pages
+      - uses: actions/download-artifact@v8
+        with:
+          name: site
+          path: site
+      - name: Publish to gh-pages
+        env:
+          SOURCE_SHA: ${{ github.sha }}
+        run: src/scripts/publish-pages pages site site
+
+  # Every pull request from this repository gets https://ww86.eu/preview/pr-<N>/ (removed again when it is closed,
+  # see preview-cleanup.yml). Not for forks and Dependabot: their GITHUB_TOKEN is read-only, so publishing would fail.
+  # There is deliberately no pull_request_target: it would run untrusted code with a write token.
+  preview:
+    if: >-
+      github.event_name == 'pull_request'
+      && github.event.pull_request.head.repo.full_name == github.repository
+      && github.actor != 'dependabot[bot]'
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    concurrency:
+      # shared with preview-cleanup.yml, so closing the PR never interleaves with a publish of it
+      group: pages-preview-pr-${{ github.event.pull_request.number }}
+      cancel-in-progress: false
+    environment:
+      name: preview
+      url: https://ww86.eu/preview/pr-${{ github.event.pull_request.number }}/
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          path: src
+          persist-credentials: false
+      - uses: actions/checkout@v7
+        with:
+          ref: gh-pages
+          path: pages
+      - uses: actions/download-artifact@v8
+        with:
+          name: preview
+          path: preview
+      - name: Publish to gh-pages
+        env:
+          PR: ${{ github.event.pull_request.number }}
+          SOURCE_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          src/scripts/publish-pages pages preview "$PR" preview
+          echo "Preview: https://ww86.eu/preview/pr-$PR/ (live about a minute after this job, when GitHub Pages has built it)" >> "$GITHUB_STEP_SUMMARY"

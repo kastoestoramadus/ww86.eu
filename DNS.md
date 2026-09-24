@@ -11,9 +11,9 @@ item and the way back.
 | `blog.ww86.eu` | `CNAME` → `kastoestoramadus.github.io` | the Jekyll blog, a different repo. **Do not touch.** |
 | `www.ww86.eu` | registrar URL forwarding → `https://ww86.eu` | works over http only, see below |
 
-Pages settings: custom domain `ww86.eu`, certificate `approved`, `https_enforced: true`. A site published
-by a workflow takes its domain from these settings and ignores any `CNAME` file, which is why the
-repository has none.
+Pages settings: custom domain `ww86.eu`, certificate `approved`, `https_enforced: true`. Pages publishes
+the `gh-pages` branch, which takes its domain from the `CNAME` file in the branch root, copied there from
+`static/CNAME` by every publish.
 
 ```bash
 gh api repos/kastoestoramadus/ww86.eu/pages --jq '{cname, https_enforced, cert: .https_certificate.state}'
@@ -56,6 +56,9 @@ curl -sIL https://blog.ww86.eu/ww86.eu/ | grep -i '^location' # old default URL 
 
 ## Rolling back
 
+Not rehearsed since the move to the `gh-pages` branch. Delete `static/CNAME` and the check for it in
+`scripts/publish-pages`, merge, then:
+
 ```bash
 gh api -X PUT repos/kastoestoramadus/ww86.eu/pages --input - <<< '{"cname": null}'
 ```
@@ -65,6 +68,6 @@ Then put the registrar's URL forwarding back on the apex. The hub returns to its
 `blog.ww86.eu`); all internal links are relative, so it works there unchanged. The blog is unaffected
 either way.
 
-To switch back again: A/AAAA records as in the table, wait until `getent hosts ww86.eu` shows GitHub's
-addresses, `gh api -X PUT repos/kastoestoramadus/ww86.eu/pages -f cname=ww86.eu`, wait for the
-certificate, then `gh api -X PUT repos/kastoestoramadus/ww86.eu/pages -F https_enforced=true`.
+To switch back again: `static/CNAME` and its check back, A/AAAA records as in the table, wait until
+`getent hosts ww86.eu` shows GitHub's addresses, `gh api -X PUT repos/kastoestoramadus/ww86.eu/pages -f cname=ww86.eu`,
+wait for the certificate, then `gh api -X PUT repos/kastoestoramadus/ww86.eu/pages -F https_enforced=true`.

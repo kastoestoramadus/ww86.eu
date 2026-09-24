@@ -7,8 +7,10 @@ interactive bits in Scala.js with Laminar.
 ```bash
 sbt test                                      # core tests, JVM + Scala.js
 sbt buildSite                                 # site into target/site
-python3 -m http.server -d target/site 4001    # preview
+python3 -m http.server -d target/site 4001    # serve it locally
 ```
+
+Every pull request gets a preview at `https://ww86.eu/preview/pr-<N>/`, removed when it is closed.
 
 The blog lives in a separate repository: [blog.ww86.eu](https://blog.ww86.eu).
 Agent-facing notes and conventions: [AGENTS.md](AGENTS.md).

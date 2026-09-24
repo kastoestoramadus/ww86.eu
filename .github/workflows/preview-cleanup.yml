@@ -1,0 +1,39 @@
+name: Remove PR preview
+
+# Deletes preview/pr-<N>/ from the gh-pages branch when the pull request is closed (merged or not).
+on:
+  pull_request:
+    types: [closed]
+
+permissions:
+  contents: read
+
+jobs:
+  cleanup:
+    # same rule as the preview job in deploy.yml: nothing was published for forks and Dependabot, and their token is read-only
+    if: >-
+      github.event.pull_request.head.repo.full_name == github.repository
+      && github.actor != 'dependabot[bot]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    concurrency:
+      # shared with the preview job in deploy.yml: waits for a running publish of this PR, and replaces a pending one
+      group: pages-preview-pr-${{ github.event.pull_request.number }}
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          # the trusted script from the default branch, the PR's merge ref does not exist for PRs closed unmerged
+          ref: ${{ github.event.repository.default_branch }}
+          path: src
+          persist-credentials: false
+      - uses: actions/checkout@v7
+        with:
+          ref: gh-pages
+          path: pages
+      - name: Remove the preview from gh-pages
+        env:
+          PR: ${{ github.event.pull_request.number }}
+        run: src/scripts/publish-pages pages remove "$PR"
