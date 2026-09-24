@@ -1,77 +1,57 @@
 # DNS and the custom domain
 
-How to move `ww86.eu` from the registrar's redirect onto this repository's GitHub Pages site, and how to
-get back if it goes wrong. Nothing here is urgent: while the custom domain is unset, GitHub serves the
-hub on its default URL (see the last section).
+The hub has been served at https://ww86.eu since 2026-09-24. This file records the setup, the one open
+item and the way back.
 
-## Where things stand
+## Records
 
-| Name | Now | Note |
-|------|-----|------|
+| Name | Record | Serves |
+|------|--------|--------|
+| `ww86.eu` (apex) | `A` 185.199.108.153, .109.153, .110.153, .111.153 and `AAAA` 2606:50c0:8000::153 ... 8003::153 | this repository's Pages site |
 | `blog.ww86.eu` | `CNAME` → `kastoestoramadus.github.io` | the Jekyll blog, a different repo. **Do not touch.** |
-| `ww86.eu` (apex) | `A` → `143.198.68.197` | the registrar's URL forwarding, which redirects to the blog |
-| `www.ww86.eu` | registrar URL forwarding | redirects to the blog as well |
+| `www.ww86.eu` | registrar URL forwarding → `https://ww86.eu` | works over http only, see below |
 
-Verified on 2026-09-17 with `python3 -c "import socket; print(socket.gethostbyname_ex('ww86.eu'))"`.
+Pages settings: custom domain `ww86.eu`, certificate `approved`, `https_enforced: true`. A site published
+by a workflow takes its domain from these settings and ignores any `CNAME` file, which is why the
+repository has none.
 
-## The switch
+```bash
+gh api repos/kastoestoramadus/ww86.eu/pages --jq '{cname, https_enforced, cert: .https_certificate.state}'
+```
 
-**1. Lower the TTL** on the apex records to 600 seconds and wait for the old TTL to expire. Skippable,
-but it makes a rollback take minutes instead of hours.
+## Open: `www` over https
 
-**2. At the registrar**, remove the URL forwarding for the apex and add GitHub Pages' addresses:
+The registrar's forwarder does not listen on port 443, so `https://www.ww86.eu` times out while
+`http://www.ww86.eu` redirects fine. Browsers that try https first stall on it.
+
+The fix is to hand `www` to GitHub as well - replace the URL forwarding with:
 
 ```plaintext
-ww86.eu.  A  185.199.108.153
-ww86.eu.  A  185.199.109.153
-ww86.eu.  A  185.199.110.153
-ww86.eu.  A  185.199.111.153
+www.ww86.eu.  CNAME  kastoestoramadus.github.io.
 ```
 
-Optionally the same over IPv6:
-
-```plaintext
-ww86.eu.  AAAA  2606:50c0:8000::153
-ww86.eu.  AAAA  2606:50c0:8001::153
-ww86.eu.  AAAA  2606:50c0:8002::153
-ww86.eu.  AAAA  2606:50c0:8003::153
-```
-
-Leave `www.ww86.eu` as a registrar redirect, pointing it at `https://ww86.eu` instead of the blog.
-GitHub's own apex-plus-`www` pairing expects `www` to be a `CNAME` to `kastoestoramadus.github.io`, and
-that host already answers for `blog.ww86.eu`, so the registrar redirect keeps the two apart.
-
-**3. Wait for propagation**, then check that the apex resolves to GitHub:
+GitHub routes by the `Host` header, not by the CNAME target, so sharing that target with `blog.ww86.eu`
+is fine. Checked on 2026-09-24 against GitHub's servers before changing any DNS:
 
 ```bash
-getent hosts ww86.eu
+curl -sI --resolve www.ww86.eu:80:185.199.108.153 http://www.ww86.eu/     # 301 → https://ww86.eu/
+curl -sI --resolve nope-xyz.ww86.eu:80:185.199.108.153 http://nope-xyz.ww86.eu/   # 404, control
 ```
 
-**4. Set the custom domain** on this repository. A site published by a workflow ignores the `CNAME`
-file in the artifact, so this has to be a settings change:
+GitHub issues the certificate for `www` only after the record points at it, so https on `www` shows up
+some minutes after the change. Check with:
 
 ```bash
-gh api -X PUT repos/kastoestoramadus/ww86.eu/pages -f cname=ww86.eu
+curl -sI https://www.ww86.eu | grep -iE '^HTTP|^location'   # expect 301 → https://ww86.eu/
 ```
 
-**5. Wait for the certificate.** GitHub issues one automatically once the DNS check passes, usually in
-minutes:
+## Verifying the site
 
 ```bash
-gh api repos/kastoestoramadus/ww86.eu/pages --jq '{cname, status, cert: .https_certificate.state}'
-```
-
-**6. Enforce HTTPS** once the certificate state is `approved`:
-
-```bash
-gh api -X PUT repos/kastoestoramadus/ww86.eu/pages -F https_enforced=true
-```
-
-**7. Verify**, and mind that the browser may have cached the old redirect:
-
-```bash
-curl -sI https://ww86.eu | head -3
+curl -sI https://ww86.eu | head -1
 curl -s https://ww86.eu/lab/digits/index.html | grep -o 'js/main.js'
+curl -sI http://ww86.eu | grep -i '^location'                 # → https://ww86.eu/
+curl -sIL https://blog.ww86.eu/ww86.eu/ | grep -i '^location' # old default URL → https://ww86.eu/
 ```
 
 ## Rolling back
@@ -80,26 +60,11 @@ curl -s https://ww86.eu/lab/digits/index.html | grep -o 'js/main.js'
 gh api -X PUT repos/kastoestoramadus/ww86.eu/pages --input - <<< '{"cname": null}'
 ```
 
-Then restore the registrar's URL forwarding for the apex. The hub returns to the default URL below, and
-`blog.ww86.eu` is unaffected either way.
+Then put the registrar's URL forwarding back on the apex. The hub returns to its default URL,
+`https://blog.ww86.eu/ww86.eu/` (project sites live under the account's user site, which owns
+`blog.ww86.eu`); all internal links are relative, so it works there unchanged. The blog is unaffected
+either way.
 
-## The default URL, with no custom domain
-
-Project sites live under the account's user site. That site has its own custom domain, so the hub is at:
-
-```plaintext
-https://blog.ww86.eu/ww86.eu/
-```
-
-`https://kastoestoramadus.github.io/ww86.eu/` redirects there. Every internal link and asset in the
-generated pages is relative, so the site works unchanged under that path prefix - but it is served from
-the blog's hostname, which is a reason not to hand that link around.
-
-If you want a real URL before committing the apex, a subdomain costs one DNS record and no redirect:
-
-```plaintext
-hub.ww86.eu.  CNAME  kastoestoramadus.github.io.
-```
-
-followed by `gh api -X PUT repos/kastoestoramadus/ww86.eu/pages -f cname=hub.ww86.eu`. The apex keeps
-redirecting to the blog until you are ready.
+To switch back again: A/AAAA records as in the table, wait until `getent hosts ww86.eu` shows GitHub's
+addresses, `gh api -X PUT repos/kastoestoramadus/ww86.eu/pages -f cname=ww86.eu`, wait for the
+certificate, then `gh api -X PUT repos/kastoestoramadus/ww86.eu/pages -F https_enforced=true`.

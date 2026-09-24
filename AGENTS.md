@@ -5,7 +5,7 @@ build, deployment, dependencies, conventions or discover a new gotcha, update th
 
 ## What this is
 
-Source of the hub that will live at https://ww86.eu (today: https://blog.ww86.eu/ww86.eu/) - a landing page, an "about me" section and the
+Source of https://ww86.eu - Waldemar Wosiński's hub: a landing page, an "about me" section and the
 **lab**, one page per thing built. Static output, no server, no database.
 
 The blog is a separate repository (Jekyll) published at https://blog.ww86.eu. This site links to it and
@@ -40,15 +40,15 @@ python3 -m http.server -d target/site 4001   # preview on http://127.0.0.1:4001
 
 ```plaintext
 master → .github/workflows/deploy.yml → sbt test buildSite → upload-pages-artifact
-       → deploy-pages (GITHUB_TOKEN, no secrets) → GitHub Pages, today at blog.ww86.eu/ww86.eu/
+       → deploy-pages (GITHUB_TOKEN, no secrets) → GitHub Pages, custom domain ww86.eu
 ```
 
-DNS: see [DNS.md](DNS.md) for the current records, the switch to the apex and the rollback.
+DNS records, the open `www` item and the rollback: [DNS.md](DNS.md).
 
 **The custom domain lives in the Pages settings, not in a `CNAME` file** - a workflow-published site
-ignores that file, which is why the repository has none. The apex is not switched over yet, so the site
-is served at `https://blog.ww86.eu/ww86.eu/`: project sites live under the account's user site, and that
-one owns `blog.ww86.eu`. The whole procedure, both directions, is in [DNS.md](DNS.md).
+ignores that file, which is why the repository has none. Without the custom domain the site falls back to
+`https://blog.ww86.eu/ww86.eu/` (project sites live under the account's user site, which owns
+`blog.ww86.eu`), and the relative links keep it working there.
 
 ## Conventions
 
@@ -76,8 +76,8 @@ one owns `blog.ww86.eu`. The whole procedure, both directions, is in [DNS.md](DN
   linker output into a directory, which `buildSite` already tolerates, and requires `type="module"`.
 - **Laminar 17 API**: `onInput.mapToValue --> var`, `child <-- signal`, `cls(name) := boolean`. Older
   snippets (Laminar 0.x) use a different Airstream API and will not compile.
-- **ScalaTags name clashes**: `title`, `main`, `nav`, `section`, `footer` are in `scalatags.Text.tags2`,
-  not in `all` - see the imports in `gen/.../Pages.scala`.
+- **ScalaTags name clashes**: `title`, `main`, `nav` and `section` are in `scalatags.Text.tags2`, not in
+  `all`; `footer` is in neither, hence `tag("footer")` - see the top of `gen/.../Pages.scala`.
 - **Locale-sensitive `toUpperCase`** differs between the JVM and JS engines; go through `Words.normalise`
   and keep the cross-platform test that covers Polish letters.
 - Do not touch the blog's URLs from here, and do not add a second copy of the blog's content: Disqus
