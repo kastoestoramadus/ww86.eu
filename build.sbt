@@ -21,7 +21,10 @@ lazy val gen = project
   .dependsOn(core.jvm)
   .settings(
     name := "gen",
-    libraryDependencies += "com.lihaoyi" %% "scalatags" % scalatagsVersion
+    libraryDependencies ++= Seq(
+      "com.lihaoyi"   %% "scalatags" % scalatagsVersion,
+      "org.scalameta" %% "munit"     % munitVersion % Test
+    )
   )
 
 // Browser code: Laminar widgets mounted into containers of the generated pages.
@@ -35,7 +38,8 @@ lazy val web = project
     libraryDependencies += "com.raquo" %%% "laminar" % laminarVersion
   )
 
-lazy val buildSite = taskKey[File]("Assemble the whole site into target/site")
+lazy val buildSite    = taskKey[File]("Assemble the whole site into target/site")
+lazy val buildPreview = taskKey[File]("The site as a PR preview: a copy in target/preview, every page noindex")
 
 lazy val root = project
   .in(file("."))
@@ -63,11 +67,24 @@ lazy val root = project
       }
 
       val classpath = (gen / Compile / fullClasspath).value.files
-      (gen / run / runner).value
-        .run("eu.ww86.gen.generate", classpath, Seq(out.getAbsolutePath), log)
-        .get
+      val genRunner = (gen / run / runner).value
+      genRunner.run("eu.ww86.gen.generate", classpath, Seq(out.getAbsolutePath), log).get
+      // also covers what lab/ brought in verbatim
+      genRunner.run("eu.ww86.gen.checkLinks", classpath, Seq(out.getAbsolutePath), log).get
 
       log.info(s"site assembled in $out")
+      out
+    },
+    // Served below /preview/pr-N/ of the same domain: the links are relative, so only noindex is added.
+    buildPreview := {
+      val site = buildSite.value
+      val out  = target.value / "preview"
+      IO.delete(out)
+      IO.copyDirectory(site, out)
+      val classpath = (gen / Compile / fullClasspath).value.files
+      (gen / run / runner).value
+        .run("eu.ww86.gen.markPreview", classpath, Seq(out.getAbsolutePath), streams.value.log)
+        .get
       out
     }
   )

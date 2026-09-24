@@ -29,26 +29,68 @@ definition and one set of tests, run on both platforms.
 ```bash
 sbt test                 # core tests on the JVM and on Scala.js
 sbt buildSite            # whole site into target/site
+sbt buildPreview         # the same plus a noindex copy in target/preview, as a PR gets it
 sbt "~core/testQuick"    # fast loop while changing logic
-python3 -m http.server -d target/site 4001   # preview on http://127.0.0.1:4001
+python3 -m http.server -d target/site 4001   # serve it on http://127.0.0.1:4001
+./scripts/test-publish-pages                 # the deploy script against a local bare repo, 1 second
 ```
 
 `buildSite` deletes `target/site`, copies `static/` and every subdirectory of `lab/`, links
-`web` with `fullLinkJS` into `js/main.js`, then runs `eu.ww86.gen.generate` to write the pages.
+`web` with `fullLinkJS` into `js/main.js`, runs `eu.ww86.gen.generate` to write the pages, then
+`eu.ww86.gen.checkLinks`, which fails the build on a link from the site root (see the pipeline rules).
 
 ## Deployment pipeline
 
 ```plaintext
-master → .github/workflows/deploy.yml → sbt test buildSite → upload-pages-artifact
-       → deploy-pages (GITHUB_TOKEN, no secrets) → GitHub Pages, custom domain ww86.eu
+this repo, branch master (not protected)
+  ├─ .github/workflows/deploy.yml
+  │    job build    (read-only token, this is where all the PR's code runs)
+  │                 sbt test buildPreview → target/site + target/preview; scripts/test-publish-pages
+  │                 → upload-artifact `site` (master) / `preview` (PRs)
+  │    job publish  (master only, contents: write)         scripts/publish-pages site       → root of gh-pages
+  │    job preview  (PRs from this repo, contents: write)  scripts/publish-pages preview N  → gh-pages preview/pr-N/
+  └─ .github/workflows/preview-cleanup.yml (PR closed)     scripts/publish-pages remove N   → deletes preview/pr-N/
+       → branch gh-pages: built site only, plus `.nojekyll` and `CNAME`
+          → GitHub Pages, "deploy from a branch" (gh-pages, /), custom domain ww86.eu
+             → https://ww86.eu/                  production
+             → https://ww86.eu/preview/pr-<N>/  one preview per open PR
 ```
 
-DNS records, the open `www` item and the rollback: [DNS.md](DNS.md).
+The same machinery as the blog's, `scripts/publish-pages` and its test are copied from there. DNS records,
+the open `www` item and the rollback: [DNS.md](DNS.md).
 
-**The custom domain lives in the Pages settings, not in a `CNAME` file** - a workflow-published site
-ignores that file, which is why the repository has none. Without the custom domain the site falls back to
-`https://blog.ww86.eu/ww86.eu/` (project sites live under the account's user site, which owns
-`blog.ww86.eu`), and the relative links keep it working there.
+Rules of the pipeline:
+- Only `GITHUB_TOKEN`: no secrets, no deploy keys, never `pull_request_target` (it runs untrusted code
+  with a write token). `contents: write` sits on the jobs `publish`, `preview` and `cleanup` only, never
+  at workflow level.
+- Previews exist only for PRs from this repo, not for forks and not for Dependabot: their token is
+  read-only. A preview is live about a minute after the job (Pages has to build the branch) and
+  disappears when the PR is closed.
+- A preview is `target/site` copied as it is, plus `<meta name="robots" content="noindex, nofollow">` on
+  every page (`buildPreview`, `eu.ww86.gen.Preview`); `static/robots.txt` disallows `/preview/`. Nothing is
+  rebuilt for the other path because every link is relative, and `buildSite` keeps it that way: it fails
+  on a link from the site root in any page or stylesheet, `lab/` included (`eu.ww86.gen.Links`), since in
+  a preview that link would lead to production. It cannot see URLs built by JavaScript.
+- `gh-pages` is written by the workflows only, never by hand. It is an orphan branch of built output; a
+  master publish replaces everything in the root except `preview/`, a preview publish touches only its
+  `preview/pr-N/`. `CNAME` and `.nojekyll` must be in the root: the domain comes from `static/CNAME`,
+  `publish-pages` refuses a site without it and re-creates `.nojekyll`. Recreating the branch from
+  scratch (drops all previews, open PRs get theirs back on their next push):
+  ```bash
+  sbt buildSite
+  tmp=$(mktemp -d) && cp -a target/site/. "$tmp" && touch "$tmp/.nojekyll" && cd "$tmp"
+  git init -q -b gh-pages && git add -A && git commit -qm "Recreate gh-pages" \
+    && git remote add origin git@github.com:kastoestoramadus/ww86.eu.git \
+    && git push --force origin gh-pages
+  ```
+- Concurrency: each publishing job has its own group per target (`pages-publish-master`,
+  `pages-preview-pr-N`; the cleanup workflow shares the group of its PR). Not one shared group: a group
+  holds one running and one *pending* job, and a newer pending job cancels the older one. Races between
+  groups are settled by the fetch-rebase-retry in `publish-pages`, which cannot conflict because the jobs
+  touch disjoint paths.
+
+Without the custom domain the site falls back to `https://blog.ww86.eu/ww86.eu/` (project sites live
+under the account's user site, which owns `blog.ww86.eu`), and the relative links keep it working there.
 
 ## Conventions
 
@@ -88,10 +130,18 @@ ignores that file, which is why the repository has none. Without the custom doma
   and keep the cross-platform test that covers Polish letters.
 - Do not touch the blog's URLs from here, and do not add a second copy of the blog's content: Disqus
   threads and RSS GUIDs over there are keyed by URL.
-- The generated site is `target/site`; nothing is committed into `docs/` and Pages is built by the workflow.
-- **The `github-pages` environment has a branch policy.** Enabling Pages created it for `main` while this
-  repo's default branch is `master`, so the first deploy failed instantly with no steps and only an
-  annotation: *Branch "master" is not allowed to deploy to github-pages*. Fixed by adding the branch:
-  `gh api -X POST repos/kastoestoramadus/ww86.eu/environments/github-pages/deployment-branch-policies -f name=master`.
-  A `deploy` job that fails in seconds with zero steps is an environment problem, not a build problem -
-  the message is in the check-run annotations, not in the logs.
+- The generated site is `target/site`, the preview `target/preview`; nothing built is committed to
+  `master`.
+- `/preview/` is reserved for PR previews: `publish-pages` refuses a site that has that path.
+- `robots.txt` keeps crawlers from fetching previews, so they never see the `noindex` meta either; a
+  preview URL posted publicly could still show up as a bare link. Share preview links with people.
+- Branch-based Pages rebuilds after every push to `gh-pages`, preview or not, and has a soft limit of
+  10 builds per hour; a burst of pushes to a PR can delay its preview. Changing the Pages *source* does
+  not build the branch: request a build with `gh api -X POST repos/kastoestoramadus/ww86.eu/pages/builds`.
+- Every publish adds a commit to `gh-pages`; the history only grows (the site limit is 1 GB, previews
+  count towards it). Squash it by recreating the branch (recipe above) if it ever matters.
+- **A job that fails in seconds with zero steps is an environment problem**, not a build problem: the
+  message is in the check-run annotations, not in the logs. It happened with the `github-pages`
+  environment, created with a branch policy for `main` while this repo uses `master`.
+- Until 2026-09-24 the site was published by `actions/deploy-pages` (Pages build type "workflow"), which
+  ignores a `CNAME` file and keeps the domain in the Pages settings only.
