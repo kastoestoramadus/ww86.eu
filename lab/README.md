@@ -4,12 +4,16 @@ One directory per artifact, each with its own `index.html` and everything it nee
 task copies every subdirectory here verbatim into `target/site/lab/`, so a page dropped in works
 exactly as it was produced - no build step, no framework, nothing rewritten.
 
+**Not every artifact belongs in the lab.** Screen claude.ai artifacts before proposing them: nothing
+that locates the author's home, nothing from job applications or interview processes, nothing copied
+from someone else's published work.
+
 To publish one:
 
 1. `mkdir lab/<slug>` and put `index.html` (plus assets) inside.
-2. Add a `LabItem` for it in `core/src/main/scala/eu/ww86/site/Catalog.scala`. Title and blurb are in
-   English; set `language` to the page's language, whose flag the card shows (a new language needs
-   `static/flags/<flag>.svg`).
+2. Add a `LabItem` for it in `core/src/main/scala/eu/ww86/site/Catalog.scala`, newest first. Title
+   and blurb are in English; set `language` to the page's language, whose flag the card shows (a new
+   language needs `static/flags/<flag>.svg`).
 3. `sbt buildSite` and open `target/site/lab/<slug>/index.html`.
 
 Files directly in `lab/` (like this README) are not copied. Slugs written by the generator are marked
