@@ -34,8 +34,7 @@ object Pages:
       section(cls := "cards-section")(
         h2("From the lab"),
         p(cls := "muted")("Small things I built, each one a page you can open."),
-        div(cls := "cards")(Catalog.featured.map(card(_, at))),
-        p(cls := "more")(a(href := at("lab/index.html"))("All lab pages →"))
+        div(cls := "cards")(Catalog.items.map(card(_, at)))
       ),
       aboutSection
     )
