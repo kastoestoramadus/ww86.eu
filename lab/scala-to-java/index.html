@@ -1,4 +1,4 @@
-<!doctype html><html lang="pl"><head><meta charset=utf8><meta name="description" content="Ściąga dla programistów Scali, którzy piszą w Javie: 35 idiomów obok siebie, 22 pułapki, które się kompilują i dają zły wynik, oraz 10 zadań z rozwiązaniami."><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<!doctype html><html lang="pl"><head><meta charset=utf8><meta name="description" content="Ściąga dla programistów Scali, którzy piszą w Javie: 35 idiomów obok siebie, 10 zadań z rozwiązaniami, 14 zadań na strumieniach Javy i kolekcjach Scali 3 oraz 22 pułapki, które się kompilują i dają zły wynik. Cały kod uruchomiony na JDK 25."><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
 <title>Scala w głowie, Java na ekranie</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Serif:wght@400;600&display=swap">
 <style>
@@ -31,7 +31,7 @@
 *{box-sizing:border-box}
 body{background:var(--ground);color:var(--ink);font-family:var(--serif);
   font-size:16.5px;line-height:1.65;margin:0;-webkit-text-size-adjust:100%}
-.wrap{max-width:1060px;margin:0 auto;padding-inline:20px}
+.wrap{max-width:1200px;margin:0 auto;padding-inline:20px}
 h1,h2,h3,h4{font-family:var(--sans);text-wrap:balance;margin:0}
 a{color:var(--java)}
 code{font-family:var(--mono);font-size:.86em;background:var(--sunk);
@@ -43,7 +43,7 @@ b{font-weight:600}
 nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;
   background:color-mix(in srgb,var(--ground) 88%,transparent);
   backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
-.navin{max-width:1060px;margin:0 auto;padding:0 20px;display:flex;
+.navin{max-width:1200px;margin:0 auto;padding:0 20px;display:flex;
   gap:4px;align-items:center;overflow-x:auto;scrollbar-width:none}
 .navin::-webkit-scrollbar{display:none}
 nav a{font-family:var(--mono);font-size:11.5px;letter-spacing:.09em;
@@ -186,19 +186,42 @@ footer{padding-block:34px 46px;color:var(--muted);font-size:13.5px;
   .prob{padding:20px 18px}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+
+/* ---- streams part ---- */
+.pair.eq{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+@media (max-width:820px){.pair.eq{grid-template-columns:1fr}}
+.pair.eq .side{display:flex;flex-direction:column}
+.pair.eq .codewrap{flex:1}
+.pair.eq + .out{margin-top:14px}
+.sidelab .loc{color:var(--muted);text-transform:none;letter-spacing:.02em;margin-left:9px}
+.ver{font-family:var(--mono);font-size:11px;color:var(--warn);background:var(--warn-wash);padding:3px 8px;border-radius:3px;white-space:nowrap}
+.why.apis{font-family:var(--mono);font-size:12px;letter-spacing:.03em;margin-bottom:16px}
+.out.eq::before{content:"wynik · Java = Scala"}
+.grp{margin:46px 0 22px}
+.grp .gl{font-family:var(--mono);font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--warn);margin:0 0 8px}
+.grp h3{font-size:22px;font-weight:600;letter-spacing:-.012em}
+.grp p:last-child{color:var(--muted);max-width:66ch;margin:8px 0 0;font-size:15.5px}
+.sub{font-size:16px;font-weight:600;margin:34px 0 12px}
+.sfact{margin:0 0 12px;font-size:15px;color:var(--ink-soft)}
+.codewrap.sfact{margin-bottom:6px}
 </style>
-<nav><div class="navin"><a href="#start">Start</a><a href="#sciaga">Ściąga idiomów</a><a href="#zadania">10 zadań</a><a href="#pulapki">22 pułapki</a><a href="#checklist">Checklist</a></div></nav>
+<nav><div class="navin"><a href="#start">Start</a><a href="#sciaga">Ściąga idiomów</a><a href="#zadania">10 zadań</a><a href="#streams">14 zadań: streamy</a><a href="#pulapki">22 pułapki</a><a href="#checklist">Checklist</a></div></nav>
 <div class="wrap">
 <header id="start">
-<p class="eyebrow">Ze Scali do Javy · live coding · ściąga</p>
+<p class="eyebrow">Ze Scali do Javy · JDK 25 · ściąga</p>
 <h1>Scala w głowie, Java na ekranie</h1>
-<p class="lead">Kto latami pisze w Scali, ten przenosi jej odruchy do Javy — na rozmowie z kodowaniem na żywo, w cudzym repozytorium, przy code review. Ta ściąga zbiera miejsca, w których te odruchy w Javie się kompilują, przechodzą prosty przykład i dają zły wynik, oraz zadania, na których każdy z nich wychodzi na jaw.</p>
-<div class="stats"><span><b>10</b> zadań z rozwiązaniami</span><span><b>22</b> pułapek z prawdziwym outputem</span><span><b>35</b> tłumaczeń idiomów</span><span>cały kod skompilowany na <b>JDK 21</b></span></div>
+<p class="lead">Kto latami pisze w Scali, ten przenosi jej odruchy do Javy — na rozmowie z kodowaniem na żywo, w cudzym repozytorium, przy code review. Ta ściąga zbiera miejsca, w których te odruchy w Javie się kompilują, przechodzą prosty przykład i dają zły wynik, oraz zadania, na których każdy z nich wychodzi na jaw. Osobna część zestawia nowoczesne Stream API Javy z kolekcjami Scali 3 — przydaje się też w drugą stronę, przy przesiadce z Javy na Scalę.</p>
+<div class="stats"><span><b>10</b> zadań z rozwiązaniami</span><span><b>14</b> zadań na strumieniach</span><span><b>22</b> pułapki z prawdziwym outputem</span><span><b>35</b> tłumaczeń idiomów</span><span>cały kod uruchomiony na <b>JDK 25</b></span></div>
 </header>
 <section id="setup"><div class="shead"><h2>Zanim napiszesz pierwszą linijkę</h2><p>Kodowanie na żywo odbywa się zwykle w CoderPadzie albo podobnym edytorze w przeglądarce: jeden plik, brak narzędzi i brak podpowiedzi, do których przyzwyczaja IntelliJ z projektem sbt.</p></div>
-<div class="setup"><div><h4>Szkielet pliku</h4><p>CoderPad kompiluje jeden plik. Klasa publiczna musi nazywać się tak jak plik (zwykle <code>Solution</code>), bez deklaracji <code>package</code>. Wejściem jest <code>public static void main(String[] args)</code> — nie ma odpowiednika arkusza roboczego ani REPL-a, każdy wydruk musi być wywołany z <code>main</code>.</p></div><div><h4>Najpierw sprawdź wersję</h4><p>Pierwsza linia, jaką piszesz: <code>System.out.println(System.getProperty("java.version"));</code>. Od niej zależy, czy masz <code>record</code> (16+), <code>Stream.toList()</code> (16+), <code>switch</code> z wzorcami (21) i bloki tekstowe (15+). Na Javie 11 wszystkie cztery odpadają.</p></div><div><h4>Importy z palca</h4><p>Podpowiedzi w CoderPad są słabe i nie dociągną importu za ciebie. Zacznij plik od <code>import java.util.*;</code> i <code>import java.util.stream.*;</code>, zanim napiszesz cokolwiek innego.</p></div><div><h4>Testy bez frameworka</h4><p>Nie ma JUnit ani ScalaTest. Napisz trzy linijki własnego <code>check</code> i wołaj je z <code>main</code> — to czytelniejszy sygnał niż ciąg <code>println</code>, a prowadzący widzi, że myślisz przypadkami brzegowymi.</p></div><div><h4>Wejście ze stdin</h4><p>Jeśli zadanie czyta stdin: <code>BufferedReader</code> owinięty w <code>InputStreamReader(System.in)</code>. <code>Scanner</code> jest wolniejszy o rząd wielkości i przy dużych wejściach potrafi być wąskim gardłem.</p></div><div><h4>Wydruk tablicy</h4><p><code>System.out.println(arr)</code> na tablicy drukuje <code>[I@7ba4f24f</code>. Zawsze <code>Arrays.toString(arr)</code>, a dla dwuwymiarowych <code>Arrays.deepToString(grid)</code>.</p></div></div>
+<div class="setup"><div><h4>Szkielet pliku</h4><p>CoderPad kompiluje jeden plik. Klasa publiczna musi nazywać się tak jak plik (zwykle <code>Solution</code>), bez deklaracji <code>package</code>. Wejściem jest <code>public static void main(String[] args)</code> — nie ma odpowiednika arkusza roboczego ani REPL-a, każdy wydruk musi być wywołany z <code>main</code>. Od JDK 25 można pominąć klasę i zacząć od <code>void main()</code>, a <code>IO.println</code> skraca wydruk — o ile edytor ma JDK 25.</p></div><div><h4>Najpierw sprawdź wersję</h4><p>Pierwsza linia, jaką piszesz: <code>System.out.println(System.getProperty("java.version"));</code>. Od niej zależy, czy masz <code>record</code> (16+), <code>Stream.toList()</code> (16+), <code>switch</code> z wzorcami (21) i bloki tekstowe (15+). Na Javie 11 wszystkie cztery odpadają. Rozwiązania zadań wymagają JDK 16 (rekordy), kod ze streamów — JDK 24 (Gatherers).</p></div><div><h4>Importy z palca</h4><p>Podpowiedzi w CoderPad są słabe i nie dociągną importu za ciebie. Zacznij plik od <code>import java.util.*;</code> i <code>import java.util.stream.*;</code>, zanim napiszesz cokolwiek innego. Od JDK 25 wystarczy jedna linia: <code>import module java.base;</code>.</p></div><div><h4>Testy bez frameworka</h4><p>Nie ma JUnit ani ScalaTest. Napisz trzy linijki własnego <code>check</code> i wołaj je z <code>main</code> — to czytelniejszy sygnał niż ciąg <code>println</code>, a prowadzący widzi, że myślisz przypadkami brzegowymi.</p></div><div><h4>Wejście ze stdin</h4><p>Jeśli zadanie czyta stdin: <code>BufferedReader</code> owinięty w <code>InputStreamReader(System.in)</code>. <code>Scanner</code> jest wolniejszy o rząd wielkości i przy dużych wejściach potrafi być wąskim gardłem.</p></div><div><h4>Wydruk tablicy</h4><p><code>System.out.println(arr)</code> na tablicy drukuje <code>[I@7ba4f24f</code>. Zawsze <code>Arrays.toString(arr)</code>, a dla dwuwymiarowych <code>Arrays.deepToString(grid)</code>.</p></div></div>
 <h3 style="font-size:16px;font-weight:600;margin:38px 0 12px">Gdy JVM okaże się starszy, niż zakładałeś</h3>
 <div class="scroll"><table class="fb"><thead><tr><th>Chcesz napisać</th><th>Zapasowy zapis</th><th>Wymaga</th></tr></thead><tbody>
+<tr><td>import module java.base;</td><td>import java.util.*; import java.util.stream.*;</td><td>Java 25</td></tr>
+<tr><td>void main() { ... }</td><td>public class Solution { public static void main(String[] args) { ... } }</td><td>Java 25</td></tr>
+<tr><td>stream.gather(Gatherers.windowSliding(2))</td><td>pętla po indeksach albo IntStream.range</td><td>Java 24</td></tr>
+<tr><td>for (var _ : xs)</td><td>for (var x : xs)</td><td>Java 22</td></tr>
+<tr><td>xs.getFirst() / xs.getLast()</td><td>xs.get(0) / xs.get(xs.size() - 1)</td><td>Java 21</td></tr>
 <tr><td>record Point(int r, int c) {}</td><td>static final class Point { final int r, c; ... + equals/hashCode }</td><td>Java 16+</td></tr>
 <tr><td>stream.toList()</td><td>stream.collect(Collectors.toList())</td><td>Java 16+</td></tr>
 <tr><td>switch (x) { case A -&gt; ...; }</td><td>switch (x) { case A: ...; break; }</td><td>Java 14+</td></tr>
@@ -300,7 +323,7 @@ footer{padding-block:34px 46px;color:var(--muted);font-size:13.5px;
     return out.toArray(new int[0][]);
 }</code></pre></div></div>
 </div>
-<ul class="notes"><li><code>Arrays.sort(int[], Comparator)</code> <b>nie istnieje</b> — komparatory działają tylko na tablicach obiektów. Tutaj przechodzi, bo <code>int[][]</code> to tablica obiektów (<code>int[]</code>).</li><li>Sortowanie prymitywów to dual-pivot quicksort: niestabilny i podatny na przypadek O(n²). Sortowanie obiektów to TimSort: stabilny i O(n log n) w najgorszym przypadku.</li><li><code>Comparator.comparingInt(a -&gt; a[0])</code>, nie <code>(a, b) -&gt; a[0] - b[0]</code> — różnica przepełnia się przy skrajnych wartościach.</li><li><code>clone()</code> na <code>int[]</code> jest głęboki; na <code>int[][]</code> już nie — kopiuje tylko tablicę referencji.</li><li><code>toArray(new int[0][])</code> — pusta tablica nadaje typ wynikowi; jest to szybsze niż <code>new int[out.size()][]</code>.</li></ul>
+<ul class="notes"><li><code>Arrays.sort(int[], Comparator)</code> <b>nie istnieje</b> — komparatory działają tylko na tablicach obiektów. Tutaj przechodzi, bo <code>int[][]</code> to tablica obiektów (<code>int[]</code>).</li><li>Sortowanie prymitywów to dual-pivot quicksort: niestabilny (przy samych liczbach tego nie widać), za to z awaryjnym przejściem na heapsort, gdy podział się psuje, więc też O(n log n). Sortowanie obiektów to TimSort: stabilny i O(n log n) w najgorszym przypadku.</li><li><code>Comparator.comparingInt(a -&gt; a[0])</code>, nie <code>(a, b) -&gt; a[0] - b[0]</code> — różnica przepełnia się przy skrajnych wartościach.</li><li><code>clone()</code> na <code>int[]</code> jest głęboki; na <code>int[][]</code> już nie — kopiuje tylko tablicę referencji.</li><li><code>toArray(new int[0][])</code> — pusta tablica nadaje typ wynikowi; jest to szybsze niż <code>new int[out.size()][]</code>.</li></ul>
 </article>
 <article class="prob">
 <div class="phead"><span class="pnum">03</span><h3>Grupowanie anagramów</h3><span class="cx">O(n · k log k) czasu</span></div>
@@ -415,7 +438,7 @@ book.minAfter(start)</code></pre></div></div>
     return sb.toString();
 }</code></pre></div></div>
 </div>
-<ul class="notes"><li><code>split</code> przyjmuje <b>regex</b>, nie literał. <code>"a.b".split(".")</code> zwraca pustą tablicę, bo kropka pasuje do wszystkiego. Potrzebujesz <code>split("\\.")</code> albo <code>Pattern.quote(".")</code>.</li><li>Bez drugiego argumentu <code>split</code> <b>usuwa końcowe puste pola</b>. Przy CSV to gubienie kolumn: <code>"a,b,,".split(",")</code> ma długość 2, nie 4.</li><li><code>toUpperCase()</code> bez <code>Locale</code> używa domyślnego locale JVM — w tureckim <code>"i"</code> zmienia się w <code>"İ"</code>. W kodzie produkcyjnym zawsze <code>Locale.ROOT</code>.</li><li>Konkatenacja <code>s += c</code> w pętli to O(n²): każda iteracja alokuje nowy <code>String</code>. Zmierzone: 20 tys. znaków to 198 ms zamiast 1 ms.</li></ul>
+<ul class="notes"><li><code>split</code> przyjmuje <b>regex</b>, nie literał. <code>"a.b".split(".")</code> zwraca pustą tablicę, bo kropka pasuje do wszystkiego. Potrzebujesz <code>split("\\.")</code> albo <code>Pattern.quote(".")</code>.</li><li>Bez drugiego argumentu <code>split</code> <b>usuwa końcowe puste pola</b>. Przy CSV to gubienie kolumn: <code>"a,b,,".split(",")</code> ma długość 2, nie 4.</li><li><code>toUpperCase()</code> bez <code>Locale</code> używa domyślnego locale JVM — w tureckim <code>"i"</code> zmienia się w <code>"İ"</code>. W kodzie produkcyjnym zawsze <code>Locale.ROOT</code>.</li><li>Konkatenacja <code>s += c</code> w pętli to O(n²): każda iteracja alokuje nowy <code>String</code>. Zmierzone na JDK 25: 20 tys. znaków to ok. 70 ms zamiast poniżej 1 ms.</li></ul>
 </article>
 <article class="prob">
 <div class="phead"><span class="pnum">08</span><h3>DFS bez rekurencji ogonowej</h3><span class="cx">O(V + E)</span></div>
@@ -491,7 +514,488 @@ static Map&lt;String, Long&gt; notionalPerBook(List&lt;Trade&gt; trades) {
 <ul class="notes"><li>To jest twój moment na rozmowę o tradeoffach: scalowe <code>sliding(k).map(_.max)</code> mieści się w jednej linii i jest O(n·k). Powiedz to na głos, zanim napiszesz wersję O(n).</li><li>Deque trzyma indeksy, nie wartości — inaczej nie wiesz, kiedy element wypada z okna.</li><li><code>Deque&lt;Integer&gt;</code> pakuje każdy indeks. Przy ciasnych limitach zamień na <code>int[] dq</code> z dwoma wskaźnikami — zero alokacji.</li><li><code>peekFirst</code> zwraca <code>null</code> na pustej kolejce, <code>getFirst</code> rzuca. Porównanie <code>dq.peekFirst() &lt;= i - k</code> odpakowuje <code>Integer</code>, więc na pustej kolejce byłby <code>NullPointerException</code> — dlatego <code>!dq.isEmpty()</code> musi być pierwsze w warunku.</li></ul>
 </article>
 </section>
-<section id="pulapki"><div class="shead"><h2>Katalog pułapek</h2><p>Każda z nich się kompiluje. Wynik pod spodem pochodzi z faktycznego uruchomienia na JDK 21 — nie z pamięci.</p></div>
+<section id="streams"><div class="shead"><h2>Streamy: Java obok Scali 3</h2><p>Czternaście zadań na logu z bramek płatnej autostrady, każde rozwiązane zaawansowanym Stream API (Java 9–24: <code>teeing</code>, <code>mapMulti</code>, Gatherers…) i odpowiednikiem w kolekcjach Scali 3. Pod każdą parą jest wynik z uruchomienia, identyczny w obu językach. Przydaje się w obie strony: przy czytaniu nowoczesnej Javy ze Scalą w głowie i przy przesiadce z Javy na Scalę.</p></div>
+<p class="sfact">Oba pliki uruchomione na tym samym logu (587 linii, 120 podróży). Java: JDK 25, <code>-Xlint:all</code> czysto. Scala: 3.3.8 i 3.9.0, 0 ostrzeżeń. Tak były uruchamiane:</p>
+<div class="codewrap sfact"><pre><code class="language-plaintext">java StreamExamples.java
+scala-cli run StreamExamples.scala</code></pre></div>
+<h3 class="sub">Ściąga: kolekcje Scali 3 i Stream API</h3>
+<div class="scroll"><table><thead><tr><th>Scala 3</th><th>Java Streams</th></tr></thead><tbody>
+<tr><td><code>groupMapReduce(f)(_ =&gt; 1)(_ + _)</code></td><td><code>groupingBy(f, counting())</code></td></tr>
+<tr><td><code>groupMap(f)(g)</code></td><td><code>groupingBy(f, mapping(g, toList()))</code></td></tr>
+<tr><td><code>partition(p)</code></td><td><code>partitioningBy(p)</code></td></tr>
+<tr><td><code>groupMapReduce(k)(v)(merge)</code></td><td><code>toMap(k, v, merge)</code></td></tr>
+<tr><td><code>dwa przebiegi / foldLeft</code></td><td><code>teeing(c1, c2, f)</code></td></tr>
+<tr><td><code>flatMap(x =&gt; Try(…).toOption)</code></td><td><code>mapMulti((x, sink) -&gt; …)</code></td></tr>
+<tr><td><code>Iterator.iterate(s)(next).takeWhile(has)</code></td><td><code>Stream.iterate(s, has, next)</code></td></tr>
+<tr><td><code>distinctBy(f)</code></td><td><code>filter(seen::add)</code></td></tr>
+<tr><td><code>zipWithIndex</code></td><td><code>IntStream.range + get(i)</code></td></tr>
+<tr><td><code>sortBy(x =&gt; (x.a, x.b))</code></td><td><code>comparing(a).thenComparing(b)</code></td></tr>
+<tr><td><code>mkString(pre, sep, suf)</code></td><td><code>joining(sep, pre, suf)</code></td></tr>
+<tr><td><code>foldLeft(id)(acc)</code></td><td><code>reduce(id, acc, comb)</code></td></tr>
+<tr><td><code>sliding(n) / grouped(n)</code></td><td><code>windowSliding(n) / windowFixed(n)</code></td></tr>
+<tr><td><code>scanLeft(init)(f).tail</code></td><td><code>Gatherers.scan(init, f)</code></td></tr>
+<tr><td><code>Option.orElse(x)</code></td><td><code>Optional.or(() -&gt; x)</code></td></tr>
+<tr><td><code>Option.getOrElse(x)</code></td><td><code>Optional.orElse(x)</code></td></tr>
+<tr><td><code>tapEach(f)</code></td><td><code>peek(f)</code></td></tr>
+<tr><td><code>.iterator / .view</code></td><td><code>stream() — leniwy</code></td></tr>
+</tbody></table></div>
+<div class="grp" id="g-model"><p class="gl">Wspólne dla wszystkich przykładów</p><h3>Model danych</h3><p>Log z bramek płatnej autostrady. Każda linia to czas, numer rejestracyjny, kilometr z literą kierunku (<code>E</code> lub <code>W</code>) i typ bramki: wjazd, punkt pomiarowy na trasie co 10 km albo zjazd. Podróż to zdarzenia jednego auta od wjazdu do zjazdu. W Javie: rekordy, <code>switch</code> ze strzałkami i <code>getFirst()</code>/<code>getLast()</code> z Javy 21.</p></div>
+<article class="prob" id="model">
+<div class="phead"><span class="pnum">model</span><h3>Wpis logu i podróż</h3></div>
+<p class="why apis">record · enum · case class · given Ordering</p>
+<div class="pair eq"><div class="side s"><span class="sidelab">Scala 3<span class="loc">32 linie</span></span><div class="codewrap"><span class="codelang">SCALA</span><pre><code class="language-scala">enum Direction:
+  case EAST, WEST
+
+object Direction:
+  given Ordering[Direction] = Ordering.by(_.ordinal) // odpowiednik naturalnego porządku enuma w Javie
+
+enum BoothType:
+  case ENTRY, EXIT, MAINROAD
+
+object BoothType:
+  given Ordering[BoothType] = Ordering.by(_.ordinal)
+
+final case class LogEntry(timestamp: Double, plate: String, location: Int, direction: Direction, booth: BoothType)
+
+object LogEntry:
+  def parse(line: String): LogEntry = line.strip.split(" ") match
+    case Array(ts, plate, loc, booth) =&gt;
+      val direction = loc.last match
+        case 'E' =&gt; Direction.EAST
+        case 'W' =&gt; Direction.WEST
+        case _   =&gt; throw IllegalArgumentException(s"Unknown direction: $loc")
+      LogEntry(ts.toDouble, plate, loc.init.toInt, direction, BoothType.valueOf(booth))
+    case _ =&gt; throw IllegalArgumentException(s"Malformed log line: $line")
+
+final case class Journey(plate: String, direction: Direction, points: Vector[LogEntry]):
+  def durationMin: Double = (points.last.timestamp - points.head.timestamp) / 60
+  def distanceKm: Int = (points.last.location - points.head.location).abs
+  def avgSpeed: Double = distanceKm / (durationMin / 60)
+
+object Journey:
+  def speed(a: LogEntry, b: LogEntry): Double =
+    (b.location - a.location).abs / ((b.timestamp - a.timestamp) / 3600)</code></pre></div></div><div class="side j"><span class="sidelab">Java<span class="loc">28 linii</span></span><div class="codewrap"><span class="codelang">JAVA</span><pre><code class="language-java">enum Direction { EAST, WEST }
+
+enum BoothType { ENTRY, EXIT, MAINROAD }
+
+record LogEntry(double timestamp, String plate, int location, Direction direction, BoothType booth) {
+    static LogEntry parse(String line) {
+        String[] t = line.strip().split(" ");
+        if (t.length != 4) throw new IllegalArgumentException("Malformed log line: " + line);
+        String loc = t[2];
+        Direction direction = switch (loc.charAt(loc.length() - 1)) {
+            case 'E' -&gt; Direction.EAST;
+            case 'W' -&gt; Direction.WEST;
+            default -&gt; throw new IllegalArgumentException("Unknown direction: " + loc);
+        };
+        return new LogEntry(Double.parseDouble(t[0]), t[1],
+                Integer.parseInt(loc.substring(0, loc.length() - 1)), direction, BoothType.valueOf(t[3]));
+    }
+}
+
+record Journey(String plate, Direction direction, List&lt;LogEntry&gt; points) {
+    double durationMin() { return (points.getLast().timestamp() - points.getFirst().timestamp()) / 60; }
+    int distanceKm()     { return Math.abs(points.getLast().location() - points.getFirst().location()); }
+    double avgSpeed()    { return distanceKm() / (durationMin() / 60); }
+
+    static double speed(LogEntry a, LogEntry b) {
+        return Math.abs(b.location() - a.location()) / ((b.timestamp() - a.timestamp()) / 3600);
+    }
+}</code></pre></div></div></div>
+<div class="out">Wczytano: 587 zdarzeń, 120 podróży</div>
+<ul class="notes"><li>Java: typy zagnieżdżone w jednej klasie, żeby plik uruchamiał się wprost przez <code>java StreamExamples.java</code>. Scala: typy na najwyższym poziomie pliku.</li><li><code>record</code> ↔ <code>case class</code>: oba dają niemutowalne pola, <code>equals</code>/<code>hashCode</code> i <code>toString</code>. Metody pochodne (<code>durationMin</code>, <code>avgSpeed</code>) wyglądają tak samo; w Scali piszemy je bez nawiasów.</li><li>Enumy w Javie są <code>Comparable</code>, w Scali nie. <code>given Ordering[Direction]</code> w obiekcie towarzyszącym jest znajdowany automatycznie wszędzie, gdzie potrzebny jest porządek: <code>SortedMap</code>, <code>sortBy</code>, <code>max</code>.</li><li>Metody statyczne (<code>Journey.speed</code>) trafiają do obiektu towarzyszącego.</li></ul>
+</article>
+<div class="grp" id="g-collectors"><p class="gl">Collectors · Java 8–12</p><h3>Kolektory</h3><p>Najwięcej „zaawansowanego” Stream API siedzi w <code>Collectors</code>: kolektory zagnieżdżone w kolektorach. W Scali wartość grupy jest zwykłą kolekcją, więc zagnieżdżanie zamienia się w zwykłe wywołania metod.</p></div>
+<article class="prob" id="grouping">
+<div class="phead"><span class="pnum">S01</span><h3>Liczba zdarzeń na typ bramki</h3></div>
+<p class="why apis">groupingBy · EnumMap · counting</p>
+<div class="pair eq"><div class="side s"><span class="sidelab">Scala 3<span class="loc">2 linie</span></span><div class="codewrap"><span class="codelang">SCALA</span><pre><code class="language-scala">def eventsPerBooth(log: Vector[LogEntry]): SortedMap[BoothType, Int] =
+  log.groupMapReduce(_.booth)(_ =&gt; 1)(_ + _).to(SortedMap)</code></pre></div></div><div class="side j"><span class="sidelab">Java<span class="loc">7 linii</span></span><div class="codewrap"><span class="codelang">JAVA</span><pre><code class="language-java">static Map&lt;BoothType, Long&gt; eventsPerBooth(List&lt;LogEntry&gt; log) {
+    return log.stream()
+            .collect(Collectors.groupingBy(
+                    LogEntry::booth,
+                    () -&gt; new EnumMap&lt;&gt;(BoothType.class),
+                    Collectors.counting()));
+}</code></pre></div></div></div>
+<div class="out eq">{ENTRY=120, EXIT=120, MAINROAD=347}</div>
+<ul class="notes"><li>Trójargumentowe <code>groupingBy(klucz, fabrykaMapy, downstream)</code> ↔ <code>groupMapReduce(klucz)(wartość)(łączenie)</code>: każdy element zamienia się na <code>1</code>, a jedynki są sumowane w jednym przebiegu.</li><li>Scala nie ma <code>EnumMap</code>. Posortowaną mapę daje <code>.to(SortedMap)</code>, a porządek enuma zapewnia <code>given Ordering</code> z modelu.</li><li><code>counting()</code> zwraca zawsze <code>Long</code>; w Scali typ wynika z funkcji <code>_ =&gt; 1</code>, więc tu jest <code>Int</code>.</li></ul>
+</article>
+<article class="prob" id="multilevel">
+<div class="phead"><span class="pnum">S02</span><h3>Ile różnych tablic na kierunek i bramkę</h3></div>
+<p class="why apis">groupingBy × 2 · mapping · collectingAndThen</p>
+<div class="pair eq"><div class="side s"><span class="sidelab">Scala 3<span class="loc">6 linii</span></span><div class="codewrap"><span class="codelang">SCALA</span><pre><code class="language-scala">def distinctPlates(log: Vector[LogEntry]): SortedMap[Direction, SortedMap[BoothType, Int]] =
+  log
+    .groupBy(_.direction)
+    .view
+    .mapValues(_.groupMap(_.booth)(_.plate).view.mapValues(_.toSet.size).to(SortedMap))
+    .to(SortedMap)</code></pre></div></div><div class="side j"><span class="sidelab">Java<span class="loc">12 linii</span></span><div class="codewrap"><span class="codelang">JAVA</span><pre><code class="language-java">static Map&lt;Direction, Map&lt;BoothType, Integer&gt;&gt; distinctPlates(List&lt;LogEntry&gt; log) {
+    return log.stream()
+            .collect(Collectors.groupingBy(
+                    LogEntry::direction,
+                    TreeMap::new,
+                    Collectors.groupingBy(
+                            LogEntry::booth,
+                            TreeMap::new,
+                            Collectors.collectingAndThen(
+                                    Collectors.mapping(LogEntry::plate, Collectors.toSet()),
+                                    Set::size))));
+}</code></pre></div></div></div>
+<div class="out eq">{EAST={ENTRY=26, EXIT=26, MAINROAD=25}, WEST={ENTRY=30, EXIT=30, MAINROAD=29}}</div>
+<ul class="notes"><li>Kolektor zagnieżdżony w kolektorze ↔ zwykłe wywołanie na grupie: wartością <code>groupBy</code> jest kolekcja, więc można na niej wywołać cokolwiek.</li><li><code>mapping(f, toSet())</code> ↔ <code>groupMap(klucz)(f)</code>. <code>collectingAndThen(…, Set::size)</code> ↔ po prostu <code>.toSet.size</code>.</li><li><code>.view.mapValues(…)</code> jest leniwe, a <code>.to(SortedMap)</code> materializuje wynik. Samo <code>mapValues</code> bez <code>.view</code> jest przestarzałe od Scali 2.13.</li></ul>
+</article>
+<article class="prob" id="partition">
+<div class="phead"><span class="pnum">S03</span><h3>Czas podróży: szybkie kontra wolne</h3></div>
+<p class="why apis">partitioningBy · summarizingDouble</p>
+<div class="pair eq"><div class="side s"><span class="sidelab">Scala 3<span class="loc">10 linii</span></span><div class="codewrap"><span class="codelang">SCALA</span><pre><code class="language-scala">final case class Stats(count: Int, min: Double, avg: Double, max: Double)
+
+object Stats:
+  def of(xs: Seq[Double]): Stats =
+    if xs.isEmpty then Stats(0, Double.PositiveInfinity, 0, Double.NegativeInfinity)
+    else Stats(xs.size, xs.min, xs.sum / xs.size, xs.max)
+
+def durationBySpeed(journeys: Vector[Journey]): (Stats, Stats) =
+  val (fast, slow) = journeys.partition(_.avgSpeed &gt;= 100)
+  (Stats.of(fast.map(_.durationMin)), Stats.of(slow.map(_.durationMin)))</code></pre></div></div><div class="side j"><span class="sidelab">Java<span class="loc">6 linii</span></span><div class="codewrap"><span class="codelang">JAVA</span><pre><code class="language-java">static Map&lt;Boolean, DoubleSummaryStatistics&gt; durationBySpeed(List&lt;Journey&gt; journeys) {
+    return journeys.stream()
+            .collect(Collectors.partitioningBy(
+                    j -&gt; j.avgSpeed() &gt;= 100,
+                    Collectors.summarizingDouble(Journey::durationMin)));
+}</code></pre></div></div></div>
+<div class="out eq">≥100 km/h n=87 min=4.9 avg=24.8 max=47.9 | &lt;100 km/h n=33 min=6.2 avg=24.7 max=50.3</div>
+<ul class="notes"><li><code>partitioningBy</code> ↔ <code>partition</code>, ale wynikiem jest para <code>(pasujące, reszta)</code>, a nie <code>Map&lt;Boolean, …&gt;</code> — nie trzeba pamiętać, czy <code>true</code> oznacza szybkie.</li><li>Scala nie ma <code>DoubleSummaryStatistics</code> ani <code>summarizing*</code>. Pięciolinijkowa <code>case class Stats</code> robi to samo (można też użyć klasy z JDK wprost — Scala widzi całe JDK).</li><li>Pusta grupa daje to samo co w Javie: <code>min = +∞</code>, <code>max = −∞</code>, średnia 0.</li></ul>
+</article>
+<article class="prob" id="tomap">
+<div class="phead"><span class="pnum">S04</span><h3>Najdłuższa podróż każdej tablicy</h3></div>
+<p class="why apis">toMap z merge · maxBy · collectingAndThen</p>
+<div class="pair eq"><div class="side s"><span class="sidelab">Scala 3<span class="loc">8 linii</span></span><div class="codewrap"><span class="codelang">SCALA</span><pre><code class="language-scala">def longestPerPlate(journeys: Vector[Journey]): SortedMap[String, Journey] =
+  journeys
+    .groupMapReduce(_.plate)(identity)((a, b) =&gt; if b.durationMin &gt; a.durationMin then b else a)
+    .to(SortedMap)
+
+// albo: grupa → maxBy (bez Optional do rozpakowania — grupa nigdy nie jest pusta)
+def longestPerPlateGrouping(journeys: Vector[Journey]): SortedMap[String, Journey] =
+  journeys.groupBy(_.plate).view.mapValues(_.maxBy(_.durationMin)).to(SortedMap)</code></pre></div></div><div class="side j"><span class="sidelab">Java<span class="loc">19 linii</span></span><div class="codewrap"><span class="codelang">JAVA</span><pre><code class="language-java">static Map&lt;String, Journey&gt; longestPerPlate(List&lt;Journey&gt; journeys) {
+    return journeys.stream()
+            .collect(Collectors.toMap(
+                    Journey::plate,
+                    Function.identity(),
+                    BinaryOperator.maxBy(Comparator.comparingDouble(Journey::durationMin)),
+                    TreeMap::new));
+}
+
+// to samo przez groupingBy — Optional z maxBy trzeba rozpakować
+static Map&lt;String, Journey&gt; longestPerPlateGrouping(List&lt;Journey&gt; journeys) {
+    return journeys.stream()
+            .collect(Collectors.groupingBy(
+                    Journey::plate,
+                    TreeMap::new,
+                    Collectors.collectingAndThen(
+                            Collectors.maxBy(Comparator.comparingDouble(Journey::durationMin)),
+                            Optional::orElseThrow)));
+}</code></pre></div></div></div>
+<div class="out eq">{AKX100=AKX100(3 pkt, 12.1 min, 98.9 km/h), AVC560=AVC560(8 pkt, 46.2 min, 104.0 km/h), BBB580=BBB580(9 pkt, 50.3 min, 95.4 km/h), BTY120=BTY120(6 pkt, 33.5 min, 107.6 km/h), … (37)} | oba warianty równe: true</div>
+<ul class="notes"><li><code>toMap(klucz, wartość, merge, fabryka)</code> ↔ <code>groupMapReduce(klucz)(wartość)(merge)</code>. Funkcja łącząca ma ten sam kontrakt: dostaje dwie wartości dla tego samego klucza.</li><li>Pułapka: <code>toMap</code> bez funkcji merge rzuca <code>IllegalStateException</code> przy powtórzonym kluczu, a Scalowe <code>.toMap</code> po cichu zostawia ostatnią wartość.</li><li><code>maxBy</code> jako downstream zwraca <code>Optional</code>, bo kolektor nie wie, że grupa nie jest pusta — stąd <code>collectingAndThen(…, Optional::orElseThrow)</code>. Grupa z <code>groupBy</code> jest zawsze niepusta, więc Scalowe <code>maxBy</code> zwraca wartość wprost.</li></ul>
+</article>
+<article class="prob" id="teeing">
+<div class="phead"><span class="pnum">S05</span><h3>Najszybsza i najwolniejsza podróż naraz</h3><span class="ver">Java 12</span></div>
+<p class="why apis">Collectors.teeing</p>
+<div class="pair eq"><div class="side s"><span class="sidelab">Scala 3<span class="loc">14 linii</span></span><div class="codewrap"><span class="codelang">SCALA</span><pre><code class="language-scala">final case class Extremes(fastest: Journey, slowest: Journey)
+
+// kolekcję można przejść dwa razy — teeing nie jest potrzebny
+def extremes(journeys: Vector[Journey]): Extremes =
+  Extremes(journeys.maxBy(_.avgSpeed), journeys.minBy(_.avgSpeed))
+
+// jeden przebieg (np. po Iterator, który jak Stream jest jednorazowy)
+def extremesOnePass(journeys: Iterator[Journey]): Option[Extremes] =
+  journeys.nextOption().map: first =&gt;
+    journeys.foldLeft(Extremes(first, first)): (acc, j) =&gt;
+      Extremes(
+        if j.avgSpeed &gt; acc.fastest.avgSpeed then j else acc.fastest,
+        if j.avgSpeed &lt; acc.slowest.avgSpeed then j else acc.slowest
+      )</code></pre></div></div><div class="side j"><span class="sidelab">Java<span class="loc">9 linii</span></span><div class="codewrap"><span class="codelang">JAVA</span><pre><code class="language-java">record Extremes(Journey fastest, Journey slowest) {}
+
+static Extremes extremes(List&lt;Journey&gt; journeys) {
+    return journeys.stream()
+            .collect(Collectors.teeing(
+                    Collectors.maxBy(Comparator.comparingDouble(Journey::avgSpeed)),
+                    Collectors.minBy(Comparator.comparingDouble(Journey::avgSpeed)),
+                    (max, min) -&gt; new Extremes(max.orElseThrow(), min.orElseThrow())));
+}</code></pre></div></div></div>
+<div class="out eq">najszybsza ZCD540(2 pkt, 4.9 min, 123.5 km/h) | najwolniejsza DQW160(3 pkt, 13.6 min, 88.3 km/h)</div>
+<ul class="notes"><li><code>teeing</code> istnieje, bo <code>Stream</code> da się przejść tylko raz. Kolekcję Scali można przechodzić wielokrotnie, więc zwykle wystarczą dwa wywołania: <code>maxBy</code> i <code>minBy</code>.</li><li>Gdy dane naprawdę są jednorazowe (<code>Iterator</code>, plik, sieć), odpowiednikiem <code>teeing</code> jest <code>foldLeft</code> na parze akumulatorów. W <code>run</code> wynik sprawdza <code>require</code> — zgadza się z wersją dwuprzebiegową.</li><li><code>maxBy</code> na pustej kolekcji rzuca wyjątek, tak jak <code>orElseThrow()</code>. Bezpieczna wersja to <code>maxByOption</code>.</li></ul>
+</article>
+<div class="grp" id="g-transform"><p class="gl">Stream · Java 9–16</p><h3>Przekształcenia</h3><p>Operacje pośrednie i terminalne spoza <code>Collectors</code>. Tu różnica jest najczęściej w nazwach — i w tym, czego Javie wciąż brakuje (<code>zip</code>, <code>distinctBy</code>).</p></div>
+<article class="prob" id="mapmulti">
+<div class="phead"><span class="pnum">S06</span><h3>Parsowanie z pominięciem złych linii</h3><span class="ver">Java 16</span></div>
+<p class="why apis">mapMulti</p>
+<div class="pair eq"><div class="side s"><span class="sidelab">Scala 3<span class="loc">4 linie</span></span><div class="codewrap"><span class="codelang">SCALA</span><pre><code class="language-scala">def parseLenient(lines: Seq[String]): Vector[LogEntry] =
+  lines.iterator
+    .flatMap(line =&gt; Try(LogEntry.parse(line)).toOption) // zła linia → None → nic
+    .toVector</code></pre></div></div><div class="side j"><span class="sidelab">Java<span class="loc">11 linii</span></span><div class="codewrap"><span class="codelang">JAVA</span><pre><code class="language-java">static List&lt;LogEntry&gt; parseLenient(List&lt;String&gt; lines) {
+    return lines.stream()
+            .&lt;LogEntry&gt;mapMulti((line, sink) -&gt; {
+                try {
+                    sink.accept(LogEntry.parse(line));
+                } catch (RuntimeException skipped) {
+                    // zła linia — nic nie emitujemy
+                }
+            })
+            .toList();
+}</code></pre></div></div></div>
+<div class="out eq">592 linii → 587 poprawnych</div>
+<ul class="notes"><li><code>mapMulti</code> emituje 0..n elementów przez <code>sink</code>, bez tworzenia pośredniego strumienia. W Scali to po prostu <code>flatMap</code> na <code>Option</code>: <code>Some</code> daje jeden element, <code>None</code> — żadnego.</li><li><code>Try(…).toOption</code> łapie wyjątki niefatalne (<code>NonFatal</code>), czyli działa jak <code>catch (RuntimeException)</code> — z tą różnicą, że Scala nie odróżnia wyjątków checked.</li><li>W Javie jawny parametr typu <code>.&lt;LogEntry&gt;mapMulti</code> jest zwykle niezbędny; w Scali typ wynika z <code>Option[LogEntry]</code>.</li></ul>
+</article>
+<article class="prob" id="iterate">
+<div class="phead"><span class="pnum">S07</span><h3>Punkty kontrolne i pierwsza godzina logu</h3><span class="ver">Java 9</span></div>
+<p class="why apis">Stream.iterate(seed, hasNext, next) · takeWhile · dropWhile</p>
+<div class="pair eq"><div class="side s"><span class="sidelab">Scala 3<span class="loc">14 linii</span></span><div class="codewrap"><span class="codelang">SCALA</span><pre><code class="language-scala">// punkty kontrolne między wjazdem a zjazdem
+def checkpoints(j: Journey): Vector[Int] =
+  val step = if j.direction == EAST then 10 else -10
+  val exit = j.points.last.location
+  Iterator.iterate(j.points.head.location + step)(_ + step).takeWhile(_ != exit).toVector
+
+// log jest posortowany po czasie
+def eventsInFirstHour(log: Vector[LogEntry]): Int =
+  val end = log.head.timestamp + 3600
+  log.segmentLength(_.timestamp &lt; end) // = log.takeWhile(...).size, bez kopii
+
+def firstAfterHour(log: Vector[LogEntry]): Option[LogEntry] =
+  val end = log.head.timestamp + 3600
+  log.dropWhile(_.timestamp &lt; end).headOption</code></pre></div></div><div class="side j"><span class="sidelab">Java<span class="loc">18 linii</span></span><div class="codewrap"><span class="codelang">JAVA</span><pre><code class="language-java">// punkty kontrolne między wjazdem a zjazdem — iterate z warunkiem (Java 9)
+static List&lt;Integer&gt; checkpoints(Journey j) {
+    int step = j.direction() == Direction.EAST ? 10 : -10;
+    int exit = j.points().getLast().location();
+    return Stream.iterate(j.points().getFirst().location() + step, loc -&gt; loc != exit, loc -&gt; loc + step)
+            .toList();
+}
+
+// log jest posortowany po czasie
+static long eventsInFirstHour(List&lt;LogEntry&gt; log) {
+    double end = log.getFirst().timestamp() + 3600;
+    return log.stream().takeWhile(e -&gt; e.timestamp() &lt; end).count();
+}
+
+static Optional&lt;LogEntry&gt; firstAfterHour(List&lt;LogEntry&gt; log) {
+    double end = log.getFirst().timestamp() + 3600;
+    return log.stream().dropWhile(e -&gt; e.timestamp() &lt; end).findFirst();
+}</code></pre></div></div></div>
+<div class="out eq">HRV700 [250, 240, 230] | pierwsza godzina: 50 zdarzeń | pierwsze po godzinie: ZCD540@47699.022</div>
+<ul class="notes"><li>Trójargumentowe <code>Stream.iterate</code> ↔ <code>Iterator.iterate(start)(next).takeWhile(warunek)</code>. Dla liczb ze stałym krokiem jeszcze prościej: <code>start until exit by step</code>.</li><li><code>takeWhile</code>/<code>dropWhile</code> mają te same nazwy i semantykę — zatrzymują się na pierwszym elemencie, który nie spełnia warunku.</li><li><code>takeWhile(…).count()</code> ↔ <code>segmentLength(…)</code>: liczy długość prefiksu bez tworzenia kopii.</li><li>Inne generatory: <code>Stream.generate</code> ↔ <code>Iterator.continually</code>, iteracja ze stanem ↔ <code>Iterator.unfold</code>, a gdy wyniki mają być zapamiętane — <code>LazyList.iterate</code>.</li></ul>
+</article>
+<article class="prob" id="distinct">
+<div class="phead"><span class="pnum">S08</span><h3>Tablice w kolejności pierwszego pojawienia się</h3></div>
+<p class="why apis">filter(seen::add) · IntStream.range</p>
+<div class="pair eq"><div class="side s"><span class="sidelab">Scala 3<span class="loc">5 linii</span></span><div class="codewrap"><span class="codelang">SCALA</span><pre><code class="language-scala">def firstSeenPlates(log: Vector[LogEntry]): Vector[String] =
+  log
+    .distinctBy(_.plate)
+    .zipWithIndex
+    .map((e, i) =&gt; s"${i + 1}. ${e.plate}")</code></pre></div></div><div class="side j"><span class="sidelab">Java<span class="loc">9 linii</span></span><div class="codewrap"><span class="codelang">JAVA</span><pre><code class="language-java">static List&lt;String&gt; firstSeenPlates(List&lt;LogEntry&gt; log) {
+    Set&lt;String&gt; seen = new HashSet&lt;&gt;();
+    List&lt;LogEntry&gt; firsts = log.stream()
+            .filter(e -&gt; seen.add(e.plate()))   // stanowa lambda — tylko sekwencyjnie!
+            .toList();
+    return IntStream.range(0, firsts.size())
+            .mapToObj(i -&gt; (i + 1) + ". " + firsts.get(i).plate())
+            .toList();
+}</code></pre></div></div></div>
+<div class="out eq">[1. VKH460, 2. HRV700, 3. RFL380, 4. RDO840, … (37)]</div>
+<ul class="notes"><li>Java nie ma <code>distinctBy</code>. Typowy trik to stanowa lambda <code>filter(seen::add)</code>, której dokumentacja odradza — zepsuje się po dodaniu <code>parallel()</code>. W Scali: <code>distinctBy(_.plate)</code>, zachowuje pierwsze wystąpienie.</li><li>Java nie ma też <code>zip</code> ani <code>zipWithIndex</code>, stąd <code>IntStream.range</code> i dostęp po indeksie. W Scali <code>zipWithIndex</code> daje pary <code>(element, indeks)</code>.</li><li><code>.map((e, i) =&gt; …)</code> — Scala 3 sama rozpakowuje krotkę na dwa parametry (parameter untupling). W Scali 2 trzeba było pisać <code>{ case (e, i) =&gt; … }</code>.</li></ul>
+</article>
+<article class="prob" id="sorting">
+<div class="phead"><span class="pnum">S09</span><h3>Ranking: trzy najszybsze podróże na wschód</h3></div>
+<p class="why apis">Comparator.comparing · thenComparing · reverseOrder · joining</p>
+<div class="pair eq"><div class="side s"><span class="sidelab">Scala 3<span class="loc">6 linii</span></span><div class="codewrap"><span class="codelang">SCALA</span><pre><code class="language-scala">def ranking(journeys: Vector[Journey]): String =
+  journeys
+    .sortBy(j =&gt; (j.direction, -j.avgSpeed, j.plate)) // Ordering krotki: po kolei każde pole
+    .take(3)
+    .map(j =&gt; f"${j.direction} ${j.plate} ${j.avgSpeed}%.1f")
+    .mkString("[", ", ", "]")</code></pre></div></div><div class="side j"><span class="sidelab">Java<span class="loc">9 linii</span></span><div class="codewrap"><span class="codelang">JAVA</span><pre><code class="language-java">static String ranking(List&lt;Journey&gt; journeys) {
+    return journeys.stream()
+            .sorted(Comparator.comparing(Journey::direction)
+                    .thenComparing(Journey::avgSpeed, Comparator.reverseOrder())
+                    .thenComparing(Journey::plate))
+            .limit(3)
+            .map(j -&gt; "%s %s %.1f".formatted(j.direction(), j.plate(), j.avgSpeed()))
+            .collect(Collectors.joining(", ", "[", "]"));
+}</code></pre></div></div></div>
+<div class="out eq">[EAST ZCD540 123.5, EAST RDO840 115.0, EAST RFL380 113.4]</div>
+<ul class="notes"><li>Łańcuch komparatorów ↔ <code>sortBy</code> z krotką: porządek krotki porównuje pola po kolei, tak jak kolejne <code>thenComparing</code>.</li><li>Odwrócenie jednego pola: dla liczb wystarczy minus (<code>-j.avgSpeed</code>). Dla innych typów — <code>Ordering[T].reverse</code> albo <code>Ordering.by(…).orElseBy(…)</code>.</li><li><code>limit(n)</code> ↔ <code>take(n)</code>, <code>joining(sep, prefix, suffix)</code> ↔ <code>mkString(prefix, sep, suffix)</code> — uwaga na inną kolejność argumentów.</li></ul>
+</article>
+<article class="prob" id="reduce">
+<div class="phead"><span class="pnum">S10</span><h3>Suma kilometrów i najdłuższa podróż</h3></div>
+<p class="why apis">reduce(identity, accumulator, combiner) · mapToInt</p>
+<div class="pair eq"><div class="side s"><span class="sidelab">Scala 3<span class="loc">8 linii</span></span><div class="codewrap"><span class="codelang">SCALA</span><pre><code class="language-scala">def totalKm(journeys: Vector[Journey]): Int =
+  journeys.foldLeft(0)((acc, j) =&gt; acc + j.distanceKm)
+
+def totalKmSum(journeys: Vector[Journey]): Int =
+  journeys.iterator.map(_.distanceKm).sum
+
+def longestByReduce(journeys: Vector[Journey]): Option[Journey] =
+  journeys.reduceOption((a, b) =&gt; if b.distanceKm &gt; a.distanceKm then b else a)</code></pre></div></div><div class="side j"><span class="sidelab">Java<span class="loc">12 linii</span></span><div class="codewrap"><span class="codelang">JAVA</span><pre><code class="language-java">static int totalKm(List&lt;Journey&gt; journeys) {
+    return journeys.stream()
+            .reduce(0, (acc, j) -&gt; acc + j.distanceKm(), Integer::sum); // combiner: tylko dla parallel
+}
+
+static int totalKmPrimitive(List&lt;Journey&gt; journeys) {
+    return journeys.stream().mapToInt(Journey::distanceKm).sum();
+}
+
+static Optional&lt;Journey&gt; longestByReduce(List&lt;Journey&gt; journeys) {
+    return journeys.stream().reduce((a, b) -&gt; b.distanceKm() &gt; a.distanceKm() ? b : a);
+}</code></pre></div></div></div>
+<div class="out eq">reduce=5120 mapToInt=5120 | najdłuższa YXE520(7 pkt, 47.4 min, 101.2 km/h)</div>
+<ul class="notes"><li>Trójargumentowe <code>reduce</code> ↔ <code>foldLeft(zero)(akumulator)</code>. <code>combiner</code> ma sens tylko dla strumieni równoległych, ale Java wymaga go zawsze, gdy typ akumulatora jest inny niż typ elementu.</li><li><code>mapToInt(…).sum()</code> ↔ <code>map(…).sum</code> — <code>sum</code> działa dla każdego typu z <code>Numeric</code>. Scala nie ma osobnych <code>IntStream</code>/<code>DoubleStream</code>: generyczne kolekcje boksują liczby, tak jak <code>Stream&lt;Integer&gt;</code>; bez boksowania działa <code>Array[Int]</code>.</li><li><code>reduce(op)</code> → <code>Optional</code> ↔ <code>reduceOption(op)</code> → <code>Option</code>. Scalowe <code>reduce</code> bez <code>Option</code> rzuca wyjątek na pustej kolekcji.</li></ul>
+</article>
+<div class="grp" id="g-gatherers"><p class="gl">java.util.stream.Gatherers · Java 24</p><h3>Gatherers</h3><p>Gatherers (JEP 485, finalne w Javie 24) dają własne operacje pośrednie: okna, <code>scan</code>, stanowe przekształcenia. W Scali większość z nich od dawna jest zwykłą metodą kolekcji.</p></div>
+<article class="prob" id="windows">
+<div class="phead"><span class="pnum">S11</span><h3>Prędkości odcinków, bieżące maksimum, paczki</h3><span class="ver">Java 24</span></div>
+<p class="why apis">Gatherers.windowSliding · windowFixed · scan</p>
+<div class="pair eq"><div class="side s"><span class="sidelab">Scala 3<span class="loc">11 linii</span></span><div class="codewrap"><span class="codelang">SCALA</span><pre><code class="language-scala">// prędkości odcinków: okno przesuwne po 2 punkty
+def segmentSpeeds(j: Journey): Vector[Double] =
+  j.points.sliding(2).map(w =&gt; Journey.speed(w(0), w(1))).toVector
+
+// bieżące maksimum — scanLeft emituje też wartość początkową, stąd .tail
+def runningMaxSpeed(j: Journey): Vector[Double] =
+  segmentSpeeds(j).scanLeft(0.0)(math.max).tail
+
+// log w paczkach po 100 zdarzeń
+def batchSizes(log: Vector[LogEntry]): Vector[Int] =
+  log.grouped(100).map(_.size).toVector</code></pre></div></div><div class="side j"><span class="sidelab">Java<span class="loc">22 linie</span></span><div class="codewrap"><span class="codelang">JAVA</span><pre><code class="language-java">// prędkości odcinków: okno przesuwne po 2 punkty
+static List&lt;Double&gt; segmentSpeeds(Journey j) {
+    return j.points().stream()
+            .gather(Gatherers.windowSliding(2))
+            .map(w -&gt; Journey.speed(w.get(0), w.get(1)))
+            .toList();
+}
+
+// bieżące maksimum — scan NIE emituje wartości początkowej
+static List&lt;Double&gt; runningMaxSpeed(Journey j) {
+    return segmentSpeeds(j).stream()
+            .gather(Gatherers.scan(() -&gt; 0.0, Math::max))
+            .toList();
+}
+
+// log w paczkach po 100 zdarzeń
+static List&lt;Integer&gt; batchSizes(List&lt;LogEntry&gt; log) {
+    return log.stream()
+            .gather(Gatherers.windowFixed(100))
+            .map(List::size)
+            .toList();
+}</code></pre></div></div></div>
+<div class="out eq">VKH460 [86.8, 95.7, 121.3, 90.7, … (6)] | max narastająco [86.8, 95.7, 121.3, 121.3, … (6)] | paczki [100, 100, 100, 100, … (6)]</div>
+<ul class="notes"><li><code>windowSliding(n)</code> ↔ <code>sliding(n)</code>, <code>windowFixed(n)</code> ↔ <code>grouped(n)</code>, <code>scan</code> ↔ <code>scanLeft</code>.</li><li>Javowe <code>scan</code> nie emituje wartości początkowej, a <code>scanLeft</code> tak — stąd <code>.tail</code>, żeby oba wyniki miały tę samą długość.</li><li>Dla 1-elementowego wejścia zarówno <code>windowSliding(2)</code>, jak i <code>sliding(2)</code> dają jedno niepełne okno, więc <code>w.get(1)</code> / <code>w(1)</code> rzuci wyjątek. Podróż ma zawsze co najmniej 2 punkty, więc tu to nie grozi.</li><li>Do par sąsiadów w Scali często czytelniej jest napisać <code>points.lazyZip(points.tail).map(Journey.speed)</code>.</li></ul>
+</article>
+<article class="prob" id="gatherer">
+<div class="phead"><span class="pnum">S12</span><h3>Własny Gatherer: log → podróże, leniwie</h3><span class="ver">Java 24</span></div>
+<p class="why apis">Gatherer.ofSequential · Integrator.ofGreedy</p>
+<div class="pair eq"><div class="side s"><span class="sidelab">Scala 3<span class="loc">20 linii</span></span><div class="codewrap"><span class="codelang">SCALA</span><pre><code class="language-scala">private type Open = Map[String, Vector[LogEntry]]
+
+// stan (otwarte podróże) płynie przez scanLeft; flatMap wyciąga tylko zakończone
+def toJourneys(log: Iterator[LogEntry]): Iterator[Journey] =
+  log
+    .scanLeft((Map.empty: Open, Option.empty[Journey])) { case ((open, _), e) =&gt;
+      e.booth match
+        case ENTRY =&gt; (open.updated(e.plate, Vector(e)), None)
+        case MAINROAD =&gt;
+          (open.get(e.plate).fold(open)(points =&gt; open.updated(e.plate, points :+ e)), None)
+        case EXIT =&gt;
+          open.get(e.plate) match
+            case Some(points) =&gt; (open - e.plate, Some(Journey(e.plate, points.head.direction, points :+ e)))
+            case None         =&gt; (open, None)
+    }
+    .flatMap(_._2)
+
+// leniwie: przestaje czytać log po trzech długich podróżach
+def firstLongJourneys(log: Vector[LogEntry]): Vector[Journey] =
+  toJourneys(log.iterator).filter(_.points.size &gt;= 6).take(3).toVector</code></pre></div></div><div class="side j"><span class="sidelab">Java<span class="loc">31 linii</span></span><div class="codewrap"><span class="codelang">JAVA</span><pre><code class="language-java">static Gatherer&lt;LogEntry, ?, Journey&gt; toJourneys() {
+    return Gatherer.ofSequential(
+            () -&gt; new HashMap&lt;String, List&lt;LogEntry&gt;&gt;(),
+            Gatherer.Integrator.ofGreedy((open, e, downstream) -&gt; {
+                switch (e.booth()) {
+                    case ENTRY -&gt; open.put(e.plate(), new ArrayList&lt;&gt;(List.of(e)));
+                    case MAINROAD -&gt; {
+                        List&lt;LogEntry&gt; points = open.get(e.plate());
+                        if (points != null) points.add(e);
+                    }
+                    case EXIT -&gt; {
+                        List&lt;LogEntry&gt; points = open.remove(e.plate());
+                        if (points != null) {
+                            points.add(e);
+                            return downstream.push(
+                                    new Journey(e.plate(), points.getFirst().direction(), List.copyOf(points)));
+                        }
+                    }
+                }
+                return true;
+            }));
+}
+
+// leniwie: przestaje czytać log po trzech długich podróżach
+static List&lt;Journey&gt; firstLongJourneys(List&lt;LogEntry&gt; log) {
+    return log.stream()
+            .gather(toJourneys())
+            .filter(j -&gt; j.points().size() &gt;= 6)
+            .limit(3)
+            .toList();
+}</code></pre></div></div></div>
+<div class="out eq">[VKH460(7 pkt, 34.7 min, 103.8 km/h), RFL380(6 pkt, 26.5 min, 113.4 km/h), RDO840(7 pkt, 33.9 min, 106.2 km/h)]</div>
+<ul class="notes"><li>Własny <code>Gatherer</code> to stanowe przekształcenie strumienia: inicjalizator stanu i integrator wołany dla każdego elementu, który może coś wypchnąć dalej (<code>downstream.push</code>). Tutaj grupuje log w podróże, leniwie: podróż wychodzi dalej w chwili, gdy auto przejeżdża przez zjazd.</li><li>W Scali to samo daje <code>scanLeft</code> na <code>Iterator</code>: stan (mapa otwartych podróży) przechodzi z elementu na element, a <code>flatMap(_._2)</code> przepuszcza tylko zakończone podróże. Bez mutowalnych struktur i bez osobnego API.</li><li>Obie wersje są leniwe: <code>limit(3)</code> / <code>take(3)</code> przestaje czytać log po trzeciej długiej podróży. <code>ofGreedy</code> znaczy, że integrator sam nie przerywa — przerwanie przychodzi z dołu, gdy <code>push</code> zwróci <code>false</code>.</li><li>Ten Gatherer i ten <code>scanLeft</code> budują też listę podróży dla wszystkich pozostałych przykładów (120 w obu językach).</li></ul>
+</article>
+<div class="grp" id="g-optional"><p class="gl">Optional · lenistwo</p><h3>Optional i leniwość</h3><p>Dwie rzeczy, na których Javowiec najczęściej potyka się w Scali: pomieszane nazwy metod <code>Optional</code>/<code>Option</code> i to, że kolekcje Scali są gorliwe.</p></div>
+<article class="prob" id="optional">
+<div class="phead"><span class="pnum">S13</span><h3>Opis podróży z awaryjnym wyborem</h3><span class="ver">Java 9</span></div>
+<p class="why apis">Optional.or · map · orElse</p>
+<div class="pair eq"><div class="side s"><span class="sidelab">Scala 3<span class="loc">7 linii</span></span><div class="codewrap"><span class="codelang">SCALA</span><pre><code class="language-scala">def describeJourney(journeys: Vector[Journey], plate: String): String =
+  val ofPlate = journeys.filter(_.plate == plate) // kolekcję można użyć ponownie
+  ofPlate
+    .find(_.points.size &gt;= 6)
+    .orElse(ofPlate.headOption)
+    .map(j =&gt; s"${j.plate} ${j.distanceKm} km, ${j.points.size} pkt")
+    .getOrElse(s"brak podróży $plate")</code></pre></div></div><div class="side j"><span class="sidelab">Java<span class="loc">9 linii</span></span><div class="codewrap"><span class="codelang">JAVA</span><pre><code class="language-java">static String describeJourney(List&lt;Journey&gt; journeys, String plate) {
+    return journeys.stream()
+            .filter(j -&gt; j.plate().equals(plate))
+            .filter(j -&gt; j.points().size() &gt;= 6)
+            .findFirst()
+            .or(() -&gt; journeys.stream().filter(j -&gt; j.plate().equals(plate)).findFirst())
+            .map(j -&gt; "%s %d km, %d pkt".formatted(j.plate(), j.distanceKm(), j.points().size()))
+            .orElse("brak podróży " + plate);
+}</code></pre></div></div></div>
+<div class="out eq">HRV700 50 km, 6 pkt | brak podróży XXX000</div>
+<ul class="notes"><li>Nazwy są zamienione: Javowe <code>Optional.or(() -&gt; …)</code> to Scalowe <code>Option.orElse(…)</code>, a Javowe <code>orElse(x)</code> to Scalowe <code>getOrElse(x)</code>.</li><li>Argumenty <code>orElse</code>/<code>getOrElse</code> w Scali są leniwe (by-name), więc nie trzeba lambdy <code>() -&gt;</code> ani osobnego <code>orElseGet</code>.</li><li>W Javie drugi strumień trzeba zbudować od nowa, bo pierwszy zużył się na <code>findFirst</code>. W Scali przefiltrowana kolekcja <code>ofPlate</code> jest użyta dwa razy.</li><li><code>findFirst()</code> ↔ <code>find(p)</code> / <code>headOption</code>; <code>flatMap(Optional::stream)</code> na strumieniu <code>Optional</code>i ↔ <code>flatten</code> na kolekcji <code>Option</code>ów.</li></ul>
+</article>
+<article class="prob" id="laziness">
+<div class="phead"><span class="pnum">S14</span><h3>Ile elementów naprawdę jest przetwarzanych</h3></div>
+<p class="why apis">peek · lenistwo · krótkie spięcie</p>
+<div class="pair eq"><div class="side s"><span class="sidelab">Scala 3<span class="loc">8 linii</span></span><div class="codewrap"><span class="codelang">SCALA</span><pre><code class="language-scala">def evaluationsUntilFirstLong(journeys: Vector[Journey]): (Int, Int) =
+  var strict = 0
+  journeys.tapEach(_ =&gt; strict += 1).find(_.points.size &gt;= 8) // Vector: tapEach przechodzi WSZYSTKO
+
+  var lazily = 0
+  journeys.iterator.tapEach(_ =&gt; lazily += 1).find(_.points.size &gt;= 8) // Iterator: jak Stream
+
+  (strict, lazily)</code></pre></div></div><div class="side j"><span class="sidelab">Java<span class="loc">8 linii</span></span><div class="codewrap"><span class="codelang">JAVA</span><pre><code class="language-java">static int evaluationsUntilFirstLong(List&lt;Journey&gt; journeys) {
+    AtomicInteger evaluated = new AtomicInteger();
+    journeys.stream()
+            .peek(j -&gt; evaluated.incrementAndGet())
+            .filter(j -&gt; j.points().size() &gt;= 8)
+            .findFirst();
+    return evaluated.get();
+}</code></pre></div></div></div>
+<div class="out">Java · peek: 16 elementów
+Scala · Iterator: 16 elementów
+Scala · Vector: 120 elementów</div>
+<ul class="notes"><li>Strumień Javy jest leniwy: <code>findFirst</code> przerywa po znalezieniu, więc <code>peek</code> wykonał się tylko dla 16 podróży. Kolekcje Scali są gorliwe: <code>Vector.tapEach</code> przeszło wszystkie 120, zanim <code>find</code> w ogóle ruszyło.</li><li>Leniwy odpowiednik strumienia to <code>.iterator</code> (jednorazowy, jak <code>Stream</code>) albo <code>.view</code> (można przechodzić wielokrotnie, ale każde przejście liczy od nowa). <code>LazyList</code> jest leniwa i zapamiętuje wyniki.</li><li><code>peek</code> ↔ <code>tapEach</code>. Pułapka w Javie: od Javy 9 <code>peek</code> może się w ogóle nie wykonać, gdy wynik da się policzyć bez przechodzenia elementów, np. <code>list.stream().peek(…).count()</code>.</li></ul>
+</article>
+<div class="grp"><p class="gl">Bez odpowiednika 1:1</p><h3>Pułapki przy przesiadce</h3><p>Rzeczy, które nie mieszczą się w parze „Scala po lewej, Java po prawej”. Różnicę między <code>toList()</code> a <code>collect(toList())</code> opisuje pułapka P11 niżej.</p></div>
+<div class="traps">
+<div class="trap"><div class="thead"><span class="tcat">Streamy</span><h4>parallelStream()</h4></div><p>Od Scali 2.13 równoległe kolekcje nie są w bibliotece standardowej. Jest osobny moduł <code>scala-parallel-collections</code> (<code>.par</code>); częściej używa się <code>Future</code> albo Cats Effect / ZIO.</p></div>
+<div class="trap"><div class="thead"><span class="tcat">Streamy</span><h4>Strumień jest jednorazowy</h4></div><p>Drugie użycie <code>Stream</code> rzuca <code>IllegalStateException</code>. Kolekcje Scali można przechodzić wielokrotnie; jednorazowy jest tylko <code>Iterator</code>.</p></div>
+<div class="trap"><div class="thead"><span class="tcat">Streamy</span><h4>Wyjątki checked w lambdach</h4></div><p>Metody rzucające <code>IOException</code> nie pasują do <code>Function</code>, więc w Javie trzeba je opakowywać. Scala nie ma wyjątków checked; błąd jako wartość to <code>Try</code> albo <code>Either</code>.</p></div>
+<div class="trap"><div class="thead"><span class="tcat">Streamy</span><h4>Kolejność kluczy w mapach</h4></div><p><code>groupingBy</code> zwraca <code>HashMap</code>, <code>groupBy</code>/<code>groupMapReduce</code> — niemutowalną mapę haszującą. Żadna nie gwarantuje kolejności, stąd <code>TreeMap::new</code> i <code>.to(SortedMap)</code> w przykładach.</p></div>
+<div class="trap"><div class="thead"><span class="tcat">Streamy</span><h4>Pośrednie kolekcje</h4></div><p>Każde <code>map</code>/<code>filter</code> na kolekcji Scali buduje nową kolekcję. Przy długich łańcuchach na dużych danych zacznij od <code>.iterator</code> albo <code>.view</code> i zmaterializuj wynik dopiero na końcu (<code>.toVector</code>).</p></div>
+</div>
+</section>
+<section id="pulapki"><div class="shead"><h2>Katalog pułapek</h2><p>Każda z nich się kompiluje. Wynik pod spodem pochodzi z faktycznego uruchomienia na JDK 25 — nie z pamięci.</p></div>
 <div class="traps">
 <div class="trap"><div class="thead"><span class="tid">P1</span><span class="tcat">Boxing</span><h4>Integer porównywany przez ==</h4></div>
 <p>W Scali <code>==</code> na <code>Int</code> to zawsze porównanie wartości. W Javie <code>==</code> na <code>Integer</code> porównuje referencje, a JVM cache'uje tylko zakres −128…127. Kod przechodzi testy na małych liczbach i pada na produkcji.</p>
@@ -618,7 +1122,7 @@ List.of(1,2,3).forEach(x -&gt; counter[0] += x);</code></pre></div>
 <p class="fix">Zwykła pętla <code>for</code> jest tu czytelniejsza od obejścia tablicą. Albo <code>mapToInt(...).sum()</code>, jeśli to redukcja.</p>
 </div>
 <div class="trap"><div class="thead"><span class="tid">P16</span><span class="tcat">Sortowanie</span><h4>Stabilność zależy od typu, nie od metody</h4></div>
-<p><code>Arrays.sort</code> na obiektach to TimSort — stabilny, O(n log n) gwarantowane. Na prymitywach to dual-pivot quicksort — niestabilny, z patologicznym przypadkiem O(n²). Ta sama nazwa metody, dwa różne algorytmy.</p>
+<p><code>Arrays.sort</code> na obiektach to TimSort — stabilny, O(n log n) gwarantowane. Na prymitywach to dual-pivot quicksort — niestabilny (przy samych liczbach tego nie widać). Ta sama nazwa metody, dwa różne algorytmy.</p>
 <div class="codewrap"><span class="codelang">JAVA</span><pre><code class="language-java">String[] words = {&quot;bb&quot;, &quot;aa&quot;, &quot;c&quot;, &quot;dd&quot;};
 Arrays.sort(words, Comparator.comparingInt(String::length));</code></pre></div>
 <div class="out">[c, bb, aa, dd]   // &quot;bb&quot; przed &quot;aa&quot; — kolejność wejściowa zachowana</div>
@@ -670,14 +1174,14 @@ for (int i = 0; i &lt; 20000; i++) slow += &#x27;x&#x27;;
 
 StringBuilder sb = new StringBuilder();
 for (int i = 0; i &lt; 20000; i++) sb.append(&#x27;x&#x27;);</code></pre></div>
-<div class="out">20 tys. znaków: konkatenacja 198 ms  vs  StringBuilder 1 ms</div>
-<p class="fix"><code>StringBuilder</code> zawsze, gdy budujesz w pętli. Poza pętlą <code>+</code> jest kompilowane do <code>StringBuilder</code> i jest w porządku.</p>
+<div class="out">20 tys. znaków: konkatenacja ok. 70 ms  vs  StringBuilder poniżej 1 ms</div>
+<p class="fix"><code>StringBuilder</code> zawsze, gdy budujesz w pętli. Poza pętlą <code>+</code> jest kompilowane do <code>invokedynamic</code> (<code>StringConcatFactory</code>) i jest w porządku.</p>
 </div>
 </div></section>
 <section id="checklist"><div class="shead"><h2>Pięć minut przed rozmową</h2><p>Do przeczytania tuż przed sesją kodowania na żywo. Punkty są klikalne — odhacz to, co masz w głowie.</p></div>
-<ul class="check"><li>Wpisz <code>System.out.println(System.getProperty("java.version"))</code> i sprawdź, czy masz <code>record</code> i <code>Stream.toList()</code>.</li><li>Dopisz <code>import java.util.*;</code> i <code>import java.util.stream.*;</code>, zanim zaczniesz pisać rozwiązanie.</li><li>Kopiec: <code>PriorityQueue</code> jest <b>min</b>-heapem. Chcesz największych — trzymaj kopiec rozmiaru k i odrzucaj korzeń.</li><li>Komparator: <code>Comparator.comparingInt</code>, nigdy <code>a - b</code>.</li><li>Suma, iloczyn, prefiks: rzutuj na <code>long</code> przed działaniem.</li><li>Klucz mapy: <code>record</code> albo liczba. Nigdy <code>int[]</code>.</li><li>Licznik: <code>merge(k, 1, Integer::sum)</code>. Odczyt: <code>getOrDefault(k, 0)</code>.</li><li>Kolejka i stos: <code>ArrayDeque</code>. Nigdy <code>java.util.Stack</code>.</li><li>Budowanie stringa: <code>StringBuilder</code>.</li><li><code>split</code> przy danych tabelarycznych: zawsze z <code>-1</code>.</li><li>Rekurencja głębsza niż kilka tysięcy poziomów: przepisz na pętlę z <code>ArrayDeque</code>.</li><li>Wydruk tablicy: <code>Arrays.toString</code> / <code>Arrays.deepToString</code>.</li><li>Zanim uznasz zadanie za skończone: puste wejście, jeden element, same duplikaty, wartości skrajne (<code>Integer.MIN_VALUE</code>).</li></ul>
+<ul class="check"><li>Wpisz <code>System.out.println(System.getProperty("java.version"))</code> i sprawdź, czy masz <code>record</code> i <code>Stream.toList()</code>.</li><li>Dopisz <code>import java.util.*;</code> i <code>import java.util.stream.*;</code>, zanim zaczniesz pisać rozwiązanie.</li><li>Kopiec: <code>PriorityQueue</code> jest <b>min</b>-heapem. Chcesz największych — trzymaj kopiec rozmiaru k i odrzucaj korzeń.</li><li>Komparator: <code>Comparator.comparingInt</code>, nigdy <code>a - b</code>.</li><li>Suma, iloczyn, prefiks: rzutuj na <code>long</code> przed działaniem.</li><li>Klucz mapy: <code>record</code> albo liczba. Nigdy <code>int[]</code>.</li><li>Licznik: <code>merge(k, 1, Integer::sum)</code>. Odczyt: <code>getOrDefault(k, 0)</code>.</li><li><span><code>groupingBy</code> i <code>toMap</code>: bez fabryki mapy dostajesz <code>HashMap</code>, a <code>toMap</code> bez funkcji łączącej rzuca <code>IllegalStateException</code> przy powtórzonym kluczu.</span></li><li>Kolejka i stos: <code>ArrayDeque</code>. Nigdy <code>java.util.Stack</code>.</li><li>Budowanie stringa: <code>StringBuilder</code>.</li><li><code>split</code> przy danych tabelarycznych: zawsze z <code>-1</code>.</li><li>Rekurencja głębsza niż kilka tysięcy poziomów: przepisz na pętlę z <code>ArrayDeque</code>.</li><li>Wydruk tablicy: <code>Arrays.toString</code> / <code>Arrays.deepToString</code>.</li><li>Zanim uznasz zadanie za skończone: puste wejście, jeden element, same duplikaty, wartości skrajne (<code>Integer.MIN_VALUE</code>).</li></ul>
 </section>
-<footer>Wyniki pułapek to wydruk z uruchomienia każdego fragmentu, sprawdzony ponownie na JDK 25; czas w P22 zależy od maszyny.<br>Rozwiązania zadań kompilują się bez ostrzeżeń z -Xlint:all.<br><a href="../index.html">← lab ww86.eu</a></footer>
+<footer>Cały kod Javy uruchomiony na JDK 25 (Temurin 25.0.4). Rozwiązania zadań kompilują się bez ostrzeżeń z -Xlint:all i przechodzą testy zachowania; kod ze streamów dał ten sam wynik w Javie i w Scali 3.3.8 oraz 3.9.0.<br>Wyniki pułapek to wydruk z uruchomienia każdego fragmentu. Czas w P22 to zimne uruchomienie (mediana z pięciu: 71 ms) i zależy od maszyny; po rozgrzaniu JIT konkatenacja schodzi do kilkunastu ms, ale <code>StringBuilder</code> nadal jest kilkadziesiąt razy szybszy. Adresy w rodzaju <code>[I@…</code> zmieniają się przy każdym uruchomieniu.<br><a href="../index.html">← lab ww86.eu</a></footer>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/java.min.js"></script>
