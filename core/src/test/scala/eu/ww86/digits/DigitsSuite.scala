@@ -95,6 +95,15 @@ class DigitsSuite extends munit.FunSuite:
     assert(!Roots(7, 3, 5).isPossible)
   }
 
+  test("the page offers every possible triple of roots, in order, and nothing else") {
+    val all = Roots.possible
+    assertEquals(all.size, 81)
+    assertEquals(all.distinct, all)
+    assert(all.forall(_.isPossible))
+    assertEquals(all.take(3), List(Roots(1, 1, 2), Roots(1, 2, 3), Roots(1, 3, 4)))
+    assertEquals(all.last, Roots(9, 9, 9))
+  }
+
   test("a name already among the words, or with a letter outside the table, is not offered") {
     val anna = GivenName("ANNA", Sex.Female, 2, 1)
     val jose = GivenName("JOSÉ", Sex.Male, 2, 1)

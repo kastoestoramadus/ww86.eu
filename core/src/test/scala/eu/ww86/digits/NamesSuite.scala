@@ -55,5 +55,5 @@ class NamesSuite extends munit.FunSuite:
   }
 
   test("the page starts with every filter on") {
-    assertEquals(NameFilter.default, NameFilter(Sex.Female, minBearers = 500, alsoSecond = true, polishAlphabet = true))
+    assertEquals(NameFilter.default, NameFilter(Sex.Female, minBearers = 100, alsoSecond = true, polishAlphabet = true))
   }
