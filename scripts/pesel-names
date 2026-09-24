@@ -1,0 +1,75 @@
+#!/usr/bin/env python3
+# Rebuilds gen/src/main/resources/pesel-names.csv, the names the digits page searches, from the PESEL register.
+#
+#   scripts/pesel-names
+#
+# Source: "Lista imion występujących w rejestrze PESEL" (living people) on dane.gov.pl, dataset 1667, CC0 1.0:
+# https://dane.gov.pl/pl/dataset/1667. Four sheets of one date - first and second names, women and men - are joined
+# into one row per name and sex: how many people bear it as the first name and how many as the second. Names borne
+# first by fewer than FLOOR people are left out: they are thousands and would triple the file the page downloads.
+# For a newer date, put the resource ids of its four sheets into SHEETS and change SNAPSHOT.
+import csv, io, sys, urllib.request, zipfile
+import xml.etree.ElementTree as ET
+from pathlib import Path
+
+SNAPSHOT = "2026-01-20"
+SHEETS = {  # (sex, which name) -> resource id
+    ("F", "first"): 1159670,
+    ("M", "first"): 1159669,
+    ("F", "second"): 1159922,
+    ("M", "second"): 1159921,
+}
+FLOOR = 20
+OUT = Path(__file__).resolve().parent.parent / "gen/src/main/resources/pesel-names.csv"
+NS = "{http://schemas.openxmlformats.org/spreadsheetml/2006/main}"
+
+
+def rows(xlsx: bytes):
+    """Rows of the first sheet as lists of strings; enough of the format for these plain sheets."""
+    book = zipfile.ZipFile(io.BytesIO(xlsx))
+    shared = []
+    if "xl/sharedStrings.xml" in book.namelist():
+        for item in ET.fromstring(book.read("xl/sharedStrings.xml")).iter(NS + "si"):
+            shared.append("".join(t.text or "" for t in item.iter(NS + "t")))
+    sheet = sorted(n for n in book.namelist() if n.startswith("xl/worksheets/sheet"))[0]
+    for row in ET.fromstring(book.read(sheet)).iter(NS + "row"):
+        cells = []
+        for cell in row.iter(NS + "c"):
+            value = cell.find(NS + "v")
+            if cell.get("t") == "s":
+                cells.append(shared[int(value.text)])
+            elif cell.get("t") == "inlineStr":
+                cells.append("".join(t.text or "" for t in cell.iter(NS + "t")))
+            else:
+                cells.append(value.text if value is not None else "")
+        yield cells
+
+
+def counts(resource: int) -> dict:
+    url = f"https://api.dane.gov.pl/resources/{resource}/file"
+    with urllib.request.urlopen(url) as response:
+        table = list(rows(response.read()))
+    header, body = table[0], table[1:]
+    if header[0] not in ("IMIĘ_PIERWSZE", "IMIĘ_DRUGIE") or header[-1] != "LICZBA_WYSTĄPIEŃ":
+        sys.exit(f"pesel-names: resource {resource} has an unexpected header {header}")
+    return {row[0].strip(): int(row[-1]) for row in body if row and row[0].strip()}
+
+
+def main():
+    sheets = {key: counts(resource) for key, resource in SHEETS.items()}
+    kept = []
+    for sex in ("F", "M"):
+        first, second = sheets[(sex, "first")], sheets[(sex, "second")]
+        for name, bearers in first.items():
+            if bearers >= FLOOR and name != "BRAK DANYCH":  # "no data", a placeholder of the register
+                kept.append((sex, -bearers, name, second.get(name, 0)))
+    kept.sort()
+    with OUT.open("w", encoding="utf-8", newline="") as out:
+        writer = csv.writer(out, lineterminator="\n")
+        writer.writerow(["name", "sex", "first", "second"])
+        writer.writerows((name, sex, -negated, second) for sex, negated, name, second in kept)
+    print(f"pesel-names: {len(kept)} names as of {SNAPSHOT} in {OUT}")
+
+
+if __name__ == "__main__":
+    main()
