@@ -12,10 +12,20 @@ final case class LabItem(
     tech: List[String],
     year: Int,
     generated: Boolean = false,
-    postUrl: Option[String] = None
+    postUrl: Option[String] = None,
+    language: Language = Language.English
 ):
   /** Path from the site root, so pages can link to it relatively. */
   def path: String = s"lab/$slug/index.html"
+
+  /** The card is always in English; this tells the reader when the page behind it is not. */
+  def languageNote: Option[String] =
+    Option.when(language != Language.English)(s"In ${language.name}")
+
+/** Language a lab page is written in. `code` goes into `hreflang`. */
+enum Language(val code: String, val name: String):
+  case English extends Language("en", "English")
+  case Polish  extends Language("pl", "Polish")
 
 object Catalog:
 
