@@ -91,6 +91,11 @@ table.sums th, table.sums td { padding: 0.35rem 0.5rem; text-align: right; borde
 table.sums thead th { font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); font-weight: 500; }
 table.sums tbody th { text-align: left; font-weight: 500; }
 table.sums tr.total th, table.sums tr.total td { color: var(--accent); }
+table.sums td.special {
+  font-weight: 600;
+  background: color-mix(in srgb, var(--accent) 22%, transparent);
+  box-shadow: inset 0 0 0 3px var(--surface);
+}
 table.counts { margin-top: 1.4rem; }
 table.counts tbody th { overflow-wrap: anywhere; }
 table.counts th, table.counts td { padding-left: 0.3rem; padding-right: 0.3rem; }
