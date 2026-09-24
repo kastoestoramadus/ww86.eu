@@ -28,9 +28,9 @@ The same machinery as the blog's, `scripts/publish-pages` and its test are copie
   with a write token). `contents: write` sits on the jobs `publish`, `preview` and `cleanup` only, never
   at workflow level.
 - Previews exist only for PRs from this repo, not for forks and not for Dependabot: their token is
-  read-only. A preview is live about a minute after the job (Pages has to build the branch) and
-  disappears when the PR is closed. It is built from the PR merged into master as master stood at the
-  PR's last push, so it goes stale when master moves: rebase and push to refresh it.
+  read-only. A preview goes live once Pages has deployed the branch, half a minute to three minutes
+  after the job, and disappears when the PR is closed. It is built from the PR merged into master as
+  master stood at the PR's last push, so it goes stale when master moves: rebase and push to refresh it.
 - A preview is `target/site` copied as it is, plus `<meta name="robots" content="noindex, nofollow">` on
   every page (`buildPreview`, `eu.ww86.gen.Preview`); `static/robots.txt` disallows `/preview/`. Nothing is
   rebuilt for the other path because every link is relative, and `buildSite` keeps it that way: it fails
@@ -59,8 +59,14 @@ under the account's user site, which owns `blog.ww86.eu`), and the relative link
 
 ## Checking a preview or production
 
-- A preview is ready when the `preview` job is done *and* Pages has built the `gh-pages` commit it made
-  (`gh api repos/kastoestoramadus/ww86.eu/pages/builds/latest`, status `built`), not before.
+- A preview is ready when the `preview` job is done *and* the `pages-build-deployment` run of the
+  `gh-pages` commit it made has finished its `deploy` job, not before:
+  ```bash
+  gh run list --workflow pages-build-deployment --limit 1 --json headSha,status,conclusion
+  ```
+  `headSha` is the commit "Preview of PR #N from ...", wait for `completed` and `success`. The builds API
+  (`pages/builds/latest`) is not the signal: for PR #8 it said `built` before the run's build job had
+  started, and the page answered 404 for two and a half more minutes, until the deploy ended.
 - **The CDN caches 404s** for a minute or two and ignores the query string, so `?x=1` does not get past it.
   To see what Pages serves right now, percent-encode one character of the path: `/preview/pr-%32/` is a
   cache miss for `/preview/pr-2/`.

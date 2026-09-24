@@ -66,7 +66,7 @@ python3 -m http.server -d target/site 4001   # serve it on http://127.0.0.1:4001
   after are one click apart:
   `https://ww86.eu/lab/<slug>/index.html` → `https://ww86.eu/preview/pr-<N>/lab/<slug>/index.html`.
   A PR that changes no page links the preview root and says the output is unchanged.
-- Open the link only when the `preview` job is done *and* Pages has built the `gh-pages` commit it made;
+- Open the link only when the `preview` job is done *and* Pages has deployed the `gh-pages` commit it made;
   how to check, and why an early 404 lingers: [DEPLOY.md](DEPLOY.md).
 - `gh pr edit` fails here (gh 2.45) with a GraphQL error about Projects (classic); edit the body through
   REST instead: `gh api -X PATCH repos/kastoestoramadus/ww86.eu/pulls/<N> -F body=@body.md`.
