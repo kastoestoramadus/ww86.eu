@@ -18,14 +18,13 @@ final case class LabItem(
   /** Path from the site root, so pages can link to it relatively. */
   def path: String = s"lab/$slug/index.html"
 
-  /** The card is always in English; this tells the reader when the page behind it is not. */
-  def languageNote: Option[String] =
-    Option.when(language != Language.English)(s"In ${language.name}")
+  /** The card is always in English, so its flag says what language the page behind it is in. */
+  def languageLabel: String = s"In ${language.name}"
 
-/** Language a lab page is written in. `code` goes into `hreflang`. */
-enum Language(val code: String, val name: String):
-  case English extends Language("en", "English")
-  case Polish  extends Language("pl", "Polish")
+/** Language a lab page is written in. `code` goes into `hreflang`, `flag` names `static/flags/<flag>.svg`. */
+enum Language(val code: String, val name: String, val flag: String):
+  case English extends Language("en", "English", "gb")
+  case Polish  extends Language("pl", "Polish", "pl")
 
 object Catalog:
 
