@@ -14,14 +14,20 @@ Habicha and Lalki**, within about 500 m. The home address stays out of this publ
 
 ## Sections, in this order
 
-1. **Frequent trains**: a column per line and direction, every station (minor ones as small dots), up to
+1. **Map**, under the filters: every route column as a line, with no places on it. Frequent trains are thick
+   in their colours with every station they call at, R1 and R3 drawn from Warszawa Wschodnia because the
+   Po drodze cards have them cross the centre; buses thin, with the stops their columns list; rare
+   trains dashed, with their columns' stations, only under "Wszystkie". A line filter dims the rest and
+   brings its line into view. Paths and station positions come from `routes.js` (see Refreshing), the
+   tiles from OpenStreetMap, credited on the map and in the footer.
+2. **Frequent trains**: a column per line and direction, every station (minor ones as small dots), up to
    the regular terminus: R1 Skierniewice, R3 Łowicz, S1 Otwock.
-2. **Po drodze w Warszawie**: the stations every train from both home stations stops at, Włochy to
+3. **Po drodze w Warszawie**: the stations every train from both home stations stops at, Włochy to
    Wschodnia. A card lists each direct line with its ride time, trains and buses alike; a place near such
    a station lives only here, and route columns point to it. Zachodnia has no card: nothing is close, and
    Blue City and Reduta (1–1.2 km) sit at the Berestecka stop of 517 and 187.
-3. **Buses** from the three stops: a column per line and direction, selected stops only.
-4. **Rare trains**: direct but a few times a day or weekdays only; stations with places and zone borders
+4. **Buses** from the three stops: a column per line and direction, selected stops only.
+5. **Rare trains**: direct but a few times a day or weekdays only; stations with places and zone borders
    only, a "Tam / Z powrotem" summary, shown only under the "Wszystkie" line filter.
 
 ## Rules
@@ -98,6 +104,15 @@ direct trains there and back for the rare destinations. After a timetable change
 page runs until 24 October 2026) update the `from` and `when` texts, the hub ride times, the "stan:" date
 and the footer note on counted days.
 
+```bash
+python3 lab/ursus-by-train.py --map
+```
+
+Rewrites `lab/ursus-by-train/routes.js` from the same feeds: each column's path, cut from the shape of
+its most common trip (or of the trips it joins: the only R2 to Siedlce starts at Ursus, the others from
+Ursus Północny end at Mińsk), and the stations each train calls at. Run it after changing a route column;
+`UrsusSuite` fails while the map misses a line or a station, or a route no longer passes a stop.
+
 ## Decisions taken with the user
 
 - R1 and R3 run to their regular termini, Skierniewice and Łowicz, not to Żyrardów and Sochaczew.
@@ -107,6 +122,7 @@ and the footer note on counted days.
 - Cinemas "even studio ones, but open"; Centrum Skorosze, Blue City, Reduta and Centrum Łopuszańska 22 by
   name; hypermarkets only big; the Leroy Merlin canteens at Skorosze and on 716 north; cinemas as their
   own category; a cultural centre with a regular cinema is `kino`, with occasional screenings `kultura`.
+- The map shows where the connections reach and nothing else: no places, the list has them.
 - Rozrywka, the catch-all, is dropped. What was left went to `kultura` (the railway museums, PKiN's
   theatres, Koneser) and to a new `mecze`, "Mecze i koncerty", for the stadiums: the user's suggestion.
 
@@ -122,5 +138,8 @@ and the footer note on counted days.
 - **2026-09-25, #18**: category Rozrywka dropped (see Decisions). Found: #16 had already moved the cinemas
   and six places were left; a browser that remembered the Rozrywka filter opened the page empty, so a
   remembered category the page no longer has is ignored.
+- **2026-09-25, #19**: the map. Found: the R2 column joins two trips (see Refreshing); a bus shape can
+  end 43 m short of the terminus pole (177 at Os. Górczewska); tiles scaled to a fractional zoom show
+  seams in Chromium, so the map keeps whole zoom levels; CARTO tiles now need an API key, OSM's do not.
 - Not checked so far: GTFS counts against KOLEO or the printed timetable; walking routes (distances are
   straight lines).

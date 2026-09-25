@@ -3,6 +3,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Source+Sans+3:wght@400;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" integrity="sha384-c6Rcwz4e4CITMbu/NBmnNS8yN2sC3cUElMEMfP3vqqKFp7GOYaaBBCqmaWBjmkjb" crossorigin="anonymous">
 <style>
 :root{
   --bg:#F3F4EF; --surface:#FFFFFF; --surface-2:#E8EAE3; --ink:#17201C; --muted:#58625C; --rule:#D3D8CE;
@@ -57,6 +58,33 @@ header.top .zones{max-width:62ch;color:var(--muted);font-size:15px;margin:10px 0
 .dot{width:8px;height:8px;border-radius:50%;display:inline-block;flex:none}
 .dot.kultura{background:var(--c-kultura)} .dot.mecze{background:var(--c-mecze)} .dot.zabytki{background:var(--c-zabytki)} .dot.natura{background:var(--c-natura)} .dot.aktywnie{background:var(--c-aktywnie)} .dot.zakupy{background:var(--c-zakupy)} .dot.kino{background:var(--c-kino)}
 .count{font-family:var(--mono);font-size:12px;color:var(--muted);margin-left:auto}
+
+/* Map of the routes; Leaflet draws them as SVG paths, coloured here through --lc */
+.routes-map{margin:24px 0 0}
+#map{height:clamp(300px,min(60vh,90vw),520px);border:1px solid var(--rule);border-radius:10px;background:var(--surface-2);font:14px/1.4 var(--body);z-index:0}
+.routes-map figcaption{font-size:13px;color:var(--muted);margin:8px 0 0;max-width:90ch}
+.routes-map .touch{display:none}
+@media (pointer:coarse){ .routes-map .touch{display:inline} }
+#map .leaflet-tile-pane{filter:saturate(.3)}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) #map .leaflet-tile-pane{filter:invert(1) hue-rotate(180deg) saturate(.3) brightness(.85)} }
+:root[data-theme="dark"] #map .leaflet-tile-pane{filter:invert(1) hue-rotate(180deg) saturate(.3) brightness(.85)}
+#map path.m-rt{stroke:var(--lc)}
+#map path.m-case{stroke:var(--surface)}
+#map path.m-st{stroke:var(--lc);fill:var(--surface)}
+#map path.m-st.m-end{fill:var(--lc)}
+#map path.m-st.m-multi{stroke:var(--ink)}
+#map path.m-st.m-multi.m-end{fill:var(--ink)}
+#map .m-dim{opacity:.15}
+#map .leaflet-tooltip.m-dim{opacity:.15!important} /* Leaflet sets a tooltip's opacity inline */
+#map .m-off,#map.m-far .m-bus,#map.m-wide .m-minor{display:none}
+#map .leaflet-tooltip.m-lbl{background:none;border:0;box-shadow:none;padding:0;color:var(--ink);font:600 14px/1 var(--display);text-shadow:0 0 3px var(--bg),0 0 3px var(--bg),0 0 3px var(--bg)}
+#map .leaflet-tooltip.m-lbl::before{display:none}
+#map .leaflet-popup-content-wrapper,#map .leaflet-popup-tip{background:var(--surface);color:var(--ink)}
+#map .leaflet-popup-content{margin:10px 14px;font-size:14px}
+#map .leaflet-popup-content .pl{display:flex;flex-wrap:wrap;gap:4px;margin:6px 0}
+#map .leaflet-bar a{background:var(--surface);color:var(--ink);border-color:var(--rule)}
+#map .leaflet-control-attribution{background:var(--surface);color:var(--muted)}
+#map .leaflet-control-attribution a{color:var(--link)}
 
 /* Lines */
 .lines{margin-top:24px;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,500px),1fr));gap:28px 36px;align-items:start}
@@ -155,6 +183,11 @@ footer p{margin:0;max-width:90ch}
     <span class="count" id="count" aria-live="polite"></span>
   </nav>
 
+  <figure class="routes-map" id="map-box">
+    <div id="map" aria-label="Mapa połączeń"></div>
+    <figcaption><strong>Dokąd bez przesiadki.</strong> Pociągi grubą linią, autobusy cienką, rzadsze pociągi przerywaną. Filtr linii wyróżnia jedną z nich; po kliknięciu stacji lub przystanku widać, co się tam zatrzymuje. Przystanki autobusów pojawiają się po przybliżeniu.<span class="touch"> Mapę przesuwa się dwoma palcami.</span></figcaption>
+  </figure>
+
   <div class="lines" id="lines"></div>
 
   <section class="sec" id="city-sec" aria-labelledby="city-h">
@@ -183,6 +216,7 @@ footer p{margin:0;max-width:90ch}
     <p><strong>Liczby kursów</strong> policzone z rozkładów na wtorek 29 września i weekend 3–4 października 2026 r.; po zmianie rozkładu mogą się różnić.</p>
     <p><strong>Źródła:</strong>
       <a href="https://mkuran.pl/gtfs/" target="_blank" rel="noopener">rozkłady ZTM, KM i PKP PLK w formacie GTFS (M. Kuranowski)</a>,
+      <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap — podkład mapy i przebieg tras autobusów</a>,
       <a href="https://www.wtp.waw.pl/integracje/wspolny-bilet-ztm-km-wkd/" target="_blank" rel="noopener">ZTM — Wspólny Bilet ZTM-KM-WKD i strefy</a>,
       <a href="https://koleo.pl/dworzec-pkp/warszawa-ursus/odjazdy" target="_blank" rel="noopener">KOLEO — odjazdy Warszawa Ursus</a>,
       <a href="https://koleo.pl/en/dworzec-pkp/warszawa-ursus-polnocny/odjazdy" target="_blank" rel="noopener">KOLEO — odjazdy Ursus Północny</a>,
@@ -293,6 +327,8 @@ footer p{margin:0;max-width:90ch}
   </footer>
 </div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js" integrity="sha384-NElt3Op+9NBMCYaef5HxeJmU4Xeard/Lku8ek6hoPTvYkQPh3zLIrJP7KiRocsxO" crossorigin="anonymous"></script>
+<script src="routes.js"></script>
 <script>
 (function(){
   var gm = function(q){ return 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(q); };
@@ -755,6 +791,111 @@ footer p{margin:0;max-width:90ch}
 
   function show(id, visible){ document.getElementById(id).hidden = !visible; }
 
+  // The map draws every route column from routes.js, rare trains first so the rest lies on top. A pressed
+  // line filter dims what it does not name; rare trains, as in the list, show under "Wszystkie" only.
+  var mapParts = [], mapView = null;
+
+  function mapFilter(){
+    if (mapView) mapView();
+    mapParts.forEach(function(p){
+      var off = !!p.rare && state.line !== 'all';
+      var dim = !off && state.line !== 'all' && p.lines.indexOf(state.line) < 0;
+      var tip = p.layer.getTooltip && p.layer.getTooltip();
+      [p.layer.getElement(), tip && tip.getElement()].forEach(function(e){
+        if (e) { e.classList.toggle('m-off', off); e.classList.toggle('m-dim', dim); }
+      });
+    });
+  }
+
+  function drawMap(){
+    if (!window.L || !window.ROUTES) { show('map-box', false); return; }
+    var touch = window.matchMedia && matchMedia('(pointer: coarse)').matches;
+    // Whole zoom levels only: Chromium leaves seams between tiles scaled to a fractional one.
+    var map = L.map('map', { scrollWheelZoom:false, dragging:!touch });
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom:19,
+      attribution:'&copy; ' + link('https://www.openstreetmap.org/copyright', 'OpenStreetMap') + ' · trasy: ' + link('https://mkuran.pl/gtfs/', 'GTFS') }).addTo(map);
+
+    var routes = [].concat(
+      RARE.map(function(l){ return { line:l, f:'rare', cls:'rare', kind:'rare' }; }),
+      BUSES.map(function(l){ return { line:l, f:l.f, cls:'bus', kind:'bus' }; }),
+      LINES.map(function(l){ return { line:l, f:l.id, cls:l.id, kind:'train' }; }));
+    // A station's dot follows its frequent line: Otwock ends S1 but is a minor stop of R7.
+    var onPage = {};
+    RARE.concat(LINES).forEach(function(l){ l.stops.forEach(function(s){ onPage[s.n] = s; }); });
+    HUB.forEach(function(s){ onPage[s.n] = s; });
+
+    // One dot per name: a station several lines call at, or a bus stop several buses share.
+    var dots = {}, order = [];
+    function dot(name, ll, r, s){
+      var d = dots[name];
+      if (!d) {
+        d = dots[name] = { ll:ll, q:(s && s.q) || name + ' stacja kolejowa', lines:[], badges:[], rare:true, bus:r.kind === 'bus', minor:true, end:false };
+        order.push(name);
+      }
+      if (d.lines.indexOf(r.f) < 0) d.lines.push(r.f);
+      var badge = '<span class="badge ' + r.cls + '">' + r.line.badge + '</span>';
+      if (d.badges.indexOf(badge) < 0) d.badges.push(badge);
+      if (r.kind !== 'rare') { d.rare = false; if (!d.cls) d.cls = r.cls; }
+      if (s && !s.minor) d.minor = false;
+      if (s && s.terminus) d.end = true;
+      if (s && s.lines) s.lines.forEach(function(f){ if (d.lines.indexOf(f) < 0) d.lines.push(f); });
+    }
+
+    var bounds = {};
+    function extend(f, path){ (bounds[f] || (bounds[f] = L.latLngBounds([]))).extend(path); }
+    routes.forEach(function(r){
+      var data = ROUTES[r.line.id];
+      if (!data) return;
+      var cls = 'm-rt ' + r.cls;
+      if (r.kind === 'train') {
+        mapParts.push({ layer:L.polyline(data.path, { className:'m-case', weight:9, interactive:false }).addTo(map), lines:[r.f] });
+      }
+      var path = L.polyline(data.path, { className:cls, weight:r.kind === 'train' ? 5 : 3, dashArray:r.kind === 'rare' ? '6 6' : null, interactive:false }).addTo(map);
+      mapParts.push({ layer:path, lines:[r.f], rare:r.kind === 'rare' });
+      if (r.kind !== 'rare') { extend('all', data.path); extend(r.f, data.path); }
+      if (r.kind === 'bus') {
+        r.line.stops.forEach(function(s){ dot(s.n, s.q.split(',').map(Number), r, s); });
+      } else {
+        // A frequent train shows every station it calls at, a rare one the stations on the page.
+        var page = r.line.stops.map(function(s){ return s.n; });
+        data.stops.forEach(function(st){
+          if (r.kind === 'rare' && page.indexOf(st[0]) < 0) return;
+          dot(st[0], [st[1], st[2]], r, onPage[st[0]]);
+        });
+      }
+    });
+
+    order.forEach(function(name){
+      var d = dots[name];
+      var cls = 'm-st ' + (d.cls || 'rare') + (d.bus ? ' m-bus' : '') + (d.badges.length > 1 && !d.bus ? ' m-multi' : '') + (d.end ? ' m-end' : d.minor ? ' m-minor' : '');
+      var m = L.circleMarker(d.ll, { className:cls, radius:d.end ? 6 : (d.minor ? 3.5 : 5), weight:d.minor ? 2 : 3, fillOpacity:1 }).addTo(map);
+      m.bindPopup('<strong>' + esc(name) + '</strong><div class="pl">' + d.badges.join('') + '</div>' + link(gm(d.q), d.bus ? 'przystanek na mapie ↗' : 'stacja na mapie ↗'));
+      if (d.end) {
+        // Under the dot, so a terminus at the edge of the map keeps its name; Ursus Północny is north of Ursus.
+        var top = name === 'Warszawa Ursus Północny';
+        m.bindTooltip(esc(name.replace(/^Warszawa /, '')), { permanent:true, direction:top ? 'top' : 'bottom', offset:[0, top ? -8 : 8], className:'m-lbl' + (d.bus ? ' m-bus' : '') });
+      }
+      mapParts.push({ layer:m, lines:d.lines, rare:d.rare });
+    });
+
+    // Zoomed out, bus stops and then minor stations would crowd the lines.
+    function far(){
+      var box = document.getElementById('map');
+      box.classList.toggle('m-far', map.getZoom() < 11);
+      box.classList.toggle('m-wide', map.getZoom() < 9);
+    }
+    map.on('zoomend', far);
+    // A pressed filter brings its line into view. Room for a terminus's name, half of it either side of the dot.
+    var shown;
+    mapView = function(){
+      if (shown === state.line) return;
+      shown = state.line;
+      map.fitBounds(bounds[state.line] || bounds.all, { paddingTopLeft:[50, 24], paddingBottomRight:[50, 36] });
+    };
+    mapFilter();
+    far();
+  }
+
   function render(){
     var total = 0;
 
@@ -801,6 +942,7 @@ footer p{margin:0;max-width:90ch}
     document.querySelectorAll('[data-line]').forEach(function(b){ b.setAttribute('aria-pressed', String(b.dataset.line === state.line)); });
     document.querySelectorAll('[data-cat]').forEach(function(b){ b.setAttribute('aria-pressed', String(b.dataset.cat === state.cat)); });
     document.querySelectorAll('[data-dist]').forEach(function(b){ b.setAttribute('aria-pressed', String(b.dataset.dist === state.dist)); });
+    mapFilter();
     try { localStorage.setItem('ursus-filters', JSON.stringify(state)); } catch(e) {}
   }
 
@@ -813,6 +955,7 @@ footer p{margin:0;max-width:90ch}
   });
 
   render();
+  drawMap();
 })();
 </script>
 
