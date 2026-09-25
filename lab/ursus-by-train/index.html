@@ -8,7 +8,7 @@
   --bg:#F3F4EF; --surface:#FFFFFF; --surface-2:#E8EAE3; --ink:#17201C; --muted:#58625C; --rule:#D3D8CE;
   --r1:#B9531A; --r1-soft:#F5E2D4; --r3:#136B75; --r3-soft:#D5EBED; --s1:#2D5BA8; --s1-soft:#DCE5F5;
   --bus:#4E5B66; --bus-soft:#E1E6EA; --rare:#7A6E52; --rare-soft:#ECE6D8;
-  --c-kultura:#6A4C93; --c-rozrywka:#B23A48; --c-zabytki:#86662A; --c-natura:#3A7636; --c-aktywnie:#1C78A8; --c-zakupy:#A23B72; --c-kino:#2F3B45;
+  --c-kultura:#6A4C93; --c-mecze:#B23A48; --c-zabytki:#86662A; --c-natura:#3A7636; --c-aktywnie:#1C78A8; --c-zakupy:#A23B72; --c-kino:#2F3B45;
   --link:#136B75; --focus:#136B75;
   --display:"Barlow Condensed","Arial Narrow",system-ui,sans-serif;
   --body:"Source Sans 3",system-ui,-apple-system,"Segoe UI",sans-serif;
@@ -19,7 +19,7 @@
     --bg:#0F1311; --surface:#161B18; --surface-2:#1F2622; --ink:#E3E8E4; --muted:#9BA69F; --rule:#2B332E;
     --r1:#E88A4F; --r1-soft:#37241A; --r3:#4DB3BD; --r3-soft:#132E2F; --s1:#86A8E6; --s1-soft:#1A2438;
     --bus:#A7B6C3; --bus-soft:#1E252B; --rare:#C9B98F; --rare-soft:#2A261D;
-    --c-kultura:#B6A0DD; --c-rozrywka:#EE8C96; --c-zabytki:#D6B46B; --c-natura:#8CC580; --c-aktywnie:#6DBBE6; --c-zakupy:#E48BB9; --c-kino:#C9D2DA;
+    --c-kultura:#B6A0DD; --c-mecze:#EE8C96; --c-zabytki:#D6B46B; --c-natura:#8CC580; --c-aktywnie:#6DBBE6; --c-zakupy:#E48BB9; --c-kino:#C9D2DA;
     --link:#6CC3CC; --focus:#6CC3CC;
   }
 }
@@ -27,7 +27,7 @@
   --bg:#0F1311; --surface:#161B18; --surface-2:#1F2622; --ink:#E3E8E4; --muted:#9BA69F; --rule:#2B332E;
   --r1:#E88A4F; --r1-soft:#37241A; --r3:#4DB3BD; --r3-soft:#132E2F; --s1:#86A8E6; --s1-soft:#1A2438;
   --bus:#A7B6C3; --bus-soft:#1E252B; --rare:#C9B98F; --rare-soft:#2A261D;
-  --c-kultura:#B6A0DD; --c-rozrywka:#EE8C96; --c-zabytki:#D6B46B; --c-natura:#8CC580; --c-aktywnie:#6DBBE6; --c-zakupy:#E48BB9; --c-kino:#C9D2DA;
+  --c-kultura:#B6A0DD; --c-mecze:#EE8C96; --c-zabytki:#D6B46B; --c-natura:#8CC580; --c-aktywnie:#6DBBE6; --c-zakupy:#E48BB9; --c-kino:#C9D2DA;
   --link:#6CC3CC; --focus:#6CC3CC;
 }
 *{box-sizing:border-box}
@@ -55,7 +55,7 @@ header.top .zones{max-width:62ch;color:var(--muted);font-size:15px;margin:10px 0
 .chip[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
 .chip[aria-pressed="true"] .dot{box-shadow:0 0 0 2px var(--bg)}
 .dot{width:8px;height:8px;border-radius:50%;display:inline-block;flex:none}
-.dot.kultura{background:var(--c-kultura)} .dot.rozrywka{background:var(--c-rozrywka)} .dot.zabytki{background:var(--c-zabytki)} .dot.natura{background:var(--c-natura)} .dot.aktywnie{background:var(--c-aktywnie)} .dot.zakupy{background:var(--c-zakupy)} .dot.kino{background:var(--c-kino)}
+.dot.kultura{background:var(--c-kultura)} .dot.mecze{background:var(--c-mecze)} .dot.zabytki{background:var(--c-zabytki)} .dot.natura{background:var(--c-natura)} .dot.aktywnie{background:var(--c-aktywnie)} .dot.zakupy{background:var(--c-zakupy)} .dot.kino{background:var(--c-kino)}
 .count{font-family:var(--mono);font-size:12px;color:var(--muted);margin-left:auto}
 
 /* Lines */
@@ -141,7 +141,7 @@ footer p{margin:0;max-width:90ch}
       <button class="chip" id="f-cat-all" data-cat="all" aria-pressed="true">Wszystko</button>
       <button class="chip" id="f-cat-kultura" data-cat="kultura" aria-pressed="false"><span class="dot kultura"></span>Kultura</button>
       <button class="chip" id="f-cat-kino" data-cat="kino" aria-pressed="false"><span class="dot kino"></span>Kino</button>
-      <button class="chip" id="f-cat-rozrywka" data-cat="rozrywka" aria-pressed="false"><span class="dot rozrywka"></span>Rozrywka</button>
+      <button class="chip" id="f-cat-mecze" data-cat="mecze" aria-pressed="false"><span class="dot mecze"></span>Mecze i koncerty</button>
       <button class="chip" id="f-cat-aktywnie" data-cat="aktywnie" aria-pressed="false"><span class="dot aktywnie"></span>Aktywnie</button>
       <button class="chip" id="f-cat-zabytki" data-cat="zabytki" aria-pressed="false"><span class="dot zabytki"></span>Zabytki i historia</button>
       <button class="chip" id="f-cat-natura" data-cat="natura" aria-pressed="false"><span class="dot natura"></span>Zieleń</button>
@@ -297,7 +297,7 @@ footer p{margin:0;max-width:90ch}
 (function(){
   var gm = function(q){ return 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(q); };
   var walk = function(from, to){ return 'https://www.google.com/maps/dir/?api=1&origin=' + encodeURIComponent(from) + '&destination=' + encodeURIComponent(to) + '&travelmode=walking'; };
-  var CAT = {kultura:'Kultura', kino:'Kino', rozrywka:'Rozrywka', aktywnie:'Aktywnie', zabytki:'Zabytki i historia', natura:'Zieleń', zakupy:'Zakupy'};
+  var CAT = {kultura:'Kultura', kino:'Kino', mecze:'Mecze i koncerty', aktywnie:'Aktywnie', zabytki:'Zabytki i historia', natura:'Zieleń', zakupy:'Zakupy'};
 
   // Stop fields: minor = small dot, terminus = filled dot, zone = border station of ZTM zones 1 and 2,
   // zEnd = zone 2 ends after this stop. Bus stops use coordinates as q, a stop name alone is ambiguous.
@@ -489,7 +489,7 @@ footer p{margin:0;max-width:90ch}
     { n:'Warszawa Stadion', q:'Warszawa Stadion stacja kolejowa', lines:['r1','s1','r3'], via:[
       { b:['r1','s1'], t:'z Ursusa · 20 min' }, { b:['r3'], t:'z Ursusa Północnego · 20 min' }
     ], places:[
-      { n:'PGE Narodowy', q:'PGE Narodowy, Warszawa', c:'rozrywka', d:'at', t:'Koncerty i mecze.' },
+      { n:'PGE Narodowy', q:'PGE Narodowy, Warszawa', c:'mecze', d:'at', t:'Koncerty i mecze.' },
       { n:'Park Skaryszewski', q:'Park Skaryszewski, Warszawa', c:'natura', d:null, t:'Zabytkowy park przy rondzie Waszyngtona.' }
     ]},
     { n:'Warszawa Wschodnia', q:'Warszawa Wschodnia stacja kolejowa', lines:['r1','s1','r3'], via:[
@@ -546,7 +546,7 @@ footer p{margin:0;max-width:90ch}
         { n:'Łazienki Królewskie', q:'Łazienki Królewskie, Warszawa', c:'zabytki', d:null, t:'Park-muzeum króla Stanisława Augusta: Pałac na Wyspie, Amfiteatr, Stara Pomarańczarnia. Wstęp do parku bezpłatny.' }
       ]},
       { n:'Legia - Stadion', q:'52.22207,21.044314', places:[
-        { n:'Stadion Legii', q:'Stadion Legii Warszawa, Łazienkowska 3, Warszawa', c:'rozrywka', d:null, t:'Mecze Legii Warszawa.' }
+        { n:'Stadion Legii', q:'Stadion Legii Warszawa, Łazienkowska 3, Warszawa', c:'mecze', d:null, t:'Mecze Legii Warszawa.' }
       ]},
       { n:'Chełmska', q:'52.201452,21.049765', minor:true },
       { n:'Stegny', q:'52.17815,21.04892', terminus:true, places:[
