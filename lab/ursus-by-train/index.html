@@ -692,6 +692,8 @@ footer p{margin:0;max-width:90ch}
 
   var state = { line:'all', cat:'all', dist:'all' };
   try { var saved = JSON.parse(localStorage.getItem('ursus-filters') || 'null'); if (saved) { state = Object.assign(state, saved); } } catch(e) {}
+  // A remembered filter may name a category that no longer exists.
+  if (state.cat !== 'all' && !CAT[state.cat]) state.cat = 'all';
 
   function el(tag, cls, html){ var e = document.createElement(tag); if (cls) e.className = cls; if (html != null) e.innerHTML = html; return e; }
   function esc(s){ return String(s).replace(/[&<>"]/g, function(ch){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[ch]; }); }
