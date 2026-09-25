@@ -8,18 +8,27 @@ class UrsusSuite extends munit.FunSuite:
   // sbt runs the tests in the root of the build, where lab/ is
   private val page = Files.readString(Path.of("lab/ursus-by-train/index.html"))
 
-  /** Name and category of every place; stops have no category. */
-  private val places = """\{ n:'([^']*)', q:'[^']*', c:'([a-z]+)'""".r
-    .findAllMatchIn(page).map(m => m.group(1) -> m.group(2)).toList
+  /** A place of the page; stops have no category. */
+  private case class Place(name: String, cats: List[String], text: String)
+
+  private val places = """\{ n:'([^']*)', q:'[^']*', c:\[([^\]]*)\], d:[^,]*, t:'([^']*)'""".r
+    .findAllMatchIn(page)
+    .map(m => Place(m.group(1), "'([a-z]+)'".r.findAllMatchIn(m.group(2)).map(_.group(1)).toList, m.group(3)))
+    .toList
 
   test("every place is read") {
-    assertEquals(places.size, "c:'".r.findAllMatchIn(page).size)
+    assertEquals(places.size, " c:".r.findAllMatchIn(page).size)
+  }
+
+  test("a place has one or two categories, the most important first, none twice") {
+    val wrong = places.filter(p => p.cats.isEmpty || p.cats.size > 2 || p.cats.distinct != p.cats).map(p => s"${p.name}: ${p.cats}")
+    assertEquals(wrong, Nil)
   }
 
   test("every category a place uses has a label, a filter chip, a dot and a colour in every theme") {
     val labels = """var CAT = \{([^}]*)\}""".r.findFirstMatchIn(page).map(_.group(1)).getOrElse("")
     val gaps = for
-      c          <- places.map(_._2).distinct
+      c          <- places.flatMap(_.cats).distinct
       (what, ok) <- List(
                       "label" -> labels.contains(s"$c:'"),
                       "chip"  -> page.contains(s"""data-cat="$c""""),
@@ -37,19 +46,22 @@ class UrsusSuite extends munit.FunSuite:
   // Named like a cinema, but screenings are occasional, so it counts as culture.
   private val occasional = Set("Stare Kino")
 
-  test("every cinema with a regular programme is under Kino, and nothing else is") {
+  test("every cinema with a regular programme is first under Kino, and nothing else is under it") {
     val wrong = places.collect {
-      case (name, c) if occasional(name) && c != "kultura"                                     => s"$name: $c"
-      case (name, c) if !occasional(name) && cinema.findFirstIn(name).isDefined != (c == "kino") => s"$name: $c"
+      case Place(name, cats, _) if occasional(name) && (!cats.contains("kultura") || cats.contains("kino")) => s"$name: $cats"
+      case Place(name, cats, _) if !occasional(name) && cinema.findFirstIn(name).isDefined != cats.contains("kino") =>
+        s"$name: $cats"
+      case Place(name, cats, _) if cats.contains("kino") && cats.head != "kino" => s"$name: $cats"
     }
     assertEquals(wrong, Nil)
   }
 
-  test("a cultural centre is under Kultura, or under Kino when it runs a cinema with a regular programme") {
+  test("a cultural centre is under Kultura, and first under Kino when it runs a cinema with a regular programme") {
     val centre = "Centrum Kultury|Ośrodek Kultury|Dom Kultury|Kulturoteka".r
     val wrong = places.collect {
-      case (name, c) if centre.findFirstIn(name).isDefined && c != (if cinema.findFirstIn(name).isDefined then "kino" else "kultura") =>
-        s"$name: $c"
+      case Place(name, cats, _) if centre.findFirstIn(name).isDefined &&
+            (if cinema.findFirstIn(name).isDefined then cats != List("kino", "kultura") else !cats.contains("kultura")) =>
+        s"$name: $cats"
     }
     assertEquals(wrong, Nil)
   }
@@ -57,7 +69,7 @@ class UrsusSuite extends munit.FunSuite:
   test("every stadium is under Mecze i koncerty") {
     // where you watch a match or a concert; a track you ride yourself is Aktywnie (Arena Pruszków)
     val stadium = "Stadion|Narodowy".r
-    val wrong = places.collect { case (name, c) if stadium.findFirstIn(name).isDefined && c != "mecze" => s"$name: $c" }
+    val wrong = places.collect { case Place(name, cats, _) if stadium.findFirstIn(name).isDefined && !cats.contains("mecze") => s"$name: $cats" }
     assertEquals(wrong, Nil)
   }
 
@@ -147,4 +159,16 @@ class UrsusSuite extends munit.FunSuite:
       if off > 50
     yield f"${l.id}, stop ${i + 1}: $off%.0f m"
     assertEquals(wrong, Nil)
+  }
+
+  test("no chain has more than three hypermarkets on the page") {
+    // A place counts for every chain its name or text names, unless as a supermarket (the Carrefour in Centrum Skorosze).
+    val chains = List("Kaufland", "Carrefour", "Auchan", "E.Leclerc", "Lidl", "Biedronka", "Netto", "Aldi", "Intermarché", "Stokrotka")
+    val over = for
+      chain <- chains
+      named  = s"(?<!supermarket )${java.util.regex.Pattern.quote(chain)}".r
+      n      = places.count(p => p.cats.contains("zakupy") && named.findFirstIn(s"${p.name} ${p.text}").isDefined)
+      if n > 3
+    yield s"$chain: $n"
+    assertEquals(over, Nil)
   }
