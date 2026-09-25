@@ -1,2 +1,11 @@
 User-agent: *
 Disallow: /preview/
+
+# Crawlers that collect AI training data: text and data mining is reserved, see copyright.html
+User-agent: GPTBot
+User-agent: ClaudeBot
+User-agent: CCBot
+User-agent: Google-Extended
+User-agent: Applebot-Extended
+User-agent: meta-externalagent
+Disallow: /
