@@ -54,25 +54,43 @@ Lalki (its four poles). The home address stays out of this public repository.
   because a stop name is ambiguous. `d` is `'at'` up to about 400 m, `null` for a walk, `'far'` for a bike
   or bus ride with "Ok. N km od stacji." in `t`; give the distance in `t` for walks of a kilometre or more
   too. Measure distances (OSM or GTFS coordinates), never estimate them.
-- **Categories** (`c`):
+- **Categories** (`c`): a list of one or two, the most important first; the dots follow its order, and
+  a filter finds a place by either. A second one only when a visitor filtering by it would want the place
+  and the text backs it; a place that needs three is split into entries, if it consists of parts with
+  their own name or entrance (the user, 2026-09-25).
   - `kultura`: museums (railway ones too), theatres (PKiN's), galleries, cultural centres, also those with
     occasional screenings (MOK Józefów, Stare Kino in Milanówek);
   - `kino`: cinemas with a regular programme, studio and community ones included, and a cultural centre
-    that runs one is a single `kino` entry (Kino Bajka in CK Błonie). A museum or palace hosting a
-    cinema keeps its own entry beside it: MSN and KinoMuzeum, PKiN and Kinoteka, Zamek Ujazdowski and
-    Kino U-jazdowski;
-  - `mecze` (label "Mecze i koncerty"): stadiums, where you watch a match or a concert;
-  - `aktywnie` (doing sport: pools, tracks, trampolines), `zabytki`, `natura`, `zakupy`.
+    that runs one is a single `['kino','kultura']` entry (Kino Bajka in CK Błonie). A museum or palace
+    hosting a cinema keeps its own entry beside it: MSN and KinoMuzeum, PKiN and Kinoteka, Zamek
+    Ujazdowski and Kino U-jazdowski; a multiplex whose text is about its mall is also `zakupy`;
+  - `mecze` (label "Mecze i koncerty"): where you watch a match or a big concert: stadiums, Torwar,
+    concert clubs and halls for about a thousand people or more (Progresja, Stodoła, Palladium, the
+    Filharmonia, Amfiteatr Bemowo). Sala Kongresowa comes back when its renovation ends (mid-2028 at
+    the earliest);
+  - `aktywnie` (doing sport: pools, tracks, trampolines), `zabytki` (a building or site worth seeing for
+    itself, not a museum about history), `natura`, `zakupy`.
   There is no catch-all: a place that fits none is reported to the user, who names a new category.
   A category needs a label in `CAT`, a colour in the light and both dark blocks, a dot class and a chip.
-  `gen/.../UrsusSuite` checks that, and files cinemas by name (Kino, Multikino, Cinema City, Helios),
-  with `occasional` as the list of names that sound like a cinema but screen rarely, and stadiums (Stadion,
-  Narodowy) under `mecze`.
-- **Shops**: malls only when they hold a cinema or a hypermarket, or the user asked. Hypermarkets only
+  `gen/.../UrsusSuite` checks that, and files cinemas by name (Kino, Multikino, Cinema City, Helios) first
+  under `kino`, with `occasional` as the list of names that sound like a cinema but screen rarely, and
+  stadiums (Stadion, Narodowy) under `mecze`.
+- **Shops**: malls only when they hold a cinema or a hypermarket, or the user asked. **At most three
+  hypermarkets of one chain**, the nearest by ride time from home; a mall or retail park listed for its
+  hypermarket counts for that chain (`UrsusSuite` counts the chains named in `zakupy` places). Hypermarkets only
   large ones ("like the Kaufland in Piastów"): Kaufland, E.Leclerc, Carrefour and Auchan hypermarkets,
   within about 1.2 km. Not: Carrefour Market or Express, Auchan Supermarket, Moje Auchan; checked and
   left out, e.g. Carrefour in Nowa Stacja Pruszków (900 m²), in Józefów, Auchan in Brwinów and all three in
-  Ursus. Carrefour is closing hypermarkets (93 left in mid-2026): check that one still trades.
+  Ursus. Carrefour is closing hypermarkets (93 left in mid-2026): check that one still trades. **Big
+  stores of other chains** count when their sales floor is about 2,000 m² or more, like the smallest
+  hypermarket kept (Carrefour Plac Unii): the Eurospar in Blue City (2,500 m²) and the Selgros halls
+  (any adult gets the customer card). None of the discounters comes close: Lidl's largest sales floor in
+  Poland is 1,717 m², the new Auchan in Żyrardów 1,580 m².
+- **Pools**: every public pool open now within about 1.5 km of a station or stop, and outdoor ones that
+  ran their summer season. Left out: the two in Ursus itself (Albatros, Skalar), pools closed for works
+  (Jagiellońska 7 since May 2026, Kawęczyńska 36), Milanówek's outdoor pool (shut since 2024), the
+  university pool on Banacha (students only). Otwock's new pool (ul. Karczewska, 1.9 km from the
+  station) was to open in the second half of September 2026: add it once it does.
 - **Every fact has a source** in the footer; say what a place is and has, nothing a source does not
   back. Hours only when a source gives them, "sprawdź przed wizytą" for anything irregular. Check that a
   place still operates (the Ossów centre closed at the end of 2025; starekinomilanowek.pl became a parked
@@ -84,7 +102,14 @@ Lalki (its four poles). The home address stays out of this public repository.
 - **Candidates**: an Overpass query for `amenity=cinema`, `shop=mall`, hypermarket brands and trampoline
   parks within 1.5 km of every station and stop, then each hit checked on the web. OSM misses cinemas run
   by cultural centres (Kino Bajka, Kino ADA), so search the towns by name as well. Found nothing, September
-  2026: a cinema in Pruszków besides Multikino, in Brwinów, Ożarów, and in Bemowo (outdoor only).
+  2026: a cinema in Pruszków besides Multikino, in Brwinów, Ożarów, and in Bemowo (outdoor only). Pools:
+  `leisure=sports_centre|water_park|swimming_pool` with `sport=swimming` per bounding box (an `around`
+  over every stop times out), then the towns by name: OSM misses ICSiR in Józefów and the Brwinów pool
+  (not found yet). Warsaw's city pools each have a page on `sport.um.warszawa.pl` with hours and breaks.
+  Store sizes: press notes on openings give the sales floor; an OSM building footprint is a fair proxy
+  only for a standalone store.
+- **Nominatim and Overpass** want a User-Agent; send a neutral one (`ww86-research/1.0`), never a
+  personal e-mail address.
 - **Regular or occasional** screenings: count the dates on the venue's programme (Kino ADA: 17 days in a
   month; MOK Józefów: a few a month, some months none).
 - **Site quirks**: Leroy Merlin store URLs change (OSM's link for Al. Jerozolimskie 244 is a 404, the
@@ -130,6 +155,9 @@ Ursus Północny end at Mińsk), and the stations each train calls at. Run it af
 - The buses from Ursus - Ratusz, though farther than the other stops: the user asked for them.
 - Rozrywka, the catch-all, is dropped. What was left went to `kultura` (the railway museums, PKiN's
   theatres, Koneser) and to a new `mecze`, "Mecze i koncerty", for the stadiums: the user's suggestion.
+- 2026-09-25: at most three hypermarkets of a chain, the nearest; the biggest stores of every chain,
+  when comparable with a big supermarket; one or two categories a place, split what needs three; Torwar
+  and the other big concert venues; every operating pool.
 
 ## Work log
 
@@ -152,5 +180,10 @@ Ursus Północny end at Mińsk), and the stations each train calls at. Run it af
   serves a casino, nothing else shows it open), Fort III Blizne (private, a paintball field), Kino
   Akademickie at WAT (no programme found), the Bemowo ice rink (its page did not answer). Teatr IMKA's
   domain is gone; its stage at Kocjana 3 is now Bemowskie Centrum Kultury's Scena Kocjana.
+- **2026-09-25, #21**: one or two categories a place (49 have two), PKiN, Łazienki and Nieborów split;
+  hypermarkets cut to three a chain (five Kauflands and Galeria Wileńska out), Eurospar in Blue City and
+  two Selgros halls in; 22 pools; Torwar and five other concert venues; bus stops Hala Kopińska,
+  Wawelska, Rozbrat, Hynka and Dostawcza. Found: Neon Muzeum left Soho Factory for PKiN in 2025; Park
+  Skarbków was never a manor park; "Galeria Młodych" in Willa Radogoszcz is classes, not a gallery.
 - Not checked so far: GTFS counts against KOLEO or the printed timetable; walking routes (distances are
   straight lines).
