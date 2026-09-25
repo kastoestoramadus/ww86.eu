@@ -23,9 +23,12 @@ The home address is not in this repository, which is public. The three stops are
 
 1. **Frequent trains**, one column per line and direction, every station listed (minor ones as small
    dots) up to the terminus of the regular trains: R1 to Skierniewice, R3 to Łowicz, S1 to Otwock.
-2. **Po drodze w Warszawie**: the stations all trains share in the centre. Each card lists every
-   direct line that stops there with the ride time, trains and buses alike; a place near one of these
-   stations lives here and nowhere else. Route columns point to it instead of repeating places.
+2. **Po drodze w Warszawie**: the stations all trains share, from Włochy to Wschodnia (every R1, R3,
+   S1 and rare train from both home stations stops at Włochy, Zachodnia and Ochota too). Each card lists
+   every direct line that stops there with the ride time, trains and buses alike; a place near one of
+   these stations lives here and nowhere else. Route columns point to it instead of repeating places.
+   Zachodnia has no card: nothing is within a short walk, and Blue City and Reduta, 1–1.2 km away, sit
+   at the Berestecka stop of 517 and 187.
 3. **Buses** from the three stops, one column per line and direction, selected stops only.
 4. **Rare trains**: direct, but a few times a day or on weekdays only. Only stations with places and zone
    borders, plus a "Tam / Z powrotem" timetable summary, because the direct return is often at a very
@@ -39,9 +42,12 @@ The home address is not in this repository, which is public. The three stops are
   6/0, to Dęblin 1/0, R2 to Siedlce 1/0.
 - **Buses**: lines at the three stops that run often and leave Ursus. On the page: 517 (fast, every
   15 minutes also at weekends), 187 (goes far but slowly, about an hour to Stegny), 177 (Bemowo), 716
-  (Monday to Saturday only, kept for the shops at both ends). Left out, and said so on the page: 207
-  (loops within Ursus), 401 (weekdays only), N35 and N85 (night), 194 and 129 (stop further away, at
-  PKP Ursus). The short hop of 517, 187 and 177 to the Ursus-Niedźwiadek loop is mentioned in the
+  (Monday to Saturday only, kept for the shops at both ends), 207 (loops within Ursus, kept because it
+  stops 160–240 m from Centrum Skorosze and the Leroy Merlin at Al. Jerozolimskie 244; 517 stops about
+  700 m away) and 401 (weekdays only, kept because it is the only direct line to Centrum Łopuszańska 22
+  with the Airo trampoline park, and it reaches Westfield Mokotów). In the GTFS 401 ends at Metro
+  Wilanowska, a stop with no boarding and alighting; the passenger terminus is Metro Służew. Left out,
+  and said so on the page: N35 and N85 (night), 194 and 129 (stop further away, at PKP Ursus). The short hop of 517, 187 and 177 to the Ursus-Niedźwiadek loop is mentioned in the
   start stop's blurb, not given a column.
 - **Ticket zones**: ZTM zone 1 is Warsaw; a zone 1+2 ticket is valid on KM and SKM trains up to
   Pruszków (R1), Płochocin (R3), Otwock Śródborów (R7; S1 ends at Otwock, inside zone 2), Sulejówek
@@ -58,6 +64,27 @@ The home address is not in this repository, which is public. The three stops are
   "sprawdź przed wizytą" for anything irregular. Check that a place still operates: the Ossów centre
   closed at the end of 2025 and the page says so.
 - **Bus stops** use their GTFS coordinates as `q`, because a stop name alone is ambiguous in Google Maps.
+- **Cinemas**: every cinema with a current programme within a walk of a station or stop, studio and
+  community ones included; if screenings are occasional, the text says so (Stare Kino in Milanówek).
+  Checked as of September 2026 and not found: a cinema in Pruszków other than Multikino, in Brwinów,
+  Ożarów Mazowiecki and Bemowo (the Bemowo centre screens only outdoors, in summer).
+- **Shops**: malls only when they hold a cinema, a hypermarket or were asked for. Hypermarkets only in
+  large formats, as the user asked ("only big ones, like the Kaufland in Piastów"): Kaufland, E.Leclerc,
+  and Carrefour or Auchan hypermarkets, within about 1.2 km. Carrefour Market, Express, Auchan
+  Supermarket and Moje Auchan are not. Checked and left out as supermarkets: Carrefour in Nowa Stacja
+  Pruszków (900 m²), Carrefour in Józefów (a Market, 1000 m²), Auchan in Brwinów (1100 m²), Auchan at
+  Kobielska and Konduktorska, and all three Auchans in Ursus (Dzieci Warszawy 28 has 700 m²). Carrefour
+  is closing hypermarkets in Poland (93 left in mid-2026): check that one still operates.
+- **Canteens** in Leroy Merlin, at Hassa (207) and Karolin (716), were added at the user's request;
+  the recommendation in their text is the user's own, written in the first person like the rest of the
+  page.
+- Leroy Merlin, Carrefour and retailnet.pl answer 403 to curl, WebFetch and Playwright's headless
+  shell; Facebook answers 400 to curl. All of them open in Playwright's full Chromium
+  (`~/.cache/ms-playwright/chromium-1243/chrome-linux64/chrome`, headless, a desktop user agent and
+  `--disable-blink-features=AutomationControlled`), which is how their links and texts were checked.
+  Leroy Merlin store URLs change: the one OSM gives for Al. Jerozolimskie 244 is a 404, the current one
+  is `warszawa-al-jerozolimskie-gigamarket.html`. Carrefour store pages do not state the format; its
+  naming does: supermarkets are "Carrefour Market ...", hypermarkets plain "Carrefour ...".
 - A new category needs a colour token in light and dark, a dot class and a filter chip.
 
 ## Refreshing the numbers
@@ -83,6 +110,11 @@ change (the Koleje Mazowieckie timetable on the page is valid until 24 October 2
   Sowińskiego, through Cmentarz Powstańców Warszawy and Park Powstańców Warszawy, is part of the
   attraction.
 - 177 leaves from Habicha, on Sundays from Lalki (its regular Sunday route).
+- The user asked for the missing cinemas, "even studio ones, but open", for Centrum Skorosze, Blue City
+  and Reduta, Centrum Łopuszańska with its trampolines, for big hypermarkets and for the Leroy Merlin
+  canteens at Skorosze and on 716 to the north. Centrum Łopuszańska 22 is about 1.5 km from the
+  Łopuszańska stop of 517 and 187; only 401 stops close to it (Orzechowa, 230 m), which is why 401 is
+  back on the page.
 
 ## Work log
 
@@ -100,3 +132,19 @@ change (the Koleje Mazowieckie timetable on the page is valid until 24 October 2
 - Checked: tests and `buildSite`, every external link answers 200, headless Chromium at 1280 and 360 px
   with no script errors and no horizontal scroll, every line filter. Not checked: the GTFS counts
   against KOLEO or the printed timetable; distances are straight lines, not walking routes.
+
+### 2026-09-25: cinemas, the malls the user named, hypermarkets, canteens, buses 207 and 401
+
+- Found with an Overpass query for cinemas, malls, hypermarkets and trampoline parks within 1.5 km of
+  every station and stop, each hit then checked on the web: 17 cinemas added (among them Kino ADA in
+  Włochy, Kinogram, Kino Atlantic, Amondo, Luna, Praha, Stacja Falenica, Blue City's Helios and Reduta's
+  Multikino at Berestecka), three named in existing entries (Kino Bajka in Błonie, Kino Muza in
+  Józefów, KinoMuzeum in the new MSN), twelve hypermarkets.
+- New hub cards Warszawa Włochy and Warszawa Ochota; the script counts ride times to both.
+- New bus columns 207 (Skorosze) and 401 (Łopuszańska 22, Westfield Mokotów).
+- Checked: tests and `buildSite`, every new external link answers 200 in full Chromium (see the rule
+  on sites that refuse scripts), headless Chromium at 1280 and 360 px with no script errors and no
+  horizontal scroll, every line filter including 207 and 401. The canteens were confirmed on their
+  Facebook pages: Cafe Bistro 81 says it is in Leroy Merlin at Połczyńska 121, Bistro Kantyna at Al.
+  Jerozolimskie 244 serves Polish dishes cooked on site; neither Leroy Merlin store page lists them. Distances are straight lines from OSM and GTFS
+  coordinates.
