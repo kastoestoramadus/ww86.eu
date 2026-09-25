@@ -20,6 +20,7 @@ URLs from here either: Disqus threads and RSS GUIDs over there are keyed by URL.
 |-------------------|------|
 | Scala code in `core`, `gen` or `web`, or `build.sbt` | [ARCHITECTURE.md](ARCHITECTURE.md) |
 | Adding or editing a lab page | [lab/README.md](lab/README.md) |
+| The Ursus by train page (`lab/ursus-by-train/`) | [lab/ursus-by-train.md](lab/ursus-by-train.md) |
 | The workflows, `scripts/`, `gh-pages`, a preview or production that looks wrong | [DEPLOY.md](DEPLOY.md) |
 | The domain, DNS records, `www` | [DNS.md](DNS.md) |
 | Opening a PR, or telling the user about one | [PULL_REQUESTS.md](PULL_REQUESTS.md) |
