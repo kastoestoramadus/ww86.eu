@@ -45,9 +45,7 @@ object Pages:
     layout("Lab", "Demos, tools and experiments by Waldemar Wosiński.", at)(
       section(cls := "cards-section")(
         h1("Lab"),
-        p(cls := "muted")(
-          "Working pages rather than screenshots. Some are hand-written; the ones drafted with an AI assistant were edited for readers and say so on their card."
-        ),
+        p(cls := "muted")("Working pages rather than screenshots."),
         div(cls := "cards")(Catalog.items.map(card(_, at)))
       )
     )
@@ -134,10 +132,7 @@ object Pages:
           "Mining for scientific research, which the law allows research organisations regardless (Art. 3 of the Directive), is not affected."
         ),
         h2("How the site is made"),
-        p(
-          "The site and its pages are developed with agentic AI systems, under my direction. ",
-          "Where a lab page started as a draft written with an AI assistant, its card says so."
-        ),
+        p("The site and its pages are developed with agentic AI systems, under my direction."),
         h2("Source code"),
         p(
           "The source of this site is public on ",

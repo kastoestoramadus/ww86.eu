@@ -18,15 +18,17 @@ To publish one:
 Files directly in `lab/` (like this README) are not copied. Slugs written by the generator are marked
 `generated = true` in the catalog and must not also exist as a directory here.
 
-## Pages drafted with an AI assistant
+## Pages drafted in a chat with an AI assistant
 
-A page from a claude.ai chat was written for the person in that chat. Before it lands here:
+A page drafted in a chat was written for the person in that chat. Before it lands here:
 
 - address the reader instead of "you and your interview", and drop mentions of files attached to the chat;
-- remove links to claude.ai artifacts - they are private, a visitor gets a login page;
+- remove links to the chat's artifacts - they are private, a visitor gets a login page;
 - check every external link and drop or replace the dead ones;
 - set `lang` on `<html>`, add a `<meta name="description">` and a link back to `../index.html`;
-- put `drafted with Claude` in the card's `tech`, as the lab index promises.
+- name no AI tool on the page or its card, not even in markup such as a script's markers: the rights
+  notice says the site is developed with agentic AI systems, and `RightsSuite` fails on a page that
+  names the tool.
 
 Keep the edits reproducible - a script with exact, match-once replacements over the downloaded artifact
 works well and fails loudly when the artifact has changed.
