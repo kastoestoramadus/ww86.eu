@@ -32,9 +32,24 @@ class UrsusSuite extends munit.FunSuite:
     assertEquals(gaps, Nil)
   }
 
-  test("every cinema is under Kino, and nothing else is") {
-    // A cinema's name says what it is; a cultural centre that runs one has a separate entry for it.
-    val cinema = "Kino|Multikino|Cinema City|Helios".r
-    val wrong = places.collect { case (name, c) if cinema.findFirstIn(name).isDefined != (c == "kino") => s"$name: $c" }
+  // A cinema's name says what it is.
+  private val cinema = "Kino|Multikino|Cinema City|Helios".r
+  // Named like a cinema, but screenings are occasional, so it counts as culture.
+  private val occasional = Set("Stare Kino")
+
+  test("every cinema with a regular programme is under Kino, and nothing else is") {
+    val wrong = places.collect {
+      case (name, c) if occasional(name) && c != "kultura"                                     => s"$name: $c"
+      case (name, c) if !occasional(name) && cinema.findFirstIn(name).isDefined != (c == "kino") => s"$name: $c"
+    }
+    assertEquals(wrong, Nil)
+  }
+
+  test("a cultural centre is under Kultura, or under Kino when it runs a cinema with a regular programme") {
+    val centre = "Centrum Kultury|Ośrodek Kultury|Dom Kultury|Kulturoteka".r
+    val wrong = places.collect {
+      case (name, c) if centre.findFirstIn(name).isDefined && c != (if cinema.findFirstIn(name).isDefined then "kino" else "kultura") =>
+        s"$name: $c"
+    }
     assertEquals(wrong, Nil)
   }
