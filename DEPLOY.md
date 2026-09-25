@@ -79,6 +79,8 @@ under the account's user site, which owns `blog.ww86.eu`), and the relative link
 - `/preview/` is reserved for PR previews: `publish-pages` refuses a site that has that path.
 - `robots.txt` keeps crawlers from fetching previews, so they never see the `noindex` meta either; a
   preview URL posted publicly could still show up as a bare link. Share preview links with people.
+- A crawler named in a `robots.txt` group of its own follows that group only and ignores `*`, so such a
+  group has to disallow `/preview/` as well. The AI training crawlers' group disallows everything.
 - Branch-based Pages rebuilds after every push to `gh-pages`, preview or not, and has a soft limit of
   10 builds per hour; a burst of pushes to a PR can delay its preview. Changing the Pages *source* does
   not build the branch: request a build with `gh api -X POST repos/kastoestoramadus/ww86.eu/pages/builds`.

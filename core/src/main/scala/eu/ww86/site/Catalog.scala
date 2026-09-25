@@ -34,7 +34,7 @@ object Catalog:
       slug = "scala-to-java",
       title = "Thinking in Scala, writing Java",
       blurb = "A cheat sheet for Scala developers who have to write Java, in a live-coding interview or someone else's codebase: 35 idioms side by side, 10 problems and 14 stream tasks solved in both languages with the output, and 22 traps that compile and still give the wrong answer. Handy in both directions: reading today's Java with Scala habits, or moving from Java to Scala.",
-      tech = List("Java 25", "Scala 3", "drafted with Claude"),
+      tech = List("Java 25", "Scala 3"),
       year = 2026,
       language = Language.Polish
     ),
@@ -50,7 +50,7 @@ object Catalog:
       slug = "ursus-by-train",
       title = "Out of Warsaw by train, from Ursus",
       blurb = "A day out with no car and no change, planned from Szamoty in Ursus: museums, cinemas, monuments, parks and shops by the stations of three train lines, to Skierniewice, Łowicz and Otwock, and four bus lines, with rarer trains apart and ticket zones marked. Filters and a walking route from each stop. Timetables as of September 2026.",
-      tech = List("JavaScript", "drafted with Claude"),
+      tech = List("JavaScript"),
       year = 2026,
       language = Language.Polish
     )

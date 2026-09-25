@@ -10,20 +10,25 @@ To publish one:
 2. Add a `LabItem` for it in `core/src/main/scala/eu/ww86/site/Catalog.scala`. Title and blurb are in
    English; set `language` to the page's language, whose flag the card shows (a new language needs
    `static/flags/<flag>.svg`).
-3. `sbt buildSite` and open `target/site/lab/<slug>/index.html`.
+3. Reserve the rights, as the Polish pages here do: in `<head>` the author, `tdm-reservation` and license
+   tags, at the foot the notice `Site.rights(language, year)` for the card's language and year, verbatim,
+   and a link to `../../copyright.html`. `sbt test` fails without them.
+4. `sbt buildSite` and open `target/site/lab/<slug>/index.html`.
 
 Files directly in `lab/` (like this README) are not copied. Slugs written by the generator are marked
 `generated = true` in the catalog and must not also exist as a directory here.
 
-## Pages drafted with an AI assistant
+## Pages drafted in a chat with an AI assistant
 
-A page from a claude.ai chat was written for the person in that chat. Before it lands here:
+A page drafted in a chat was written for the person in that chat. Before it lands here:
 
 - address the reader instead of "you and your interview", and drop mentions of files attached to the chat;
-- remove links to claude.ai artifacts - they are private, a visitor gets a login page;
+- remove links to the chat's artifacts - they are private, a visitor gets a login page;
 - check every external link and drop or replace the dead ones;
 - set `lang` on `<html>`, add a `<meta name="description">` and a link back to `../index.html`;
-- put `drafted with Claude` in the card's `tech`, as the lab index promises.
+- name no AI tool on the page or its card, not even in markup such as a script's markers: the rights
+  notice says the site is developed with agentic AI systems, and `RightsSuite` fails on a page that
+  names the tool.
 
 Keep the edits reproducible - a script with exact, match-once replacements over the downloaded artifact
 works well and fails loudly when the artifact has changed.

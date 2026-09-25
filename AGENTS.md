@@ -50,6 +50,11 @@ python3 -m http.server -d target/site 4001   # serve it on http://127.0.0.1:4001
   its labels from the caller, and `SpecialSums`, whose groups are bare numbers with no names.
 - Shared texts and links live in `eu.ww86.site.Site`; keep them consistent with the blog's `_config.yml`
   and about page (Scala & Big Data engineer, Warsaw, 15+ years, banking/fintech/public sector).
+- **Every page reserves its rights.** At its foot the notice `Site.rights` in the page's language with a
+  link to `copyright.html`, the terms page (`Pages.copyright`); in its head `<meta name="author">`,
+  `<meta name="tdm-reservation" content="1">` and `<link rel="license">`. The generator adds them to its
+  pages, a lab page holds them verbatim, and `RightsSuite` fails `sbt test` on a page without them.
+  `static/robots.txt` turns away the AI training crawlers; the terms page says so, keep the two in step.
 - **All internal links and assets are relative**, built through `At(depth)` in `gen/.../Pages.scala`, so
   the site works at a domain root, under a path prefix and from `file://`. Never hardcode a leading `/`.
 - Every pure function in `core` gets a test, which must pass on both platforms. `gen` has JVM-only tests

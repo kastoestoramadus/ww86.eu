@@ -14,3 +14,6 @@ Every pull request gets a preview at `https://ww86.eu/preview/pr-<N>/`, removed 
 
 The blog lives in a separate repository: [blog.ww86.eu](https://blog.ww86.eu).
 Agent-facing notes and conventions: [AGENTS.md](AGENTS.md).
+
+All rights reserved, text and data mining included: see [LICENSE](LICENSE) and
+[ww86.eu/copyright.html](https://ww86.eu/copyright.html).
