@@ -33,6 +33,12 @@ class RightsSuite extends munit.FunSuite:
     assertEquals(gaps, Nil)
   }
 
+  test("no page names the AI tool it was developed with") {
+    val lab   = filesUnder(Path.of("lab"), ".html").map(path => path -> Files.readString(path))
+    val pages = files.filter(_._1.toString.endsWith(".html")) ++ lab
+    assertEquals(pages.collect { case (path, page) if page.toLowerCase.contains("claude") => path.toString }, Nil)
+  }
+
   test("the terms page every notice links to is generated and gives the legal ground of the reservation") {
     val page = files.toMap.getOrElse(Path.of("copyright.html"), fail("copyright.html is not generated"))
     List("Art. 4(3) of Directive (EU) 2019/790", "Art. 26³", Site.sourceUrl).foreach { text =>
