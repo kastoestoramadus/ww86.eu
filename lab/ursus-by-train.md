@@ -45,17 +45,19 @@ Habicha and Lalki**, within about 500 m. The home address stays out of this publ
   or bus ride with "Ok. N km od stacji." in `t`; give the distance in `t` for walks of a kilometre or more
   too. Measure distances (OSM or GTFS coordinates), never estimate them.
 - **Categories** (`c`):
-  - `kultura`: museums, theatres, galleries, cultural centres, also those with occasional screenings
-    (MOK Józefów, Stare Kino in Milanówek);
+  - `kultura`: museums (railway ones too), theatres (PKiN's), galleries, cultural centres, also those with
+    occasional screenings (MOK Józefów, Stare Kino in Milanówek);
   - `kino`: cinemas with a regular programme, studio and community ones included, and a cultural centre
     that runs one is a single `kino` entry (Kino Bajka in CK Błonie). A museum or palace hosting a
     cinema keeps its own entry beside it: MSN and KinoMuzeum, PKiN and Kinoteka, Zamek Ujazdowski and
     Kino U-jazdowski;
-  - `rozrywka`: the rest (PKiN's theatres and viewpoint, stadiums, railway museums, Koneser);
+  - `mecze` (label "Mecze i koncerty"): stadiums, where you watch a match or a concert;
   - `aktywnie` (doing sport: pools, tracks, trampolines), `zabytki`, `natura`, `zakupy`.
+  There is no catch-all: a place that fits none is reported to the user, who names a new category.
   A category needs a label in `CAT`, a colour in the light and both dark blocks, a dot class and a chip.
   `gen/.../UrsusSuite` checks that, and files cinemas by name (Kino, Multikino, Cinema City, Helios),
-  with `occasional` as the list of names that sound like a cinema but screen rarely.
+  with `occasional` as the list of names that sound like a cinema but screen rarely, and stadiums (Stadion,
+  Narodowy) under `mecze`.
 - **Shops**: malls only when they hold a cinema or a hypermarket, or the user asked. Hypermarkets only
   large ones ("like the Kaufland in Piastów"): Kaufland, E.Leclerc, Carrefour and Auchan hypermarkets,
   within about 1.2 km. Not: Carrefour Market or Express, Auchan Supermarket, Moje Auchan; checked and
@@ -105,6 +107,8 @@ and the footer note on counted days.
 - Cinemas "even studio ones, but open"; Centrum Skorosze, Blue City, Reduta and Centrum Łopuszańska 22 by
   name; hypermarkets only big; the Leroy Merlin canteens at Skorosze and on 716 north; cinemas as their
   own category; a cultural centre with a regular cinema is `kino`, with occasional screenings `kultura`.
+- Rozrywka, the catch-all, is dropped. What was left went to `kultura` (the railway museums, PKiN's
+  theatres, Koneser) and to a new `mecze`, "Mecze i koncerty", for the stadiums: the user's suggestion.
 
 ## Work log
 
@@ -115,5 +119,8 @@ and the footer note on counted days.
   Reduta, 12 hypermarkets, the canteens, buses 207 and 401, hub cards Włochy and Ochota, `UrsusSuite`. A
   dot on a pressed chip got a ring in the background colour: the slate Kino dot vanished on the ink-coloured
   chip.
+- **2026-09-25, #18**: category Rozrywka dropped (see Decisions). Found: #16 had already moved the cinemas
+  and six places were left; a browser that remembered the Rozrywka filter opened the page empty, so a
+  remembered category the page no longer has is ignored.
 - Not checked so far: GTFS counts against KOLEO or the printed timetable; walking routes (distances are
   straight lines).

@@ -53,3 +53,10 @@ class UrsusSuite extends munit.FunSuite:
     }
     assertEquals(wrong, Nil)
   }
+
+  test("every stadium is under Mecze i koncerty") {
+    // where you watch a match or a concert; a track you ride yourself is Aktywnie (Arena Pruszków)
+    val stadium = "Stadion|Narodowy".r
+    val wrong = places.collect { case (name, c) if stadium.findFirstIn(name).isDefined && c != "mecze" => s"$name: $c" }
+    assertEquals(wrong, Nil)
+  }
