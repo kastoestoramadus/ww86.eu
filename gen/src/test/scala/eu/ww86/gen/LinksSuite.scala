@@ -31,7 +31,7 @@ class LinksSuite extends munit.FunSuite:
   }
 
   test("the generated pages link nothing from the site root") {
-    List(Pages.landing, Pages.labIndex, Pages.digits).foreach { page =>
-      assertEquals(Links.fromSiteRoot(page), Nil)
+    files.filter(_._1.toString.endsWith(".html")).foreach { (path, page) =>
+      assertEquals(Links.fromSiteRoot(page), Nil, path)
     }
   }
