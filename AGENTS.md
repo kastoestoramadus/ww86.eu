@@ -38,6 +38,13 @@ python3 -m http.server -d target/site 4001   # serve it on http://127.0.0.1:4001
 ./scripts/test-publish-pages                 # the deploy script against a local bare repo, 1 second
 ```
 
+**In a browser**: `playwright-core@1.63.0` from npm in your scratchpad, browsers in `~/.cache/ms-playwright`.
+On this WSL unpack `libnspr4 libnss3 libasound2t64` without sudo (`apt-get download`, `dpkg-deb -x <deb>
+<scratch>/libs`) and run with `LD_LIBRARY_PATH=<scratch>/libs/usr/lib/x86_64-linux-gnu`. Sites that refuse
+curl, WebFetch and the headless shell (Leroy Merlin, Carrefour, Facebook) open in the full
+`chromium-1243/chrome-linux64/chrome`, headless, with a desktop user agent and
+`--disable-blink-features=AutomationControlled`; `DISPLAY=:0` (WSLg) gives a window if the user must log in.
+
 ## Rules for every change
 
 - **English, both code and copy.** Identifiers, comments, commit messages, page text. The one exception
@@ -58,10 +65,11 @@ python3 -m http.server -d target/site 4001   # serve it on http://127.0.0.1:4001
 - **All internal links and assets are relative**, built through `At(depth)` in `gen/.../Pages.scala`, so
   the site works at a domain root, under a path prefix and from `file://`. Never hardcode a leading `/`.
 - Every pure function in `core` gets a test, which must pass on both platforms. `gen` has JVM-only tests
-  for what the generator writes. All tests are munit.
+  for what the generator writes and for the data of lab pages (`RightsSuite`, `UrsusSuite`). All munit.
 - Pinned versions live in `build.sbt` and `project/plugins.sbt`; bump them deliberately, one at a time.
 - The generated site is `target/site`, the preview `target/preview`; nothing built is committed to
   `master`.
-- **Work in a `git worktree` of your own.** Several agent sessions use this checkout at once; a
-  `git checkout` in it switches the branch under all of them, and another session's next commit lands
-  on your branch. It happened on 2026-09-24.
+- **Work in a `git worktree` of your own**, made before your first branch change:
+  `git worktree add <scratchpad>/<name> -b <branch> origin/master`. Several agent sessions share this
+  checkout; a `git checkout` in it switches the branch under all of them, and another session's next
+  commit lands on your branch (2026-09-24).

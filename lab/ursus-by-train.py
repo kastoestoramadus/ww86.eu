@@ -13,14 +13,17 @@ import argparse, collections, csv, datetime, io, os, statistics, urllib.request,
 FEEDS = {'trains': 'https://mkuran.pl/gtfs/polish_trains.zip', 'ztm': 'https://mkuran.pl/gtfs/warsaw.zip'}
 HOME_STATIONS = ('Warszawa Ursus', 'Warszawa Ursus Północny')
 HOME_STOPS = ('Lalki', 'Habicha', 'Gierdziejewskiego')
-CENTRE = ('Warszawa Śródmieście', 'Warszawa Powiśle', 'Warszawa Stadion', 'Warszawa Wschodnia')
+CENTRE = ('Warszawa Włochy', 'Warszawa Ochota', 'Warszawa Śródmieście', 'Warszawa Powiśle', 'Warszawa Stadion',
+          'Warszawa Wschodnia')
 FAR = ('Żyrardów', 'Skierniewice', 'Sochaczew', 'Łowicz Główny', 'Otwock')
 RARE = ('Sulejówek', 'Mińsk Mazowiecki', 'Siedlce', 'Kobyłka-Ossów', 'Kobyłka', 'Wołomin', 'Pilawa', 'Dęblin')
 BUS_TARGETS = {
-    '517': ('Dw. Zachodni', 'Dw. Centralny', 'Centrum', 'Pl. Trzech Krzyży'),
+    '517': ('Berestecka', 'Dw. Zachodni', 'Pl. Zawiszy', 'Dw. Centralny', 'Centrum', 'Pl. Trzech Krzyży'),
     '187': ('Dw. Zachodni', 'Pomnik Lotnika', 'Metro Politechnika', 'Pl. Na Rozdrożu', 'Legia - Stadion', 'Stegny'),
     '177': ('Raginisa', 'Metro Bemowo', 'Os. Górczewska'),
     '716': ('Fort Wola', 'Cm. Wolski', 'Piastów Lelewela', 'Piastów Ogińskiego'),
+    '207': ('Hassa',),
+    '401': ('Orzechowa', 'Rondo Unii Europejskiej', 'Metro Służew'),
 }
 
 
