@@ -14,6 +14,7 @@ import scala.jdk.CollectionConverters.*
 /** Every generated file by its path in the site. */
 private[gen] lazy val files: List[(Path, String)] = List(
   Path.of("index.html")                  -> Pages.landing,
+  Path.of("copyright.html")              -> Pages.copyright,
   Path.of("lab", "index.html")           -> Pages.labIndex,
   Path.of("lab", "digits", "index.html") -> Pages.digits,
   // the PESEL first names the digits widget fetches; Scala.js cannot read resources

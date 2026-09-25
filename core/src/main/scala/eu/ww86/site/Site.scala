@@ -16,3 +16,14 @@ object Site:
   val githubUrl   = "https://github.com/kastoestoramadus"
   val linkedInUrl = "https://www.linkedin.com/in/waldemar-wosi%C5%84ski-a9936144/"
   val contactUrl  = s"$blogUrl/#contact"
+  val sourceUrl   = s"$githubUrl/ww86.eu"
+
+  /** Year the site was first published, the year in the notice of the generated pages. */
+  val since = 2026
+
+  /** Rights notice at the foot of a page. A lab page holds it verbatim, `RightsSuite` in `gen` checks that. */
+  def rights(language: Language, year: Int): String = language match
+    case Language.English =>
+      s"© $year $author. All rights reserved, including text and data mining (Art. 4(3) of Directive (EU) 2019/790). Developed with agentic AI systems."
+    case Language.Polish =>
+      s"© $year $author. Wszelkie prawa zastrzeżone, również w zakresie eksploracji tekstów i danych (art. 26³ ustawy o prawie autorskim i prawach pokrewnych). Strona rozwijana z użyciem systemów agentowych."

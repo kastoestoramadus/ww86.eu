@@ -10,7 +10,10 @@ To publish one:
 2. Add a `LabItem` for it in `core/src/main/scala/eu/ww86/site/Catalog.scala`. Title and blurb are in
    English; set `language` to the page's language, whose flag the card shows (a new language needs
    `static/flags/<flag>.svg`).
-3. `sbt buildSite` and open `target/site/lab/<slug>/index.html`.
+3. Reserve the rights, as the Polish pages here do: in `<head>` the author, `tdm-reservation` and license
+   tags, at the foot the notice `Site.rights(language, year)` for the card's language and year, verbatim,
+   and a link to `../../copyright.html`. `sbt test` fails without them.
+4. `sbt buildSite` and open `target/site/lab/<slug>/index.html`.
 
 Files directly in `lab/` (like this README) are not copied. Slugs written by the generator are marked
 `generated = true` in the catalog and must not also exist as a directory here.

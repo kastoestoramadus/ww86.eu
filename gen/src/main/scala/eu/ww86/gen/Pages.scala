@@ -1,7 +1,7 @@
 package eu.ww86.gen
 
 import eu.ww86.digits.SpecialSums
-import eu.ww86.site.{Catalog, LabItem, Site}
+import eu.ww86.site.{Catalog, LabItem, Language, Site}
 import scalatags.Text.all.*
 import scalatags.Text.tags2.{main as mainTag, nav, section, title as titleTag}
 
@@ -105,6 +105,56 @@ object Pages:
       )
     )
 
+  def copyright: String =
+    val at = At(0)
+    layout("Copyright and terms of use", s"Who owns the pages of ${Site.domain} and what you may do with them.", at)(
+      section(cls := "page")(
+        h1("Copyright and terms of use"),
+        p(
+          s"Everything on ${Site.domain}, the lab pages included, is © ${Site.author}; the year on a page is the year it was first published. ",
+          "All rights reserved: copying, republishing or adapting a page, whole or in part, needs my written permission. ",
+          "To ask, use the ",
+          a(href := Site.contactUrl)("contact on the blog"),
+          "."
+        ),
+        h2("Without asking"),
+        p(
+          "Link to any page. Some uses need no permission under the law anyway, such as quoting a fragment with its author and source ",
+          "(Art. 29 of the Polish Act on Copyright and Related Rights) or private use; nothing here takes them away."
+        ),
+        h2("Text and data mining"),
+        p(
+          "Text and data mining of this site is reserved, training AI models included, under Art. 4(3) of Directive (EU) 2019/790 ",
+          "and Art. 26³ of the Polish Act on Copyright and Related Rights. ",
+          "The reservation is also machine-readable, as Polish law requires for content published online: every page carries ",
+          code("""<meta name="tdm-reservation" content="1">"""),
+          " (the W3C TDM Reservation Protocol), and ",
+          a(href := at("robots.txt"))("robots.txt"),
+          " turns away the crawlers that collect training data. ",
+          "Mining for scientific research, which the law allows research organisations regardless (Art. 3 of the Directive), is not affected."
+        ),
+        h2("How the site is made"),
+        p(
+          "The site and its pages are developed with agentic AI systems, under my direction. ",
+          "Where a lab page started as a draft written with an AI assistant, its card says so."
+        ),
+        h2("Source code"),
+        p(
+          "The source of this site is public on ",
+          a(href := Site.sourceUrl)("GitHub"),
+          " to be read, not reused: no open-source license is granted. ",
+          "GitHub's terms let its users view a public repository and fork it on GitHub; ",
+          "any other use of the code needs permission, like the rest of the site."
+        ),
+        h2("Other people's work"),
+        p(
+          "Facts such as timetables, opening hours and addresses are not anyone's to own; each lab page links its sources. ",
+          "Work by others keeps its own license: highlight.js under the BSD 3-Clause License, its notice kept in the pages that bundle it; ",
+          "fonts from Google Fonts under the SIL Open Font License; the first names on the digits page, from the PESEL register, under CC0."
+        )
+      )
+    )
+
   private def card(item: LabItem, at: At): Frag =
     a(cls := "card", href := at(item.path), attr("hreflang") := item.language.code)(
       h3(item.title),
@@ -152,6 +202,8 @@ object Pages:
           titleTag(fullTitle),
           meta(name := "description", content := pageDescription),
           meta(name := "author", content := Site.author),
+          meta(name := "tdm-reservation", content := "1"),
+          link(rel := "license", href := at("copyright.html")),
           link(rel := "icon", href := at("favicon.svg"), `type` := "image/svg+xml"),
           link(rel := "stylesheet", href := at("css/site.css")),
           if withScript then script(src := at("js/main.js"), attr("defer").empty) else frag()
@@ -167,7 +219,7 @@ object Pages:
           ),
           mainTag(sections),
           footerTag(
-            p(s"© ${Site.author}"),
+            p(Site.rights(Language.English, Site.since), " ", a(href := at("copyright.html"))("Terms of use")),
             p(cls := "muted")(
               a(href := Site.blogUrl)("blog.ww86.eu"),
               " · ",
