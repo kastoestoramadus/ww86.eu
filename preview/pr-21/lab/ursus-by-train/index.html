@@ -1,8 +1,9 @@
-<!doctype html><html lang="pl"><head><meta name="robots" content="noindex, nofollow"><meta charset=utf8><meta name="description" content="Co zobaczyć bez przesiadek z Szamot w warszawskim Ursusie: pociągi z Ursusa i Ursusa Północnego (R1 do Skierniewic, R3 do Łowicza, S1 do Otwocka), autobusy 517, 187, 177, 716, 207 i 401 oraz rzadsze pociągi, ze strefami biletowymi ZTM. Muzea, kina, zabytki, zieleń, zakupy i hipermarkety."><meta name="author" content="Waldemar Wosiński"><meta name="tdm-reservation" content="1"><link rel="license" href="../../copyright.html"><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<!doctype html><html lang="pl"><head><meta name="robots" content="noindex, nofollow"><meta charset=utf8><meta name="description" content="Co zobaczyć bez przesiadek z Szamot w warszawskim Ursusie: pociągi z Ursusa i Ursusa Północnego (R1 do Skierniewic, R3 do Łowicza, S1 do Otwocka), autobusy 517, 187, 177, 716, 207 i 401, a z Ursusa - Ratusza 194, 220 i 228, oraz rzadsze pociągi, ze strefami biletowymi ZTM. Muzea, kina, zabytki, zieleń, zakupy i hipermarkety."><meta name="author" content="Waldemar Wosiński"><meta name="tdm-reservation" content="1"><link rel="license" href="../../copyright.html"><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
 <title>Z Ursusa pociągiem</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Source+Sans+3:wght@400;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" integrity="sha384-c6Rcwz4e4CITMbu/NBmnNS8yN2sC3cUElMEMfP3vqqKFp7GOYaaBBCqmaWBjmkjb" crossorigin="anonymous">
 <style>
 :root{
   --bg:#F3F4EF; --surface:#FFFFFF; --surface-2:#E8EAE3; --ink:#17201C; --muted:#58625C; --rule:#D3D8CE;
@@ -58,6 +59,33 @@ header.top .zones{max-width:62ch;color:var(--muted);font-size:15px;margin:10px 0
 .dot.kultura{background:var(--c-kultura)} .dot.mecze{background:var(--c-mecze)} .dot.zabytki{background:var(--c-zabytki)} .dot.natura{background:var(--c-natura)} .dot.aktywnie{background:var(--c-aktywnie)} .dot.zakupy{background:var(--c-zakupy)} .dot.kino{background:var(--c-kino)}
 .count{font-family:var(--mono);font-size:12px;color:var(--muted);margin-left:auto}
 
+/* Map of the routes; Leaflet draws them as SVG paths, coloured here through --lc */
+.routes-map{margin:24px 0 0}
+#map{height:clamp(300px,min(60vh,90vw),520px);border:1px solid var(--rule);border-radius:10px;background:var(--surface-2);font:14px/1.4 var(--body);z-index:0}
+.routes-map figcaption{font-size:13px;color:var(--muted);margin:8px 0 0;max-width:90ch}
+.routes-map .touch{display:none}
+@media (pointer:coarse){ .routes-map .touch{display:inline} }
+#map .leaflet-tile-pane{filter:saturate(.3)}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) #map .leaflet-tile-pane{filter:invert(1) hue-rotate(180deg) saturate(.3) brightness(.85)} }
+:root[data-theme="dark"] #map .leaflet-tile-pane{filter:invert(1) hue-rotate(180deg) saturate(.3) brightness(.85)}
+#map path.m-rt{stroke:var(--lc)}
+#map path.m-case{stroke:var(--surface)}
+#map path.m-st{stroke:var(--lc);fill:var(--surface)}
+#map path.m-st.m-end{fill:var(--lc)}
+#map path.m-st.m-multi{stroke:var(--ink)}
+#map path.m-st.m-multi.m-end{fill:var(--ink)}
+#map .m-dim{opacity:.15}
+#map .leaflet-tooltip.m-dim{opacity:.15!important} /* Leaflet sets a tooltip's opacity inline */
+#map .m-off,#map.m-far .m-bus,#map.m-wide .m-minor{display:none}
+#map .leaflet-tooltip.m-lbl{background:none;border:0;box-shadow:none;padding:0;color:var(--ink);font:600 14px/1 var(--display);text-shadow:0 0 3px var(--bg),0 0 3px var(--bg),0 0 3px var(--bg)}
+#map .leaflet-tooltip.m-lbl::before{display:none}
+#map .leaflet-popup-content-wrapper,#map .leaflet-popup-tip{background:var(--surface);color:var(--ink)}
+#map .leaflet-popup-content{margin:10px 14px;font-size:14px}
+#map .leaflet-popup-content .pl{display:flex;flex-wrap:wrap;gap:4px;margin:6px 0}
+#map .leaflet-bar a{background:var(--surface);color:var(--ink);border-color:var(--rule)}
+#map .leaflet-control-attribution{background:var(--surface);color:var(--muted)}
+#map .leaflet-control-attribution a{color:var(--link)}
+
 /* Lines */
 .lines{margin-top:24px;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,500px),1fr));gap:28px 36px;align-items:start}
 .line-head{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:6px}
@@ -88,6 +116,7 @@ ol.stops{list-style:none;margin:14px 0 0;padding:0}
 .cat{display:inline-flex;gap:6px;align-items:center}
 .dist{font-family:var(--mono);font-size:11px;letter-spacing:.04em;text-transform:uppercase;padding:3px 6px;border-radius:4px;background:var(--surface-2);color:var(--ink)}
 .dist.at{background:var(--lcs);color:var(--ink)}
+.season{font-size:12px;padding:2px 7px;border:1px dashed var(--muted);border-radius:999px;color:var(--ink)}
 .meta a{margin-left:auto}
 .empty{font-size:13px;color:var(--muted);margin:6px 0 0;font-style:italic}
 .r1{--lc:var(--r1);--lcs:var(--r1-soft)} .r3{--lc:var(--r3);--lcs:var(--r3-soft)} .s1{--lc:var(--s1);--lcs:var(--s1-soft)}
@@ -118,7 +147,7 @@ footer p{margin:0;max-width:90ch}
   <header class="top">
     <p class="eyebrow">Koleje Mazowieckie, SKM i autobusy ZTM · bez przesiadek · stan: wrzesień 2026</p>
     <h1>Z Ursusa pociągiem</h1>
-    <p class="lead">Opracowanie optymalne dla <strong>Szamot</strong>: stąd blisko do obu stacji — <strong>Warszawa Ursus</strong> i <strong>Warszawa Ursus Północny</strong> — i do przystanków autobusów 517, 187, 177, 716, 207 i 401. Wypad bez samochodu i bez przesiadek: co jest przy stacjach na zachód — linią <span class="badge r1">R1</span> do Skierniewic i linią <span class="badge r3">R3</span> do Łowicza — i na wschód, linią <span class="badge s1">S1</span> przez centrum do Otwocka. Dalej autobusy i pociągi, które jeżdżą rzadko. Każda nazwa to link do Google Maps, a „trasa pieszo” pokazuje realny czas dojścia od stacji lub przystanku.</p>
+    <p class="lead">Opracowanie optymalne dla <strong>Szamot</strong>: stąd blisko do obu stacji — <strong>Warszawa Ursus</strong> i <strong>Warszawa Ursus Północny</strong> — i do przystanków autobusów 517, 187, 177, 716, 207 i 401; ok. 1 km dalej, z Ursusa - Ratusza, jeżdżą jeszcze 194, 220 i 228. Wypad bez samochodu i bez przesiadek: co jest przy stacjach na zachód — linią <span class="badge r1">R1</span> do Skierniewic i linią <span class="badge r3">R3</span> do Łowicza — i na wschód, linią <span class="badge s1">S1</span> przez centrum do Otwocka. Dalej autobusy i pociągi, które jeżdżą rzadko. Każda nazwa to link do Google Maps, a „trasa pieszo” pokazuje realny czas dojścia od stacji lub przystanku.</p>
     <p class="zones"><strong>Strefy biletowe ZTM.</strong> 1. strefa to Warszawa. Bilet na strefy 1 i 2 obowiązuje też w pociągach KM i SKM — do Pruszkowa (R1), Płochocina (R3) i Otwocka (S1). Stacje graniczne, Ursus-Niedźwiadek, Gołąbki i Falenica, należą do obu stref; dalej potrzebny jest bilet Kolei Mazowieckich. Na trasach granice są zaznaczone przerywaną linią.</p>
   </header>
 
@@ -135,6 +164,9 @@ footer p{margin:0;max-width:90ch}
       <button class="chip" id="f-line-716" data-line="716" aria-pressed="false"><span class="badge bus">716</span> Wola i Piastów</button>
       <button class="chip" id="f-line-207" data-line="207" aria-pressed="false"><span class="badge bus">207</span> Skorosze</button>
       <button class="chip" id="f-line-401" data-line="401" aria-pressed="false"><span class="badge bus">401</span> Łopuszańska i Mokotów</button>
+      <button class="chip" id="f-line-194" data-line="194" aria-pressed="false"><span class="badge bus">194</span> Włochy i Wola</button>
+      <button class="chip" id="f-line-220" data-line="220" aria-pressed="false"><span class="badge bus">220</span> Okęcie i Bemowo</button>
+      <button class="chip" id="f-line-228" data-line="228" aria-pressed="false"><span class="badge bus">228</span> Rakowiec i Mokotów</button>
     </div>
     <div class="group" role="group" aria-label="Rodzaj">
       <span class="lbl">Rodzaj</span>
@@ -155,6 +187,11 @@ footer p{margin:0;max-width:90ch}
     <span class="count" id="count" aria-live="polite"></span>
   </nav>
 
+  <figure class="routes-map" id="map-box">
+    <div id="map" aria-label="Mapa połączeń"></div>
+    <figcaption><strong>Dokąd bez przesiadki.</strong> Pociągi grubą linią, autobusy cienką, rzadsze pociągi przerywaną. Filtr linii wyróżnia jedną z nich; po kliknięciu stacji lub przystanku widać, co się tam zatrzymuje. Przystanki autobusów pojawiają się po przybliżeniu.<span class="touch"> Mapę przesuwa się dwoma palcami.</span></figcaption>
+  </figure>
+
   <div class="lines" id="lines"></div>
 
   <section class="sec" id="city-sec" aria-labelledby="city-h">
@@ -167,7 +204,7 @@ footer p{margin:0;max-width:90ch}
   <section class="sec" id="bus-sec" aria-labelledby="bus-h">
     <p class="eyebrow">Autobusy ZTM z najbliższych przystanków</p>
     <h2 id="bus-h">Autobusy z Szamot</h2>
-    <p class="lead">Z przystanków Lalki, Habicha i Gierdziejewskiego — linie, które jeżdżą często i wyjeżdżają poza Ursus, a do tego dwie dla zakupów: 207, która krąży po Ursusie, ale dowozi na Skorosze, i 401, która kursuje tylko w dni robocze. 517 to linia przyspieszona i kursuje co 15 minut także w weekend; 187 dojeżdża daleko, ale wolno. Pomijam nocne N35 i N85 oraz 194 i 129, które stają dalej, przy PKP Ursus.</p>
+    <p class="lead">Z przystanków Lalki, Habicha i Gierdziejewskiego — linie, które jeżdżą często i wyjeżdżają poza Ursus, a do tego dwie dla zakupów: 207, która krąży po Ursusie, ale dowozi na Skorosze, i 401, która kursuje tylko w dni robocze. 517 to linia przyspieszona i kursuje co 15 minut także w weekend; 187 dojeżdża daleko, ale wolno. Z Ursusa - Ratusza, ok. 1 km od Lalek, dochodzą 194 do Włoch i na Wolę, także w niedziele, gdy 716 nie kursuje, 220 na Okęcie i na Bemowo oraz 228 przez Rakowiec na Mokotów. Pomijam nocne N35 i N85 oraz 129, która staje przy PKP Ursus.</p>
     <div class="lines" id="buses"></div>
   </section>
 
@@ -183,6 +220,7 @@ footer p{margin:0;max-width:90ch}
     <p><strong>Liczby kursów</strong> policzone z rozkładów na wtorek 29 września i weekend 3–4 października 2026 r.; po zmianie rozkładu mogą się różnić.</p>
     <p><strong>Źródła:</strong>
       <a href="https://mkuran.pl/gtfs/" target="_blank" rel="noopener">rozkłady ZTM, KM i PKP PLK w formacie GTFS (M. Kuranowski)</a>,
+      <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap — podkład mapy i przebieg tras autobusów</a>,
       <a href="https://www.wtp.waw.pl/integracje/wspolny-bilet-ztm-km-wkd/" target="_blank" rel="noopener">ZTM — Wspólny Bilet ZTM-KM-WKD i strefy</a>,
       <a href="https://koleo.pl/dworzec-pkp/warszawa-ursus/odjazdy" target="_blank" rel="noopener">KOLEO — odjazdy Warszawa Ursus</a>,
       <a href="https://koleo.pl/en/dworzec-pkp/warszawa-ursus-polnocny/odjazdy" target="_blank" rel="noopener">KOLEO — odjazdy Ursus Północny</a>,
@@ -250,7 +288,6 @@ footer p{margin:0;max-width:90ch}
       <a href="https://pl.wikipedia.org/wiki/Kino_Praha" target="_blank" rel="noopener">Kino Praha</a>,
       <a href="https://www.mteatr.pl/pl/KinoPraha" target="_blank" rel="noopener">Mazowiecki Teatr Muzyczny — Kino Praha</a>,
       <a href="https://kinoluna.waw.pl" target="_blank" rel="noopener">Kino Luna</a>,
-      <a href="https://www.dlahandlu.pl/detal-hurt/wiadomosci/z-koncam-maja-rusza-hipermarket-carrefour-w-placu-unii,120338.html" target="_blank" rel="noopener">Carrefour w Placu Unii</a>,
       <a href="https://www.cinema-city.pl/kina/sadyba/1060" target="_blank" rel="noopener">Cinema City Sadyba</a>,
       <a href="https://jerozolimskie.leclerc.pl/znajdz-sklep/" target="_blank" rel="noopener">E.Leclerc Jerozolimskie</a>,
       <a href="https://en.wikipedia.org/wiki/Blue_City_(Warsaw)" target="_blank" rel="noopener">Blue City</a>,
@@ -351,13 +388,79 @@ footer p{margin:0;max-width:90ch}
       <a href="https://torwar.cos.pl/7132/faq" target="_blank" rel="noopener">Hala COS Torwar</a>,
       <a href="https://torwar.cos.pl/" target="_blank" rel="noopener">COS Torwar Lodowisko</a>,
       <a href="https://www.ebilet.pl/miejsce/torwar" target="_blank" rel="noopener">Torwar — wydarzenia 2026</a>,
-      <a href="https://www.nocowanie.pl/kino_kultura_w_wolominie,162026.html" target="_blank" rel="noopener">Kino Kultura — opis</a>.
+      <a href="https://www.nocowanie.pl/kino_kultura_w_wolominie,162026.html" target="_blank" rel="noopener">Kino Kultura — opis</a>,
+      <a href="https://eko.um.warszawa.pl/-/park-kombatantow" target="_blank" rel="noopener">Park Kombatantów</a>,
+      <a href="https://izbapamieci.muzeumwarszawy.pl/" target="_blank" rel="noopener">Izba Pamięci przy Cmentarzu Powstańców</a>,
+      <a href="https://minizoo.waw.pl/" target="_blank" rel="noopener">Mini Zoo Warszawa</a>,
+      <a href="https://www.park-linowy-ursus.pl" target="_blank" rel="noopener">Park Linowy Ursus</a>,
+      <a href="https://sport.um.warszawa.pl/waw/osir-ursus/sosnkowskiego" target="_blank" rel="noopener">OSiR Ursus — pływalnia Skalar</a>,
+      <a href="https://gorczewska.murall.pl/" target="_blank" rel="noopener">Murall Górczewska</a>,
+      <a href="https://kochamskakac.pl/warszawa/kontakt/" target="_blank" rel="noopener">#KochamSkakać</a>,
+      <a href="https://okeciepark.pl/kocham-skakac-park-trampolin/" target="_blank" rel="noopener">Okęcie Park — park trampolin</a>,
+      <a href="https://krakowska.murall.pl" target="_blank" rel="noopener">Murall Krakowska</a>,
+      <a href="https://sklep.kaufland.pl/uslugi/sklepy/warszawa-bemowo-bat-chlo-1063.html" target="_blank" rel="noopener">Kaufland Batalionów Chłopskich</a>,
+      <a href="https://bemowskie.pl/wynajem/scena-kocjana/" target="_blank" rel="noopener">Scena Kocjana</a>,
+      <a href="https://www.galeria-bemowo.pl/" target="_blank" rel="noopener">Galeria Bemowo</a>,
+      <a href="https://www.cinema-city.pl/kina/bemowo/" target="_blank" rel="noopener">Cinema City Bemowo</a>,
+      <a href="https://eko.um.warszawa.pl/-/park-szczesliwicki" target="_blank" rel="noopener">Park Szczęśliwicki</a>,
+      <a href="https://dkwlochy.pl/osw" target="_blank" rel="noopener">Okęcka Sala Widowiskowa</a>,
+      <a href="https://fiff.org.pl/odwiedz-nas/" target="_blank" rel="noopener">Instytut Fotografii Fort</a>,
+      <a href="https://pik.warszawa.pl/miejsca/teatr-druga-strefa/" target="_blank" rel="noopener">Teatr Druga Strefa</a>,
+      <a href="https://pl.wikipedia.org/wiki/Dw%C3%B3r_Ksawer%C3%B3w" target="_blank" rel="noopener">Dwór Ksawerów</a>,
+      <a href="https://eko.um.warszawa.pl/-/park-arkadia" target="_blank" rel="noopener">Park Arkadia</a>,
+      <a href="https://krolikarnia.mnw.art.pl/" target="_blank" rel="noopener">Królikarnia</a>,
+      <a href="https://www.dlahandlu.pl/detal-hurt/otwarcie-fortu-wola-woolworth-i-kaufland-wsrod-najemcow,114489.html" target="_blank" rel="noopener">Kaufland w Forcie Wola</a>,
+      <a href="https://media.auchan.pl/komunikaty-prasowe/otwarcie-auchan-okecie" target="_blank" rel="noopener">Auchan Okęcie</a>,
+      <a href="https://pl.wikipedia.org/wiki/Wola_Park" target="_blank" rel="noopener">Wola Park</a>,
+      <a href="https://www.multikino.pl/repertuar/warszawa-wola-park/teraz-gramy" target="_blank" rel="noopener">Multikino Wola Park</a>,
+      <a href="https://www.aldi.pl/wyszukiwarka-sklepu/ozarow-mazowiecki/poznanska-224/4096912.html" target="_blank" rel="noopener">Aldi Ożarów</a>,
+      <a href="https://warszawa.eska.pl/nowy-sklep-aldi-w-ozarowie-mazowieckim-znamy-date-i-godzine-otwarcia-26-09-aa-UvDf-nGZn-5nqt.html" target="_blank" rel="noopener">otwarcie Aldi w Ożarowie</a>,
+      <a href="https://netto.pl/sklepow/oarow-mazowiecki/nadbrzezna-35-lok-h1/c53a102697164dc5bb123e943743caa9/" target="_blank" rel="noopener">Netto Ożarów</a>,
+      <a href="https://netto.pl/sklepow/michalowice-osiedle/al-jesionowa-1f/4657582986ec4aaf8393206458e7505c/" target="_blank" rel="noopener">Netto Michałowice</a>,
+      <a href="https://www.propertynews.pl/centra-handlowe/jedyny-taki-aldi-w-polsce-juz-otwarty-czynny-7-dni-w-tygodniu-od-6-00-do-22-00,196418.html" target="_blank" rel="noopener">Aldi na Dworcu Zachodnim</a>,
+      <a href="https://www.aldi.pl/wyszukiwarka-sklepu/warszawa/karolkowa-30-lok.-10/6266048.html" target="_blank" rel="noopener">Aldi Karolkowa</a>,
+      <a href="https://www.dlahandlu.pl/detal-hurt/byl-frac-13-maja-ruszy-aldi,163489.html" target="_blank" rel="noopener">Aldi zamiast Fraca</a>,
+      <a href="https://netto.pl/sklepow/warszawa/ul-kleszczowa-18/068a8a4475c54ae09d92d96b2743ef54/" target="_blank" rel="noopener">Netto Kleszczowa</a>,
+      <a href="https://sport.um.warszawa.pl/waw/osir-wola/-/plywalnia-kryta-nowa-fala-garbinskiego-1" target="_blank" rel="noopener">Pływalnia Nowa Fala — godziny</a>,
+      <a href="https://www.osir.lowicz.pl/index.php?option=com_content&view=article&id=10&Itemid=125" target="_blank" rel="noopener">pływalnia w Łowiczu — sauna i godziny</a>,
+      <a href="https://www.wodnypark.com.pl/basen-olimpijski/" target="_blank" rel="noopener">Warszawianka — basen olimpijski</a>,
+      <a href="https://www.wodnypark.com.pl/basen-rekreacyjny/" target="_blank" rel="noopener">Warszawianka — basen rekreacyjny</a>,
+      <a href="https://www.wodnypark.com.pl/2026/09/08/16-wrzesnia-otwieramy-wyremontowana-pierwsza-czesc-strefy-saun/" target="_blank" rel="noopener">Warszawianka — strefa saun</a>,
+      <a href="https://www.wodnypark.com.pl/godziny-i-dni-otwarcia" target="_blank" rel="noopener">Warszawianka — godziny</a>,
+      <a href="https://mosir.org.pl/obiekty/lodowisko/" target="_blank" rel="noopener">lodowisko w Mińsku</a>,
+      <a href="https://sport.um.warszawa.pl/waw/osir-ochota/-/plywalnia-otwarta-usypiskowa-18-park-szczesliwicki-" target="_blank" rel="noopener">odkryta pływalnia w Parku Szczęśliwickim</a>,
+      <a href="https://sport.um.warszawa.pl/waw/osir-bemowo/-/plywalni-pingwin" target="_blank" rel="noopener">Pływalnia Pingwin</a>,
+      <a href="https://sport.um.warszawa.pl/waw/crs-bielany/-/plywalnia-conrada-6" target="_blank" rel="noopener">pływalnia CRS Bielany</a>,
+      <a href="https://sport.um.warszawa.pl/waw/crs-bielany/-/sauna-conrada-6" target="_blank" rel="noopener">sauny CRS Bielany</a>,
+      <a href="https://sport.um.warszawa.pl/waw/osir-ursus/-/sauna-sosnkowskiego-3" target="_blank" rel="noopener">sauny na Skalarze</a>,
+      <a href="https://sportowa.warszawa.pl/osrodki-sportu/skalar-sosnkowskiego-3/" target="_blank" rel="noopener">Skalar — baseny</a>,
+      <a href="https://sport.um.warszawa.pl/waw/osir-ursus/-/plywalnia-kryta-orlat-lwowskich" target="_blank" rel="noopener">Pływalnia Albatros</a>,
+      <a href="https://sport.um.warszawa.pl/waw/osir-ursus/-/sauna-orlat-lwowskich-1" target="_blank" rel="noopener">sauny na Albatrosie</a>,
+      <a href="https://pl.wikipedia.org/wiki/Kr%C3%B3likarnia" target="_blank" rel="noopener">pałac Królikarnia</a>,
+      <a href="https://pkin.pl/aktualnosci-i-wydarzenia/wystawa-glowna-narodowego-muzeum-techniki/" target="_blank" rel="noopener">wystawa główna NMT</a>,
+      <a href="https://nmt.waw.pl/dla-zwiedzajacych/" target="_blank" rel="noopener">NMT — godziny</a>,
+      <a href="https://muzeumewolucji.pl/?page_id=906" target="_blank" rel="noopener">Muzeum Ewolucji — wizyta</a>,
+      <a href="https://en.wikipedia.org/wiki/Museum_of_Evolution_of_Polish_Academy_of_Sciences" target="_blank" rel="noopener">Muzeum Ewolucji — wystawa</a>,
+      <a href="https://fotoplastikonwarszawski.pl/" target="_blank" rel="noopener">Fotoplastikon Warszawski</a>,
+      <a href="https://stacjamuzeum.pl/en/" target="_blank" rel="noopener">Stacja Muzeum</a>,
+      <a href="https://muzeumwoli.muzeumwarszawy.pl/en/" target="_blank" rel="noopener">Muzeum Woli</a>,
+      <a href="https://fabrykaczekolady.pl/en" target="_blank" rel="noopener">Muzeum Fabryka Czekolady E. Wedel</a>,
+      <a href="https://wmkig.pl/cennik.html" target="_blank" rel="noopener">Warszawskie Muzeum Komputerów i Gier</a>,
+      <a href="https://zzw.waw.pl/nasze-tereny/parki/park-przy-stawie-sluzewieckim/" target="_blank" rel="noopener">Park nad Stawem Służewieckim</a>,
+      <a href="https://wpr24.pl/znow-mozna-korzystac-z-piastowskiej-tezni/" target="_blank" rel="noopener">tężnia w Piastowie</a>,
+      <a href="https://pl.wikipedia.org/wiki/Stadion_Znicza_Pruszk%C3%B3w" target="_blank" rel="noopener">Stadion Znicza</a>,
+      <a href="https://www.pruszkow.pl/inwestycje/zrealizowane-inwestycje/pruszkowska-teznia-juz-dziala/" target="_blank" rel="noopener">tężnia w Pruszkowie</a>,
+      <a href="https://mmgik.org/faq" target="_blank" rel="noopener">Milanowskie Muzeum Gier i Komputerów</a>,
+      <a href="https://pl.wikipedia.org/wiki/Bolimowski_Park_Krajobrazowy" target="_blank" rel="noopener">Bolimowski Park Krajobrazowy</a>,
+      <a href="https://www.wodnypark.com.pl/" target="_blank" rel="noopener">Wodny Park Warszawianka</a>.
     </p>
     <p><a href="../index.html">← lab ww86.eu</a></p>
     <p>© 2026 Waldemar Wosiński. Wszelkie prawa zastrzeżone, również w zakresie eksploracji tekstów i danych (art. 26³ ustawy o prawie autorskim i prawach pokrewnych). Strona rozwijana z użyciem systemów agentowych. <a href="../../copyright.html">Zasady korzystania (po angielsku)</a></p>
   </footer>
 </div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js" integrity="sha384-NElt3Op+9NBMCYaef5HxeJmU4Xeard/Lku8ek6hoPTvYkQPh3zLIrJP7KiRocsxO" crossorigin="anonymous"></script>
+<script src="routes.js"></script>
 <script>
 (function(){
   var gm = function(q){ return 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(q); };
@@ -367,13 +470,17 @@ footer p{margin:0;max-width:90ch}
   // Stop fields: minor = small dot, terminus = filled dot, zone = border station of ZTM zones 1 and 2,
   // zEnd = zone 2 ends after this stop. Bus stops use coordinates as q, a stop name alone is ambiguous.
   // Place fields: c = one or two categories, the most important first, which gives the order of the dots;
-  // dist: "at" = kilka minut pieszo, "far" = rower/autobus, null = sprawdź trasę
+  // dist: "at" = kilka minut pieszo, "far" = rower/autobus, null = sprawdź trasę;
+  // t: **…** is bold; s (optional): what runs part of the year only, and when
   var LINES = [
     { id:'r1', badge:'R1', title:'Ursus → Skierniewice', from:'Z przystanku Warszawa Ursus · R1 Koleje Mazowieckie: do Skierniewic 25 pociągów w dzień roboczy i 21 w weekend (ok. 56 min), do Żyrardowa razem 32 i 26 (ok. 34 min) · SKM S1 dojeżdża tylko do Pruszkowa', stops:[
       { n:'Warszawa Ursus', q:'Warszawa Ursus stacja kolejowa', terminus:true, blurb:'Start.' },
-      { n:'Warszawa Ursus-Niedźwiadek', q:'Warszawa Ursus-Niedźwiadek stacja kolejowa', minor:true, zone:true },
+      { n:'Warszawa Ursus-Niedźwiadek', q:'Warszawa Ursus-Niedźwiadek stacja kolejowa', zone:true, places:[
+        { n:'Pływalnia Albatros', q:'Pływalnia Albatros, Orląt Lwowskich 1, Warszawa', c:['aktywnie'], d:null, t:'Pływalnia OSiR Ursus: basen sportowy 25 × 12,5 m na sześć torów i basen rekreacyjny z wodą o temperaturze 32–34 °C; **sauny**: sucha, parowa, infrared i **biosauna**. Pn–pt 6–22, sb–nd 8–22.' }
+      ]},
       { n:'Piastów', q:'Piastów stacja kolejowa', blurb:'Park Handlowy Piast z Kauflandem jest ok. 1,1 km od stacji — opisany niżej, przy autobusie 716.', places:[
-        { n:'Kino Baśń (MOK Piastów)', q:'Kino Baśń, Piastów', c:['kino','kultura'], d:null, t:'Kameralne kino Miejskiego Ośrodka Kultury; są też koncerty i spektakle.' }
+        { n:'Kino Baśń (MOK Piastów)', q:'Kino Baśń, Piastów', c:['kino','kultura'], d:null, t:'Kameralne kino Miejskiego Ośrodka Kultury; są też koncerty i spektakle.' },
+        { n:'Tężnia solankowa w Piastowie', q:'Tężnia solankowa, Aleja Tysiąclecia 1, Piastów', c:['natura'], d:'at', t:'W parku Sokorskich, obok MOSiR: tężnia z solanką z Zabłocia, czynna codziennie od rana do 21; zimą przerwa.', s:'od wiosny do jesieni' }
       ]},
       { n:'Pruszków', q:'Pruszków stacja kolejowa', zEnd:true, places:[
         { n:'Multikino w Nowej Stacji', q:'Multikino Pruszków, Sienkiewicza 19', c:['kino','zakupy'], d:'at', t:'Galeria handlowa zbudowana tuż przy dworcu, z multipleksem.' },
@@ -381,9 +488,11 @@ footer p{margin:0;max-width:90ch}
         { n:'Muzeum Starożytnego Hutnictwa Mazowieckiego', q:'Muzeum Starożytnego Hutnictwa Mazowieckiego, pl. Jana Pawła II 2, Pruszków', c:['kultura','zabytki'], d:null, t:'Archeologia: dymarki i hutnictwo żelaza sprzed 2 tys. lat. Wt–pt 9–15, weekendy 11–17. Mieści się w klasycystycznej oficynie dworskiej zespołu pałacowo-parkowego Potulickich, w rejestrze zabytków od 1987 r.' },
         { n:'Park Potulickich', q:'Park Potulickich, Pruszków', c:['natura','zabytki'], d:null, t:'Zabytkowy park w centrum miasta.' },
         { n:'Arena Pruszków', q:'Arena Pruszków, Andrzeja 1, Pruszków', c:['aktywnie','mecze'], d:null, t:'Kryty tor kolarski — zawody, a także wypożyczalnia rowerów torowych. Trybuny mieszczą 1800 widzów. Ok. 1,6 km od stacji.' },
+        { n:'Stadion Znicza Pruszków', q:'Stadion Znicz, Bohaterów Warszawy 4, Pruszków', c:['mecze'], d:null, t:'Stadion piłkarski z 2006 r. na 2097 miejsc; gra tu Znicz Pruszków, w sezonie 2025/26 w I lidze. Ok. 1 km od stacji.' },
         { n:'Pływalnia Kapry', q:'Pływalnia Kapry, Andrzeja 3, Pruszków', c:['aktywnie'], d:null, t:'Miejska kryta pływalnia, tuż obok Areny. Ok. 1,7 km od stacji.' },
-        { n:'Pływalnia powiatowa przy SMS', q:'Pływalnia SMS, Gomulińskiego 4, Pruszków', c:['aktywnie'], d:null, t:'Pływalnia Szkoły Mistrzostwa Sportowego, otwarta w 2024 r.: 8 torów 25-metrowych, wstęp także dla mieszkańców — godziny sprawdź przed wizytą. Ok. 1,3 km od stacji.' },
-        { n:'Park Mazowsze', q:'Park Kultury i Wypoczynku Mazowsze, Pruszków', c:['aktywnie','natura'], d:null, t:'Prawie 10 ha zieleni wokół dwóch stawów po dawnych glinankach: kąpielisko strzeżone w wakacje (codziennie 10–18), stały grill, miejsca na ognisko, plac zabaw.' }
+        { n:'Pływalnia powiatowa przy SMS', q:'Pływalnia SMS, Gomulińskiego 4, Pruszków', c:['aktywnie'], d:null, t:'Pływalnia Szkoły Mistrzostwa Sportowego, otwarta w 2024 r.: 8 torów 25-metrowych, wstęp także dla mieszkańców, według ogłoszenia powiatu od poniedziałku do piątku 6:30–21:30. **O weekendach ogłoszenie nie mówi — sprawdź przed wizytą.** Ok. 1,3 km od stacji.' },
+        { n:'Park Mazowsze', q:'Park Kultury i Wypoczynku Mazowsze, Pruszków', c:['aktywnie','natura'], d:null, t:'Prawie 10 ha zieleni wokół dwóch stawów po dawnych glinankach: kąpielisko strzeżone w wakacje (codziennie 10–18), stały grill, miejsca na ognisko, plac zabaw.', s:'kąpielisko w wakacje' },
+        { n:'Tężnia w Parku Kościuszki', q:'Tężnia solankowa, Park Kościuszki, Pruszków', c:['natura'], d:null, t:'Tężnia solankowa od strony Al. Niepodległości, działa od 2020 r.; codziennie 7–22.' }
       ]},
       { n:'Parzniew', q:'Parzniew stacja kolejowa', minor:true },
       { n:'Brwinów', q:'Brwinów stacja kolejowa', places:[
@@ -395,7 +504,8 @@ footer p{margin:0;max-width:90ch}
         { n:'Milanowskie Centrum Kultury', q:'Milanowskie Centrum Kultury, Kościelna 3, Milanówek', c:['kultura'], d:null, t:'Koncerty, spektakle i festiwale miejskie.' },
         { n:'Park Turczynek', q:'Turczynek, Milanówek', c:['natura','zabytki'], d:null, t:'Park z nowymi alejkami przy dwóch willach Dawida Landego z początku XX w.; wille są ogrodzone i czekają na remont.' },
         { n:'Muzeum Jedwabnictwa Milanowskiego', q:'Muzeum Jedwabnictwa Milanowskiego, Milanówek', c:['kultura'], d:null, t:'Prowadzone przez stowarzyszenie — dni otwarcia sprawdź przed wizytą.' },
-        { n:'Stare Kino', q:'Stare Kino, Piłsudskiego 33, Milanówek', c:['kultura'], d:'at', t:'Filia Milanowskiego Centrum Kultury: koncerty, spektakle, wystawy, warsztaty. Seanse filmowe są sporadyczne, w cyklach takich jak „Kino Kobiet” — sprawdź program.' }
+        { n:'Stare Kino', q:'Stare Kino, Piłsudskiego 33, Milanówek', c:['kultura'], d:'at', t:'Filia Milanowskiego Centrum Kultury: koncerty, spektakle, wystawy, warsztaty. Seanse filmowe są sporadyczne, w cyklach takich jak „Kino Kobiet” — sprawdź program.' },
+        { n:'Milanowskie Muzeum Gier i Komputerów', q:'Milanowskie Muzeum Gier i Komputerów, Dworcowa 2, Milanówek', c:['kultura'], d:'at', t:'Działające komputery, konsole i gry z lat 80. i 90. **Pojedynczy goście tylko w ogłoszone soboty, 9–12 lub 17–20**; w tygodniu grupy po umówieniu. Wejście od ul. Piasta.' }
       ]},
       { n:'Grodzisk Mazowiecki', q:'Grodzisk Mazowiecki stacja kolejowa PKP', blurb:'Najbogatszy przystanek na R1 poza Żyrardowem.', places:[
         { n:'Poczekalnia PKP', q:'Poczekalnia PKP, 1 Maja 4, Grodzisk Mazowiecki', c:['kultura','zabytki'], d:'at', t:'W samym zabytkowym dworcu (1922–24, proj. Romuald Miller): informacja turystyczna, wystawy, koncerty, warsztaty, wycieczki rowerowe.' },
@@ -405,8 +515,8 @@ footer p{margin:0;max-width:90ch}
         { n:'Park Skarbków', q:'Park Skarbków, Grodzisk Mazowiecki', c:['natura'], d:null, t:'Park im. hrabiów Skarbków, otwarty dla mieszkańców ok. 1870 r.: Stawy Goliana i stare dęby — pomniki przyrody.' },
         { n:'Willa Foksal', q:'Willa Foksal, Grodzisk Mazowiecki', c:['zabytki'], d:null, t:'Dawny dworzec Kolei Warszawsko-Wiedeńskiej z 1846 r.' },
         { n:'Kościół św. Anny', q:'Kościół św. Anny, Grodzisk Mazowiecki', c:['zabytki'], d:null, t:'Świątynia budowana etapami przez ok. 200 lat; parafia wzmiankowana już w 1355 r.' },
-        { n:'Stawy Walczewskiego', q:'Stawy Walczewskiego, Grodzisk Mazowiecki', c:['aktywnie','natura'], d:null, t:'Tereny rekreacyjne z miejskim kąpieliskiem (w sezonie). Dwa sztuczne stawy otoczone parkiem.' },
-        { n:'Pływalnia Wodnik 2000', q:'Pływalnia Wodnik 2000, Grodzisk Mazowiecki', c:['aktywnie'], d:null, t:'Miejski basen OSiR: basen sportowy 25 × 12,5 m, zjeżdżalnia 65 m, jacuzzi i sauny. Ok. 1,4 km od stacji.' }
+        { n:'Stawy Walczewskiego', q:'Stawy Walczewskiego, Grodzisk Mazowiecki', c:['aktywnie','natura'], d:null, t:'Tereny rekreacyjne z miejskim kąpieliskiem (w sezonie). Dwa sztuczne stawy otoczone parkiem.', s:'kąpielisko' },
+        { n:'Pływalnia Wodnik 2000', q:'Pływalnia Wodnik 2000, Grodzisk Mazowiecki', c:['aktywnie'], d:null, t:'Miejski basen OSiR: basen sportowy 25 × 12,5 m, zjeżdżalnia 65 m, jacuzzi, wodny plac zabaw i **sauny**: damska, męska, sucha i mokra. Ok. 1,4 km od stacji.' }
       ]},
       { n:'Jaktorów', q:'Jaktorów stacja kolejowa', places:[
         { n:'Pomnik ostatniego tura', q:'Pomnik tura, Jaktorów', c:['zabytki'], d:null, t:'Głaz z 1972 r. w miejscu, gdzie w 1627 r. padła ostatnia turzyca na świecie. Kawałek pieszo od stacji, przy drodze 719.' },
@@ -423,19 +533,21 @@ footer p{margin:0;max-width:90ch}
         { n:'Kościół Matki Bożej Pocieszenia', q:'Kościół Matki Bożej Pocieszenia, Żyrardów', c:['zabytki'], d:null, t:'Neogotycka świątynia z dwiema ok. 70-metrowymi wieżami i secesyjnymi witrażami.' },
         { n:'Stara Przędzalnia i lofty', q:'Stara Przędzalnia, Żyrardów', c:['zabytki'], d:null, t:'Zrewitalizowane hale przędzalni — dziś sklepy, hotel i mieszkania.' },
         { n:'Park Dittricha', q:'Park Dittricha, Żyrardów', c:['natura'], d:null, t:'Angielski park krajobrazowy nad Pisią Gągoliną: kaskady, mostki, stawy.' },
-        { n:'Aqua Żyrardów', q:'Aqua Żyrardów, Pileckiego 25, Żyrardów', c:['aktywnie'], d:null, t:'Kryta pływalnia miejska ze sztuczną rzeką i zjeżdżalnią o długości 123 m; codziennie 6:45–22. Ok. 1,7 km od stacji.' },
-        { n:'Kompleks Farbiarska', q:'Kompleks Sportowo-Rekreacyjny Farbiarska, Farbiarska 3, Żyrardów', c:['aktywnie'], d:null, t:'Trzy odkryte, podgrzewane baseny — pływacki, rekreacyjny i brodzik — z wodnym placem zabaw, otwarte w czerwcu 2026 r. w Parku Miejskim nad Pisią Gągoliną; czynne latem. Ok. 1,5 km od stacji.' }
+        { n:'Aqua Żyrardów', q:'Aqua Żyrardów, Pileckiego 25, Żyrardów', c:['aktywnie'], d:null, t:'Kryta pływalnia miejska ze sztuczną rzeką i zjeżdżalnią o długości 123 m, jedną z najdłuższych w Polsce, oraz **saunami**, suchą i parową (w weekendy od 15); codziennie 6:45–22. Ok. 1,7 km od stacji.' },
+        { n:'Kompleks Farbiarska', q:'Kompleks Sportowo-Rekreacyjny Farbiarska, Farbiarska 3, Żyrardów', c:['aktywnie'], d:null, t:'Trzy odkryte, podgrzewane baseny — pływacki, rekreacyjny i brodzik — z wodnym placem zabaw, otwarte w czerwcu 2026 r. w Parku Miejskim nad Pisią Gągoliną; czynne latem. Ok. 1,5 km od stacji.', s:'latem' }
       ]},
       { n:'Sucha Żyrardowska', q:'Sucha Żyrardowska stacja kolejowa', minor:true },
       { n:'Jesionka', q:'Jesionka stacja kolejowa', minor:true },
       { n:'Radziwiłłów Mazowiecki', q:'Radziwiłłów Mazowiecki stacja kolejowa', minor:true },
-      { n:'Skierniewice Rawka', q:'Skierniewice Rawka stacja kolejowa', minor:true },
+      { n:'Skierniewice Rawka', q:'Skierniewice Rawka stacja kolejowa', places:[
+        { n:'Bolimowski Park Krajobrazowy', q:'Bolimowski Park Krajobrazowy', c:['natura'], d:'at', t:'Park krajobrazowy z 1986 r. na ponad 200 km²: meandrująca dolina Rawki i Puszcza Bolimowska, sześć rezerwatów i znakowane szlaki. Granica parku ok. 300 m od stacji.' }
+      ]},
       { n:'Skierniewice', q:'Skierniewice stacja kolejowa', terminus:true, blurb:'Dawna rezydencja arcybiskupów gnieźnieńskich; dworzec i parowozownia ucieszą miłośników kolei.', places:[
         { n:'Dworzec kolejowy', q:'Dworzec PKP Skierniewice', c:['zabytki'], d:'at', t:'Budynek z 1873 r., wzniesiony na przyjazdy cara, spłonął w 1914 r. i został odbudowany w latach 1919–21 według projektu Jana Heuricha. Remont zakończono w grudniu 2025 r.' },
         { n:'Parowozownia Skierniewice', q:'Parowozownia Skierniewice, Łowicka 1, Skierniewice', c:['kultura','zabytki'], d:null, t:'Wachlarzowa parowozownia z kolekcją taboru Polskiego Stowarzyszenia Miłośników Kolei: parowozy i wagony, symulator lokomotywy SM42, kolejka ogrodowa. Otwarta w wyznaczone dni, zwykle 11–16 — terminy w kalendarzu PSMK. Zespół parowozowni jest w rejestrze zabytków od 1994 r.' },
         { n:'Pałac Prymasowski i park', q:'Pałac Prymasowski, Skierniewice', c:['zabytki','natura'], d:null, t:'Rezydencja arcybiskupów gnieźnieńskich z lat 1610–19, przebudowana w 1780 r. według projektu Efraima Schroegera; na stałe mieszkał tu prymas Ignacy Krasicki. Dziś należy do Instytutu Ogrodnictwa: park jest otwarty, wnętrza zwiedza się okazjonalnie.' },
         { n:'Kinoteatr Polonez', q:'Kino Polonez, Wita Stwosza 2/4, Skierniewice', c:['kino','kultura'], d:null, t:'Jedyne kino w mieście, prowadzone przez Centrum Kultury i Sztuki: dwie sale, w sieci kin studyjnych. Ma też pełnowymiarową scenę teatralną: odbywają się tu duże wydarzenia kulturalne miasta i koncerty.' },
-        { n:'Pływalnia Nawa', q:'Pływalnia Nawa, Prusa 6a, Skierniewice', c:['aktywnie'], d:null, t:'Miejska pływalnia z 1995 r.: basen sportowy i mały basen rekreacyjny ze zjeżdżalnią i jacuzzi. Codziennie 6:10–21:45, ostatnie wejście o 20:50.' }
+        { n:'Pływalnia Nawa', q:'Pływalnia Nawa, Prusa 6a, Skierniewice', c:['aktywnie'], d:null, t:'Miejska pływalnia z 1995 r.: basen sportowy i mały basen rekreacyjny ze zjeżdżalnią i jacuzzi oraz **sauny**. Codziennie 6:10–21:45, ostatnie wejście o 20:50.' }
       ]}
     ]},
     { id:'r3', badge:'R3', title:'Ursus Północny → Łowicz', from:'Z przystanku Warszawa Ursus Północny · R3 Koleje Mazowieckie: do Sochaczewa 32 pociągi w dzień roboczy i 21 w weekend (ok. 45 min), z tego do Łowicza 14 i 12 (ok. 70 min)', stops:[
@@ -444,14 +556,16 @@ footer p{margin:0;max-width:90ch}
       { n:'Ożarów Mazowiecki', q:'Ożarów Mazowiecki stacja kolejowa', places:[
         { n:'Dom Kultury „Uśmiech”', q:'Dom Kultury Uśmiech, Kolejowa 2, Ożarów Mazowiecki', c:['kultura'], d:null, t:'Koncerty, spotkania i wernisaże, głównie w weekendy.' },
         { n:'Park Ołtarzewski', q:'Park Ołtarzewski, Ożarów Mazowiecki', c:['natura','zabytki'], d:null, t:'Dawny park dworski z XVIII w. na 15 ha: ok. 1150 drzew, stawy i lipowa aleja, odnowiony w 2021 r. Majątek należał kiedyś do Stanisława Kierbedzia, projektanta pierwszego żelaznego mostu na Wiśle w Warszawie.' },
-        { n:'Pływalnia GOSiR', q:'Pływalnia GOSiR, Szkolna 2A, Ożarów Mazowiecki', c:['aktywnie'], d:'at', t:'Gminna pływalnia z sauną, czynna 6–22, ostatnie wejście o 21.' }
+        { n:'Pływalnia GOSiR', q:'Pływalnia GOSiR, Szkolna 2A, Ożarów Mazowiecki', c:['aktywnie'], d:'at', t:'Gminna pływalnia z **sauną** (dwie kabiny) i wanną whirlpool, czynna codziennie 6–22, ostatnie wejście o 21.' },
+        { n:'Aldi Ożarów', q:'Aldi, Poznańska 224, Ożarów Mazowiecki', c:['zakupy'], d:null, t:'Sklep na ok. 1000 m², otwarty w 2023 r.; pn–sb 6–22. Ok. 1,2 km od stacji.' },
+        { n:'Netto Ożarów', q:'Netto, Nadbrzeżna 35, Ożarów Mazowiecki', c:['zakupy'], d:null, t:'Sklep przy ul. Nadbrzeżnej. Ok. 1,2 km od stacji.' }
       ]},
       { n:'Płochocin', q:'Płochocin stacja kolejowa', minor:true, zEnd:true },
       { n:'Błonie Rokitno', q:'Błonie Rokitno stacja kolejowa', minor:true },
       { n:'Błonie', q:'Błonie stacja kolejowa', places:[
         { n:'Centrum Kultury · Kino Bajka', q:'Kino Bajka, Jana Pawła II 1B, Błonie', c:['kino','kultura'], d:null, t:'Kino Bajka: sala na 236 miejsc w budynku Centrum Kultury; są też koncerty i spektakle.' },
         { n:'Kościół Świętej Trójcy', q:'Kościół Świętej Trójcy, Błonie', c:['zabytki'], d:null, t:'Kościół farny z XIII wieku.' },
-        { n:'Pływalnia Centrum Sportu', q:'Centrum Sportu, Grodziska 1, Błonie', c:['aktywnie'], d:null, t:'Basen sportowy, rekreacyjny i do nauki pływania oraz wodny tor przeszkód; codziennie 6–22.' }
+        { n:'Pływalnia Centrum Sportu', q:'Centrum Sportu, Grodziska 1, Błonie', c:['aktywnie'], d:null, t:'Basen sportowy, rekreacyjny i do nauki pływania oraz wodny tor przeszkód i wodny plac zabaw; codziennie 6–22.' }
       ]},
       { n:'Witanów', q:'Witanów stacja kolejowa', minor:true },
       { n:'Boża Wola', q:'Boża Wola stacja kolejowa', minor:true },
@@ -468,7 +582,7 @@ footer p{margin:0;max-width:90ch}
         { n:'Ruiny zamku książąt mazowieckich', q:'Ruiny Zamku Książąt Mazowieckich, Sochaczew', c:['zabytki'], d:null, t:'Ruiny na wzgórzu nad Bzurą, przy centrum miasta.' },
         { n:'Kino Mazowsze', q:'Kino Mazowsze, Sochaczew', c:['kino'], d:null, t:'Kino Sochaczewskiego Centrum Kultury.' },
         { n:'Żelazowa Wola — dom urodzenia Chopina', q:'Dom Urodzenia Fryderyka Chopina, Żelazowa Wola', c:['kultura','natura'], d:'far', t:'Kilka kilometrów od Sochaczewa — dojazd autobusem lub rowerem. Dworek otacza park urządzony w latach 1932–39 według projektu Franciszka Krzywdy-Polkowskiego, z pomnikiem kompozytora.' },
-        { n:'Pływalnia Orka', q:'Pływalnia Orka, Olimpijska 3, Sochaczew', c:['aktywnie'], d:null, t:'Miejska pływalnia MOSiR z sauną. Ok. 1,4 km od stacji.' }
+        { n:'Pływalnia Orka', q:'Pływalnia Orka, Olimpijska 3, Sochaczew', c:['aktywnie'], d:null, t:'Miejska pływalnia MOSiR z **sauną**; codziennie 6:30–21:45. Ok. 1,4 km od stacji.' }
       ]},
       { n:'Kornelin', q:'Kornelin stacja kolejowa', minor:true },
       { n:'Nowa Sucha', q:'Nowa Sucha stacja kolejowa', minor:true },
@@ -485,7 +599,7 @@ footer p{margin:0;max-width:90ch}
         { n:'Bazylika katedralna', q:'Bazylika katedralna, Stary Rynek 30, Łowicz', c:['zabytki'], d:null, t:'Dawna kolegiata prymasowska przy Starym Rynku; w podziemiach ponad 500 pochówków, w tym 12 arcybiskupów gnieźnieńskich i prymasów.' },
         { n:'Kino Fenix', q:'Kino Fenix, Podrzeczna 20, Łowicz', c:['kino'], d:null, t:'Kino Łowickiego Ośrodka Kultury.' },
         { n:'Skansen w Maurzycach', q:'Skansen Wsi Łowickiej, Maurzyce', c:['kultura','zabytki'], d:'far', t:'Skansen wsi łowickiej, oddział Muzeum w Łowiczu. Ok. 7 km od stacji. 42 budynki dawnej wsi księżackiej, głównie z XIX i XX w., m.in. drewniany kościół z 1758 r.; skansen jest w rejestrze zabytków.' },
-        { n:'Pływalnia OSiR', q:'Pływalnia OSiR, Łowicz', c:['aktywnie'], d:null, t:'Kryta pływalnia miejska; obok baseny zewnętrzne, czynne latem.' }
+        { n:'Pływalnia OSiR', q:'Pływalnia OSiR, Łowicz', c:['aktywnie'], d:null, t:'Kryta pływalnia miejska z **sauną**, w weekendy 10–20; obok baseny zewnętrzne, czynne latem.', s:'baseny zewnętrzne latem' }
       ]}
     ]},
     { id:'s1', badge:'S1', title:'Ursus → Otwock', from:'Z przystanku Warszawa Ursus · SKM S1 do Otwocka co godzinę, 19 pociągów dziennie także w weekend (ok. 65 min)', stops:[
@@ -504,7 +618,7 @@ footer p{margin:0;max-width:90ch}
         { n:'Cmentarz-Pomnik w Wawrze', q:'Cmentarz-Pomnik w Wawrze, 27 Grudnia, Warszawa', c:['zabytki'], d:'at', t:'Miejsce, gdzie 27 grudnia 1939 r. Niemcy rozstrzelali ok. 107 mężczyzn zatrzymanych w domach, na ulicach i na stacji Wawer. Pomnik z 1949 r.' }
       ]},
       { n:'Warszawa Anin', q:'Warszawa Anin stacja kolejowa', places:[
-        { n:'Pływalnia OSiR Wawer', q:'Pływalnia OSiR Wawer, V Poprzeczna 22, Warszawa', c:['aktywnie'], d:null, t:'Basen sportowy 25 × 12,5 m na sześć torów, strefa rekreacyjna ze sztuczną rzeką i jacuzzi.' }
+        { n:'Pływalnia OSiR Wawer', q:'Pływalnia OSiR Wawer, V Poprzeczna 22, Warszawa', c:['aktywnie'], d:null, t:'Basen sportowy 25 × 12,5 m na sześć torów, strefa rekreacyjna ze sztuczną rzeką i jacuzzi, **dwie sauny suche** i łaźnia parowa; codziennie 6:05–21:45.' }
       ]},
       { n:'Warszawa Międzylesie', q:'Warszawa Międzylesie stacja kolejowa', minor:true },
       { n:'Warszawa Radość', q:'Warszawa Radość stacja kolejowa', minor:true },
@@ -517,7 +631,7 @@ footer p{margin:0;max-width:90ch}
       { n:'Michalin', q:'Michalin stacja kolejowa', minor:true },
       { n:'Józefów', q:'Józefów stacja kolejowa', places:[
         { n:'Miejski Ośrodek Kultury', q:'Miejski Ośrodek Kultury, Kardynała Wyszyńskiego 1, Józefów', c:['kultura'], d:'at', t:'Sala widowiskowa i dwie galerie przy urzędzie miasta: koncerty, spektakle, wystawy. W sali działa też Kino Muza, ale seanse są sporadyczne, często z wolnym wstępem — sprawdź program.' },
-        { n:'Pływalnia ICSiR', q:'ICSiR, Długa 44, Józefów', c:['aktywnie'], d:null, t:'Basen sportowy 25 × 12,5 m, basen rekreacyjny, 80-metrowa zjeżdżalnia i sauna. Ok. 1,2 km od stacji.' }
+        { n:'Pływalnia ICSiR', q:'ICSiR, Długa 44, Józefów', c:['aktywnie'], d:null, t:'Basen sportowy 25 × 12,5 m, basen rekreacyjny, 80-metrowa zjeżdżalnia z 9 m spadku, jacuzzi i **sauna** fińska. Ok. 1,2 km od stacji.' }
       ]},
       { n:'Otwock Świder', q:'Otwock Świder stacja kolejowa', places:[
         { n:'Rezerwat przyrody Świder', q:'Rezerwat przyrody Świder, Otwock', c:['natura'], d:null, t:'Meandrująca rzeka na granicy Otwocka i Józefowa, chroniona od 1978 r. na ok. 41 km. Obowiązują zasady rezerwatu: bez ognisk, śmieci i hałasu.' }
@@ -534,16 +648,27 @@ footer p{margin:0;max-width:90ch}
 
   // Stations every train from both home stations stops at; `lines` drive the line filter.
   var HUB = [
-    { n:'Warszawa Włochy', q:'Warszawa Włochy stacja kolejowa', lines:['r1','s1','r3'], via:[
-      { b:['r1','s1'], t:'z Ursusa · 2 min' }, { b:['r3'], t:'z Ursusa Północnego · 2 min' }
+    { n:'Warszawa Włochy', q:'Warszawa Włochy stacja kolejowa', lines:['r1','s1','r3','194','228'], via:[
+      { b:['r1','s1'], t:'z Ursusa · 2 min' }, { b:['r3'], t:'z Ursusa Północnego · 2 min' },
+      { b:['194','228'], t:'z Ursusa - Ratusza, na PKP Włochy · 6–7 min' }
     ], places:[
-      { n:'Kino Studyjne ADA', q:'Kino ADA, Chrościckiego 14, Warszawa', c:['kino'], d:null, t:'Sala na 60 miejsc w Domu Kultury Włochy: cykle z kina polskiego i światowego, spotkania z twórcami. Nazwa po przedwojennym kinie Ada, które działało w tym miejscu.' }
+      { n:'Kino Studyjne ADA', q:'Kino ADA, Chrościckiego 14, Warszawa', c:['kino'], d:null, t:'Sala na 60 miejsc w Domu Kultury Włochy: cykle z kina polskiego i światowego, spotkania z twórcami. Nazwa po przedwojennym kinie Ada, które działało w tym miejscu.' },
+      { n:'Park Kombatantów', q:'Park Kombatantów, Chrościckiego, Warszawa', c:['natura','zabytki'], d:'at', t:'5 ha dawnej podmiejskiej rezydencji Tadeusza Mostowskiego (1795), w 1842 r. przerobionej na ogród angielski: neorenesansowy pałac z tego roku, brama z XVIII w., Staw Koziorożca, place zabaw.' },
+      { n:'Netto Kleszczowa', q:'Netto, Kleszczowa 18, Warszawa', c:['zakupy'], d:null, t:'Sklep przy ul. Kleszczowej. Ok. 0,9 km od stacji.' }
+    ]},
+    { n:'Warszawa Zachodnia', q:'Warszawa Zachodnia stacja kolejowa', lines:['r1','s1','r3','517','187'], via:[
+      { b:['r1','s1'], t:'z Ursusa · 7–8 min' }, { b:['r3'], t:'z Ursusa Północnego · 8 min' }, { b:['517','187'], t:'z Lalek na Dw. Zachodni · 24–25 min' }
+    ], places:[
+      { n:'Aldi na dworcu Warszawa Zachodnia', q:'Aldi, Tunelowa 6, Warszawa', c:['zakupy'], d:'at', t:'Pierwszy w Polsce Aldi na dworcu, pod peronami, ok. 600 m², otwarty w lutym 2026 r.; codziennie 6–22, także w niedziele.' }
     ]},
     { n:'Warszawa Ochota', q:'Warszawa Ochota stacja kolejowa', lines:['r1','s1','r3','517'], via:[
       { b:['r1','s1'], t:'z Ursusa · 11 min' }, { b:['r3'], t:'z Ursusa Północnego · 11 min' }, { b:['517'], t:'z Lalek na pl. Zawiszy, obok stacji · 32 min' }
     ], places:[
       { n:'Kinogram', q:'Kinogram, Żelazna 51/53, Warszawa', c:['kino'], d:null, t:'Butikowe kino w Fabryce Norblina, z 14-metrowym barem.' },
-      { n:'Pływalnia Delfin', q:'Pływalnia Delfin, Kasprzaka 1/3, Warszawa', c:['aktywnie'], d:null, t:'Pływalnia OSiR Wola: pon.–pt. 7–22, weekendy 8–22. Ok. 1 km od stacji.' }
+      { n:'Stacja Muzeum', q:'Stacja Muzeum, Towarowa 3, Warszawa', c:['kultura'], d:null, t:'Muzeum kolejnictwa przy dawnym dworcu Warszawa Główna: ponad 50 pojazdów szynowych. Codziennie poza wtorkami 10–18, w poniedziałki wstęp wolny; od 21 września do 2 października 2026 r. nieczynne.' },
+      { n:'Muzeum Woli', q:'Muzeum Woli, Srebrna 12, Warszawa', c:['kultura'], d:'at', t:'Oddział Muzeum Warszawy: wystawy, warsztaty i wydarzenia o historii miasta. Wt, śr, pt 10–17, czw 11–19, sb–nd 11–18; w czwartki bilet za 1 zł.' },
+      { n:'Pływalnia Delfin', q:'Pływalnia Delfin, Kasprzaka 1/3, Warszawa', c:['aktywnie'], d:null, t:'Pływalnia OSiR Wola z **sauną**: pon.–pt. 7–22, weekendy 8–22. Ok. 1 km od stacji.' },
+      { n:'Aldi Karolkowa', q:'Aldi, Karolkowa 30, Warszawa', c:['zakupy'], d:null, t:'Sklep w formacie Compact, otwarty w maju 2026 r. w miejscu Fraca; codziennie 6–22. Ok. 1,1 km od stacji.' }
     ]},
     { n:'Warszawa Śródmieście', q:'Warszawa Śródmieście stacja kolejowa', lines:['r1','s1','r3','517'], via:[
       { b:['r1','s1'], t:'z Ursusa · 14 min' }, { b:['r3'], t:'z Ursusa Północnego · 14 min' }, { b:['517'], t:'z Lalek do Dw. Centralnego · 35–39 min' }
@@ -553,13 +678,16 @@ footer p{margin:0;max-width:90ch}
       { n:'Pałac Kultury i Nauki', q:'Pałac Kultury i Nauki, Warszawa', c:['zabytki'], d:'at', t:'Najwyższy zabytek w Polsce, w rejestrze od 2007 r. Taras widokowy na XXX piętrze, 114 m nad ziemią, czynny codziennie 10–20; kasa na wprost wejścia od Marszałkowskiej.' },
       { n:'Teatry w Pałacu Kultury', q:'Teatr Dramatyczny, Plac Defilad 1, Warszawa', c:['kultura'], d:'at', t:'Cztery teatry w jednym gmachu: Dramatyczny, Studio, Lalka i 6. piętro.' },
       { n:'Muzeum Neonów', q:'Muzeum Neonów, Plac Defilad 1, Warszawa', c:['kultura'], d:'at', t:'Neony z czasów PRL-u, od 2025 r. na 4. piętrze Pałacu Kultury (wejście od Marszałkowskiej); wcześniej w Soho Factory na Kamionku. Codziennie od 11, w piątki i soboty do 19, w pozostałe dni do 18.' },
+      { n:'Narodowe Muzeum Techniki', q:'Narodowe Muzeum Techniki, Plac Defilad 1, Warszawa', c:['kultura'], d:'at', t:'W Pałacu Kultury: wystawa główna o wkładzie Polaków w światową technikę i naukę od XVII do XX w., a obok o historii paliw kopalnych i Ignacym Łukasiewiczu. Wt–nd 9–18, ostatnie wejście o 17:15.' },
+      { n:'Muzeum Ewolucji', q:'Muzeum Ewolucji, Plac Defilad 1, Warszawa', c:['kultura'], d:'at', t:'Muzeum Instytutu Paleobiologii PAN w Pałacu Kultury, wejście od ul. Świętokrzyskiej przez Pałac Młodzieży: dinozaury z polsko-mongolskich wypraw na pustynię Gobi, a szkielet zauropoda Opisthocoelicaudia wypełnia niemal całą salę. Wt–sb 8–16, nd 9–15.' },
+      { n:'Fotoplastikon Warszawski', q:'Fotoplastikon Warszawski, Aleje Jerozolimskie 51, Warszawa', c:['kultura'], d:'at', t:'Oddział Muzeum Powstania Warszawskiego: fotoplastikon z początku XX w. i ponad 10 tys. zdjęć stereoskopowych. Pn oraz śr–nd 10–18, we wtorki nieczynny; w czwartki wstęp wolny.' },
       { n:'Kinoteka', q:'Kinoteka, Plac Defilad 1, Warszawa', c:['kino'], d:'at', t:'Kino w Pałacu Kultury, otwarte w 2001 r.: osiem sal na 1410 miejsc, repertuar komercyjny i alternatywny.' },
       { n:'Multikino Złote Tarasy', q:'Multikino Złote Tarasy, Złota 59, Warszawa', c:['kino','zakupy'], d:'at', t:'Multipleks w centrum handlowym Złote Tarasy, przy Dworcu Centralnym.' },
       { n:'Kino Atlantic', q:'Kino Atlantic, Chmielna 33, Warszawa', c:['kino'], d:null, t:'Kino otwarte w 1930 r.: cztery sale na 794 miejsca.' },
       { n:'Kino Amondo', q:'Kino Amondo, Żurawia 20, Warszawa', c:['kino'], d:null, t:'Kameralne kino studyjne prowadzone przez Fundację Amondo Films.' },
       { n:'Filharmonia Narodowa', q:'Filharmonia Narodowa, Jasna 5, Warszawa', c:['kultura','mecze'], d:null, t:'Sala koncertowa Filharmonii Narodowej w gmachu z 1901 r. projektu Karola Kozłowskiego, odbudowanym w latach 1950–55 po zniszczeniach wojennych.' },
       { n:'Palladium', q:'Palladium, Złota 9, Warszawa', c:['mecze','kultura'], d:null, t:'Sala widowiskowo-koncertowa: koncerty, spektakle i pokazy filmowe.' },
-      { n:'Ośrodek Sportowy Grzybowska', q:'Ośrodek Sportowy Grzybowska, Grzybowska 35A, Warszawa', c:['aktywnie'], d:null, t:'Pięciotorowa pływalnia 25-metrowa i sauna fińska. Ok. 1 km od stacji.' }
+      { n:'Ośrodek Sportowy Grzybowska', q:'Ośrodek Sportowy Grzybowska, Grzybowska 35A, Warszawa', c:['aktywnie'], d:null, t:'Pięciotorowa pływalnia 25-metrowa i **sauna** fińska. **W weekendy krócej: w soboty do 18:45, w niedziele do 14:45.** Ok. 1 km od stacji.' }
     ]},
     { n:'Warszawa Powiśle', q:'Warszawa Powiśle stacja kolejowa', lines:['r1','s1','r3','517'], via:[
       { b:['r1','s1'], t:'z Ursusa · 18 min' }, { b:['r3'], t:'z Ursusa Północnego · 18 min' }, { b:['517'], t:'z Lalek na pl. Trzech Krzyży, 400 m od Muzeum Narodowego · 41–47 min' }
@@ -572,7 +700,8 @@ footer p{margin:0;max-width:90ch}
       { b:['r1','s1'], t:'z Ursusa · 20 min' }, { b:['r3'], t:'z Ursusa Północnego · 20 min' }
     ], places:[
       { n:'PGE Narodowy', q:'PGE Narodowy, Warszawa', c:['mecze'], d:'at', t:'Koncerty i mecze.' },
-      { n:'Park Skaryszewski', q:'Park Skaryszewski, Warszawa', c:['natura','zabytki'], d:null, t:'Zabytkowy park przy rondzie Waszyngtona.' }
+      { n:'Park Skaryszewski', q:'Park Skaryszewski, Warszawa', c:['natura','zabytki'], d:null, t:'Zabytkowy park przy rondzie Waszyngtona.' },
+      { n:'Muzeum Fabryka Czekolady E. Wedel', q:'Fabryka Czekolady E. Wedel, Aleja Emila Wedla 5, Warszawa', c:['kultura'], d:null, t:'Muzeum w fabryce Wedla: 90-minutowe zwiedzanie z przewodnikiem i degustacją, są też warsztaty robienia czekolady. Codziennie 10–20; bilety najlepiej kupić online.' }
     ]},
     { n:'Warszawa Wschodnia', q:'Warszawa Wschodnia stacja kolejowa', lines:['r1','s1','r3'], via:[
       { b:['r1','s1'], t:'z Ursusa · 23 min' }, { b:['r3'], t:'z Ursusa Północnego · 23 min' }
@@ -585,6 +714,9 @@ footer p{margin:0;max-width:90ch}
   var BUSES = [
     { id:'b517', f:'517', badge:'517', title:'Lalki → pl. Trzech Krzyży', from:'Linia przyspieszona z przystanku Lalki: co 15 min także w weekend, w dni robocze co 10–20 min; do Dworca Centralnego 35–39 min, na plac Trzech Krzyży 41–47 min · cała trasa w 1. strefie', stops:[
       { n:'Lalki', q:'52.197572,20.881237', terminus:true, blurb:'Start. W drugą stronę 517 jedzie tylko 5 minut, do pętli Ursus-Niedźwiadek.' },
+      { n:'Spisaka', q:'52.189394,20.884608', places:[
+        { n:'Netto Michałowice', q:'Netto, Jesionowa 1F, Michałowice', c:['zakupy'], d:null, t:'Sklep w Michałowicach-Osiedlu, za granicą Warszawy. Ok. 1,2 km od przystanku.' }
+      ]},
       { n:'Dzieci Warszawy', q:'52.192928,20.908758', minor:true },
       { n:'Łopuszańska', q:'52.196661,20.929963', places:[
         { n:'E.Leclerc', q:'E.Leclerc, Jutrzenki 156, Warszawa', c:['zakupy'], d:null, t:'Hipermarket E.Leclerc z galerią sklepów.' }
@@ -595,7 +727,7 @@ footer p{margin:0;max-width:90ch}
         { n:'Reduta', q:'Reduta, Aleje Jerozolimskie 148, Warszawa', c:['zakupy'], d:'at', t:'Centrum handlowe z 1999 r., dawniej Atrium Reduta, po drugiej stronie Alej: hipermarket Carrefour i ok. 130 sklepów.' },
         { n:'Multikino Atrium Reduta', q:'Multikino Atrium Reduta, Aleje Jerozolimskie 148, Warszawa', c:['kino'], d:'at', t:'Sześć sal w Reducie; wcześniej działało tu Cinema3D.' }
       ]},
-      { n:'Dw. Zachodni', q:'52.218142,20.96707', minor:true },
+      { n:'Dw. Zachodni', q:'52.218142,20.96707', blurb:'Obok dworzec Warszawa Zachodnia; Aldi — wyżej, w „Po drodze w Warszawie”.' },
       { n:'Hala Kopińska', q:'52.217204,20.978082', places:[
         { n:'Pływalnia OSiR Ochota', q:'Pływalnia OSiR Ochota, Rokosowska 10, Warszawa', c:['aktywnie'], d:null, t:'Basen sportowy na sześć torów, basen rekreacyjny ze sztuczną rzeką, 70-metrowa zjeżdżalnia rurowa i brodzik; w dni powszednie 6–22, w weekendy 8–22.' }
       ]},
@@ -613,19 +745,21 @@ footer p{margin:0;max-width:90ch}
       { n:'Batalionu Włochy', q:'52.197742,20.904352', minor:true },
       { n:'Łopuszańska', q:'52.196661,20.929963', blurb:'E.Leclerc — opisany przy 517, która staje na tym samym przystanku.' },
       { n:'Berestecka', q:'52.212562,20.95348', blurb:'Blue City i Reduta — opisane przy 517.' },
-      { n:'Dw. Zachodni', q:'52.218142,20.96707', minor:true },
+      { n:'Dw. Zachodni', q:'52.218142,20.96707', blurb:'Obok dworzec Warszawa Zachodnia; Aldi — wyżej, w „Po drodze w Warszawie”.' },
       { n:'Hala Kopińska', q:'52.217204,20.978082', blurb:'Pływalnia OSiR Ochota — opisana przy 517, która staje na tym samym przystanku.' },
       { n:'Wawelska', q:'52.21596,20.982821', places:[
-        { n:'Basen olimpijski WUM', q:'Centrum Sportowo-Rehabilitacyjne WUM, Księcia Trojdena 2C, Warszawa', c:['aktywnie'], d:null, t:'Basen 51,3 × 25 m z dziesięcioma torami i trybunami na 670 osób, obok basen szkoleniowy; bilety jednorazowe dla każdego. Ok. 1,1 km od przystanku.' }
+        { n:'Basen olimpijski WUM', q:'Centrum Sportowo-Rehabilitacyjne WUM, Księcia Trojdena 2C, Warszawa', c:['aktywnie'], d:null, t:'Basen 51,3 × 25 m z dziesięcioma torami i trybunami na 670 osób, obok basen szkoleniowy; bilety jednorazowe dla każdego, a w ich cenie **sauna** sucha i parowa. Ok. 1,1 km od przystanku.' }
       ]},
       { n:'Pomnik Lotnika', q:'52.21627,20.99134', places:[
         { n:'Pole Mokotowskie', q:'Pole Mokotowskie, Warszawa', c:['natura'], d:null, t:'Ok. 70 ha zieleni tam, gdzie dawniej ćwiczyło wojsko, działał tor wyścigów konnych (do 1938 r.) i lotnisko mokotowskie.' }
       ]},
+      { n:'GUS', q:'52.217168,21.006397', places:[
+        { n:'Warszawskie Muzeum Komputerów i Gier', q:'Warszawskie Muzeum Komputerów i Gier, Aleja Niepodległości 208, Warszawa', c:['kultura'], d:'at', t:'Retro gry na oryginalnych komputerach, konsolach i telewizorach CRT. Wejście z przejścia podziemnego, pasaż Giełdy Elektronicznej, pawilon 28. Wt–pt 15–20, sb–nd 11–20, w poniedziałki nieczynne.' }
+      ]},
       { n:'Metro Politechnika', q:'52.216862,21.013961', places:[
         { n:'Gmach Główny Politechniki Warszawskiej', q:'Gmach Główny Politechniki Warszawskiej, plac Politechniki 1, Warszawa', c:['zabytki'], d:null, t:'Gmach z lat 1899–1901 projektu Stefana Szyllera, z Dużą Aulą pod przeszklonym dachem.' },
         { n:'Kino Luna', q:'Kino Luna, Marszałkowska 28, Warszawa', c:['kino'], d:'at', t:'Kino studyjne przy placu Zbawiciela, prowadzone przez Mazowiecki Instytut Kultury.' },
-        { n:'Plac Unii', q:'Plac Unii, Puławska 2, Warszawa', c:['zakupy'], d:null, t:'Centrum handlowe z hipermarketem Carrefour na ponad 2 tys. m², otwartym w 2023 r.' },
-        { n:'Pływalnia OSiR Śródmieście', q:'Pływalnia OSiR Śródmieście, Polna 7A, Warszawa', c:['aktywnie'], d:'at', t:'Pływalnia z sauną, czynna codziennie 6–22.' },
+        { n:'Pływalnia OSiR Śródmieście', q:'Pływalnia OSiR Śródmieście, Polna 7A, Warszawa', c:['aktywnie'], d:'at', t:'Pływalnia z **sauną**, czynna codziennie 6–22.' },
         { n:'Stodoła', q:'Klub Stodoła, Batorego 10, Warszawa', c:['mecze'], d:null, t:'Centralny Klub Studentów Politechniki Warszawskiej, scena koncertowa.' }
       ]},
       { n:'Pl. Na Rozdrożu', q:'52.219525,21.026608', places:[
@@ -636,15 +770,15 @@ footer p{margin:0;max-width:90ch}
         { n:'Pałac na Wyspie', q:'Pałac na Wyspie, Łazienki Królewskie, Warszawa', c:['kultura','zabytki'], d:null, t:'Barokowa Łaźnia przebudowana dla Stanisława Augusta w klasycystyczny pałac; dziś Królewska Kolekcja Obrazów, 140 dzieł. Obok Stara Oranżeria z Teatrem Królewskim. Obiekty muzeum są otwarte wt–nd, w piątki wstęp wolny (tylko parter); godziny zależą od sezonu — sprawdź przed wizytą.' }
       ]},
       { n:'Rozbrat', q:'52.222289,21.037618', places:[
-        { n:'Ośrodek Sportowy Rozbrat', q:'Ośrodek Sportowy Rozbrat, Rozbrat 26, Warszawa', c:['aktywnie'], d:'at', t:'Mała pływalnia: trzy tory po 25 m; pon.–pt. 6:30–21:30, weekendy 8–19:30. Sauna po wcześniejszej rezerwacji telefonicznej.' }
+        { n:'Ośrodek Sportowy Rozbrat', q:'Ośrodek Sportowy Rozbrat, Rozbrat 26, Warszawa', c:['aktywnie'], d:'at', t:'Mała pływalnia: trzy tory po 25 m; pon.–pt. 6:30–21:30, weekendy 8–19:30. **Sauna** po wcześniejszej rezerwacji telefonicznej.' }
       ]},
       { n:'Legia - Stadion', q:'52.22207,21.044314', places:[
         { n:'Stadion Legii', q:'Stadion Legii Warszawa, Łazienkowska 3, Warszawa', c:['mecze'], d:null, t:'Mecze Legii Warszawa.' },
-        { n:'Torwar', q:'Hala COS Torwar, Łazienkowska 6a, Warszawa', c:['mecze','aktywnie'], d:'at', t:'Hala sportowo-widowiskowa Centralnego Ośrodka Sportu: koncerty i mecze. Obok lodowisko z ogólnodostępnymi ślizgawkami w sezonie.' }
+        { n:'Torwar', q:'Hala COS Torwar, Łazienkowska 6a, Warszawa', c:['mecze','aktywnie'], d:'at', t:'Hala sportowo-widowiskowa Centralnego Ośrodka Sportu: koncerty i mecze. Obok lodowisko z ogólnodostępnymi ślizgawkami w sezonie.', s:'ślizgawki' }
       ]},
       { n:'Chełmska', q:'52.201452,21.049765', minor:true },
       { n:'Stegny', q:'52.17815,21.04892', terminus:true, places:[
-        { n:'Tor Stegny', q:'Tor Stegny, Inspektowa 1, Warszawa', c:['aktywnie'], d:null, t:'400-metrowy tor łyżwiarski, najdłuższy w Warszawie; od grudnia do połowy marca ślizgawka dla wszystkich.' },
+        { n:'Tor Stegny', q:'Tor Stegny, Inspektowa 1, Warszawa', c:['aktywnie'], d:null, t:'400-metrowy tor łyżwiarski, najdłuższy w Warszawie; od grudnia do połowy marca ślizgawka dla wszystkich.', s:'ślizgawka od grudnia do połowy marca' },
         { n:'Cinema City Sadyba', q:'Cinema City Sadyba, Powsińska 31, Warszawa', c:['kino','zakupy'], d:null, t:'Multipleks z salą IMAX w centrum handlowym Sadyba Best Mall, 12 sal. Ok. 1,3 km od przystanku.' }
       ]}
     ]},
@@ -658,7 +792,8 @@ footer p{margin:0;max-width:90ch}
       ]},
       { n:'Metro Bemowo', q:'52.239191,20.911538', minor:true },
       { n:'Os. Górczewska', q:'52.238811,20.898842', terminus:true, places:[
-        { n:'Kaufland Górczewska', q:'Kaufland, Górczewska 218, Warszawa', c:['zakupy'], d:null, t:'Sklep na ok. 4 tys. m² w miejscu dawnego hipermarketu Tesco Extra, otwarty we wrześniu 2024 r.' }
+        { n:'Kaufland Górczewska', q:'Kaufland, Górczewska 218, Warszawa', c:['zakupy'], d:null, t:'Sklep na ok. 4 tys. m² w miejscu dawnego hipermarketu Tesco Extra, otwarty we wrześniu 2024 r.' },
+        { n:'Murall Górczewska', q:'Murall, Górczewska 218, Warszawa', c:['aktywnie'], d:null, t:'Boulderownia w pasażu Górczewska 218, tym samym co Kaufland; codziennie 7–23.' }
       ]}
     ]},
     { id:'b716w', f:'716', badge:'716', title:'Gierdziejewskiego → Cm. Wolski', from:'Z przystanku Gierdziejewskiego lub Lalki: od poniedziałku do soboty co 20–30 min, w niedziele nie kursuje; do Fortu Wola ok. 17–20 min · cała trasa w 1. strefie', stops:[
@@ -673,14 +808,15 @@ footer p{margin:0;max-width:90ch}
       { n:'Lazurowa', q:'52.216293,20.897362', minor:true },
       { n:'P+R Połczyńska', q:'52.221784,20.923929', minor:true },
       { n:'Fort Wola', q:'52.22395,20.929633', places:[
-        { n:'Fort Wola', q:'Fort Wola, Połczyńska 4, Warszawa', c:['zakupy'], d:'at', t:'Park handlowy przy przystanku: Kaufland, JYSK, Empik, Rossmann, CCC, Sinsay i inne sklepy.' },
+        { n:'Fort Wola', q:'Fort Wola, Połczyńska 4, Warszawa', c:['zakupy'], d:'at', t:'Park handlowy przy przystanku: Kaufland na 5 tys. m², największy z tej sieci w zasięgu 30 minut jazdy, a także JYSK, Empik, Rossmann, CCC, Sinsay i inne sklepy.' },
         { n:'Progresja', q:'Progresja, Fort Wola 22, Warszawa', c:['mecze'], d:'at', t:'Klub koncertowy działający od 2003 r.: dwie sceny dla do 2000 osób i ponad 120 koncertów rocznie; latem także Letnia Scena Progresji.' }
       ]},
       { n:'Cm. Wolski', q:'52.224954,20.930725', terminus:true, places:[
         { n:'Cmentarz Powstańców Warszawy', q:'Cmentarz Powstańców Warszawy, Wolska 174/176, Warszawa', c:['zabytki'], d:null, t:'Ponad 104 tys. pochowanych, w ok. 80% cywilów, głównie ofiar powstania 1944 r.; kurhan kryje ok. 12 ton prochów. Pomnik „Polegli – Niepokonani” Gustawa Zemły (1973).' },
         { n:'Park Powstańców Warszawy', q:'Park Powstańców Warszawy, Wolska, Warszawa', c:['natura'], d:null, t:'Park na dawnej części cmentarza, ze Stawem Wolskim.' },
         { n:'Park im. gen. Józefa Sowińskiego', q:'Park Sowińskiego, Elekcyjna, Warszawa', c:['natura','zabytki'], d:null, t:'8,3 ha z 1936 r.: pomnik generała, amfiteatr pod namiotowym dachem i tężnia. Kawałek od pętli (ok. 1,3 km), ale samo dojście jest spacerem — przez Cmentarz Powstańców Warszawy i Park Powstańców Warszawy. Park wytyczono częściowo na terenie reduty Sowińskiego; tablica upamiętnia ok. 1500 osób zamordowanych tu przez Niemców w sierpniu 1944 r.' },
-        { n:'Pływalnia Nowa Fala', q:'Pływalnia Nowa Fala, Garbińskiego 1, Warszawa', c:['aktywnie'], d:null, t:'Pływalnia OSiR Wola. Ok. 1,4 km od przystanku.' }
+        { n:'Izba Pamięci przy Cmentarzu Powstańców Warszawy', q:'Izba Pamięci, Wolska 168, Warszawa', c:['zabytki','kultura'], d:null, t:'Oddział Muzeum Warszawy: dwa pawilony i Mur Pamięci z nazwiskami ofiar powstania 1944 r. Wstęp wolny; od kwietnia do 1 listopada wt–nd 11–18, zimą wt–nd 9–16.' },
+        { n:'Pływalnia Nowa Fala', q:'Pływalnia Nowa Fala, Garbińskiego 1, Warszawa', c:['aktywnie'], d:null, t:'Pływalnia OSiR Wola: pon.–pt. 7–22, weekendy 8–22. Ok. 1,4 km od przystanku.' }
       ]}
     ]},
     { id:'b716p', f:'716', badge:'716', title:'Gierdziejewskiego → Piastów', from:'Z przystanku Gierdziejewskiego lub Lalki: od poniedziałku do soboty co 20–30 min, w niedziele nie kursuje; do Piastowa 10–18 min · Piastów to 2. strefa', stops:[
@@ -700,7 +836,10 @@ footer p{margin:0;max-width:90ch}
       { n:'Składkowskiego', q:'52.190037,20.899557', minor:true },
       { n:'Hassa', q:'52.187519,20.897095', places:[
         { n:'Centrum Skorosze', q:'Centrum Skorosze, Składkowskiego 4, Warszawa', c:['zakupy'], d:'at', t:'Centrum handlowe z 2007 r., ok. 12 tys. m²: supermarket Carrefour, Smyk, CCC, Home&You, Super-Pharm, Empik.' },
-        { n:'Leroy Merlin i Bistro Kantyna', q:'Leroy Merlin, Aleje Jerozolimskie 244, Warszawa', c:['zakupy'], d:'at', t:'Market budowlany Leroy Merlin, a w nim Bistro Kantyna z obiadami domowymi gotowanymi na miejscu. Polecam: tanio i dobrze karmią, a nie każdy Leroy Merlin ma tak udaną kantynę.' }
+        { n:'Leroy Merlin i Bistro Kantyna', q:'Leroy Merlin, Aleje Jerozolimskie 244, Warszawa', c:['zakupy'], d:'at', t:'Market budowlany Leroy Merlin, a w nim Bistro Kantyna z obiadami domowymi gotowanymi na miejscu. Polecam: tanio i dobrze karmią, a nie każdy Leroy Merlin ma tak udaną kantynę.' },
+        { n:'Mini Zoo Warszawa', q:'Mini Zoo Warszawa, Kolorowa 19, Warszawa', c:['natura'], d:null, t:'Zoo kontaktowe: surykatki, fretki, króliki, szynszyle, ostronos, skunks, żółwie, agamy — zwierzęta można karmić i głaskać. Czynne cały rok, pn–pt 11–19, sb–nd 10–18.' },
+        { n:'Park Linowy Ursus', q:'Park Linowy Ursus, Sosnkowskiego 3, Warszawa', c:['aktywnie'], d:null, t:'Trzy trasy na terenie OSiR Ursus, dla dzieci od 3 lat. Działa sezonowo — sprawdź przed wizytą.', s:'trasy linowe' },
+        { n:'Pływalnia Skalar', q:'Pływalnia Skalar, Sosnkowskiego 3, Warszawa', c:['aktywnie'], d:null, t:'Pływalnia OSiR Ursus: basen sportowy i rekreacyjny, brodzik, zjeżdżalnia, masaż wodny i powietrzny, a obok **kompleks siedmiu saun**, w tym solna i parowo-ziołowa, z lodospadem. Pn–pt 6–22, sb–nd 8–22.' }
       ]},
       { n:'Regulska', q:'52.18332,20.870516', minor:true, terminus:true }
     ]},
@@ -714,14 +853,85 @@ footer p{margin:0;max-width:90ch}
         { n:'Airo — park trampolin', q:'Airo, Łopuszańska 22, Warszawa', c:['aktywnie'], d:'at', t:'W Centrum Łopuszańska 22: główna strefa z 45 trampolinami na ok. 500 m², ścieżki ninja, ścianka wspinaczkowa, basen z gąbkami; obok sala zabaw Airo Space Kids. Codziennie 10–21.' }
       ]},
       { n:'Hynka', q:'52.189736,20.958956', places:[
-        { n:'Pływalnia OSiR Włochy', q:'OSiR Włochy, Gładka 18, Warszawa', c:['aktywnie'], d:'at', t:'Pływalnia kryta z sauną: sześć torów, brodzik, jacuzzi i zjeżdżalnia; pon.–pt. 6–22, weekendy 8–22.' }
+        { n:'Pływalnia OSiR Włochy', q:'OSiR Włochy, Gładka 18, Warszawa', c:['aktywnie'], d:'at', t:'Pływalnia kryta z **sauną**: sześć torów, brodzik, jacuzzi i zjeżdżalnia; pon.–pt. 6–22, weekendy 8–22.' }
       ]},
       { n:'PKP Służewiec', q:'52.181179,20.986991', minor:true },
       { n:'Rondo Unii Europejskiej', q:'52.177868,21.00385', places:[
         { n:'Westfield Mokotów', q:'Westfield Mokotów, Wołoska 12, Warszawa', c:['zakupy'], d:'at', t:'Dawna Galeria Mokotów, z hipermarketem Carrefour na ok. 3,8 tys. m².' },
         { n:'Cinema City Mokotów', q:'Cinema City Mokotów, Wołoska 12, Warszawa', c:['kino'], d:'at', t:'Multipleks w Westfield Mokotów: 14 sal na ponad 3,2 tys. widzów.' }
       ]},
+      { n:'Bełdan', q:'52.174184,21.01358', places:[
+        { n:'Park nad Stawem Służewieckim', q:'Park nad Stawem Służewieckim, Warszawa', c:['natura'], d:null, t:'Park z 2018 r. na 5 ha wokół odnowionego stawu: duże molo, trzy sztuczne wyspy, pływająca fontanna, mała elektrownia wodna z turbiną Archimedesa, plac zabaw i siłownia plenerowa.' }
+      ]},
       { n:'Metro Służew', q:'52.17387,21.026334', terminus:true }
+    ]},
+    { id:'b194', f:'194', badge:'194', title:'Ursus - Ratusz → Cm. Wolski', from:'Z przystanku Ursus - Ratusz: co 12–17 min w dni robocze, co 20 min w weekend, także w niedziele; do PKP Włochy ok. 7 min, do Fortu Wola i Cm. Wolskiego ok. 15 min · cała trasa w 1. strefie', stops:[
+      { n:'Ursus - Ratusz', q:'52.201675,20.89617', terminus:true, blurb:'Start, ok. 1 km od Lalek. W drugą stronę 194 jedzie po Ursusie, przez PKP Ursus i Niedźwiadek, do PKP Gołąbki.' },
+      { n:'PKP Ursus Płn.', q:'52.206192,20.891764', minor:true },
+      { n:'PKP Włochy', q:'52.206155,20.912752', blurb:'Kino Studyjne ADA i Park Kombatantów — opisane w „Po drodze w Warszawie”, stacja Włochy.' },
+      { n:'P+R Połczyńska', q:'52.221784,20.923929', minor:true },
+      { n:'Fort Wola', q:'52.22395,20.929633', blurb:'Park handlowy Fort Wola — opisany przy 716.' },
+      { n:'Cm. Wolski', q:'52.225052,20.930696', terminus:true, blurb:'Cmentarz Powstańców Warszawy, Izba Pamięci i oba parki — opisane przy 716. W niedziele, gdy 716 nie kursuje, dojeżdża tu tylko 194.' }
+    ]},
+    { id:'b220k', f:'220', badge:'220', title:'Ursus - Ratusz → P+R Al. Krakowska', from:'Z przystanku Ursus - Ratusz: co 15–20 min w dni robocze, co 20 min w weekend; na Hassa ok. 6 min, do Okęcie Park ok. 14 min · cała trasa w 1. strefie', stops:[
+      { n:'Ursus - Ratusz', q:'52.201961,20.896829', terminus:true, blurb:'Start, ok. 1 km od Lalek.' },
+      { n:'Skoroszewska', q:'52.193431,20.902777', minor:true },
+      { n:'Hassa', q:'52.187519,20.897095', blurb:'Centrum Skorosze, Leroy Merlin, Mini Zoo, park linowy i pływalnia — opisane przy 207.' },
+      { n:'WKD Opacz', q:'52.180676,20.905404', minor:true },
+      { n:'Kolumba', q:'52.173002,20.929505', places:[
+        { n:'Park trampolin #KochamSkakać', q:'Kocham Skakać, Aleja Krakowska 61, Warszawa', c:['aktywnie'], d:'at', t:'W Okęcie Park: ponad 2500 m² i 14 stref — trampoliny, poduszka powietrzna, tor parkour, zjeżdżalnia, baseny z gąbkami. Dla dzieci od 3 lat; codziennie 10–21.' },
+        { n:'Murall Krakowska', q:'Murall, Aleja Krakowska 61, Warszawa', c:['aktywnie'], d:'at', t:'Boulderownia w Okęcie Park, ponad 2000 m², ze ścianką dla dzieci; buty do wypożyczenia. Codziennie 7–23.' },
+        { n:'Okęcie Park z hipermarketem Auchan', q:'Auchan Okęcie, Aleja Krakowska 61, Warszawa', c:['zakupy'], d:'at', t:'Centrum handlowe, w którym są też park trampolin i boulderownia: hipermarket Auchan na prawie 8 tys. m², otwarty w 2015 r.' }
+      ]},
+      { n:'P+R Al. Krakowska', q:'52.175505,20.943504', minor:true, terminus:true }
+    ]},
+    { id:'b220b', f:'220', badge:'220', title:'Ursus - Ratusz → Nowe Bemowo', from:'Z przystanku Ursus - Ratusz: co 13–20 min w dni robocze, co 20 min w weekend; do Os. Górczewska ok. 12 min, do Galerii Bemowo ok. 30 min · cała trasa w 1. strefie', stops:[
+      { n:'Ursus - Ratusz', q:'52.202946,20.895217', terminus:true, blurb:'Start, ok. 1 km od Lalek.' },
+      { n:'PKP Ursus Płn.', q:'52.206192,20.891764', minor:true },
+      { n:'Lazurowa', q:'52.217105,20.896413', minor:true },
+      { n:'Batalionów Chłopskich', q:'52.23226,20.896941', blurb:'Park Górczewska z Amfiteatrem Bemowo — opisany przy 177.', places:[
+        { n:'Kaufland Batalionów Chłopskich', q:'Kaufland, Batalionów Chłopskich 73, Warszawa', c:['zakupy'], d:'at', t:'Pn–sb 6–23, w niedziele zamknięty.' }
+      ]},
+      { n:'Os. Górczewska', q:'52.24045,20.89692', blurb:'Kaufland Górczewska i boulderownia Murall — opisane przy 177.' },
+      { n:'Kocjana', q:'52.249845,20.898387', places:[
+        { n:'Scena Kocjana', q:'Scena Kocjana, Kocjana 3, Warszawa', c:['kultura'], d:null, t:'Sala Bemowskiego Centrum Kultury na 185 miejsc: spektakle, koncerty, prelekcje. Program sprawdź przed wizytą.' }
+      ]},
+      { n:'Radiowa', q:'52.251505,20.9147', minor:true },
+      { n:'Orlich Gniazd', q:'52.249281,20.921545', places:[
+        { n:'Wola Park z hipermarketem Auchan', q:'Wola Park, Górczewska 124, Warszawa', c:['zakupy'], d:null, t:'Centrum handlowe z 2002 r. z największym w Polsce dwupoziomowym hipermarketem Auchan. Ok. 1 km od przystanku.' },
+        { n:'Multikino Wola Park', q:'Multikino Wola Park, Górczewska 124, Warszawa', c:['kino'], d:null, t:'Multipleks w centrum handlowym Wola Park. Ok. 1 km od przystanku.' }
+      ]},
+      { n:'Piastów Śląskich', q:'52.262961,20.926555', places:[
+        { n:'Galeria Bemowo z hipermarketem Carrefour', q:'Galeria Bemowo, Powstańców Śląskich 126, Warszawa', c:['zakupy'], d:'at', t:'Centrum handlowe z hipermarketem Carrefour (pn–sb 6–22, nd 9–21), apteką i filią biblioteki.' },
+        { n:'Cinema City Bemowo', q:'Cinema City Bemowo, Powstańców Śląskich 126a, Warszawa', c:['kino'], d:null, t:'Multipleks obok Galerii Bemowo: 11 sal, blisko 2400 miejsc.' },
+        { n:'Pływalnia CRS Bielany', q:'CRS Bielany, Conrada 6, Warszawa', c:['aktywnie'], d:null, t:'Basen 25 × 12,5 m na sześć torów z widownią, jacuzzi i dwie **sauny** fińskie, damska i męska; w weekendy 8–22. Ok. 1,1 km od przystanku.' }
+      ]},
+      { n:'Nowe Bemowo', q:'52.260647,20.924989', terminus:true, places:[
+        { n:'Pływalnia Pingwin', q:'Pływalnia Pingwin, Oławska 3A, Warszawa', c:['aktywnie'], d:'at', t:'Pływalnia OSiR Bemowo: basen sportowy na sześć torów, basen rekreacyjny, 80-metrowa zjeżdżalnia, gejzery i leżanki z masażem wodnym, **sauna** sucha.' }
+      ]}
+    ]},
+    { id:'b228', f:'228', badge:'228', title:'Ursus - Ratusz → Metro Wierzbno', from:'Z przystanku Ursus - Ratusz, gdzie ma pętlę: 36 kursów dziennie, co 23–37 min, tak samo w weekend; do Rakowskiej ok. 24 min, do Metra Wierzbno ok. 40 min · cała trasa w 1. strefie', stops:[
+      { n:'Ursus - Ratusz', q:'52.200359,20.893006', terminus:true, blurb:'Start, ok. 1 km od Lalek.' },
+      { n:'PKP Włochy', q:'52.207194,20.916014', blurb:'Kino Studyjne ADA i Park Kombatantów — opisane w „Po drodze w Warszawie”, stacja Włochy.' },
+      { n:'Popularna', q:'52.201009,20.936944', blurb:'Centrum handlowe z hipermarketem E.Leclerc — opisane przy 517, przystanek Łopuszańska.' },
+      { n:'Rakowska', q:'52.199052,20.954605', blurb:'Airo i Centrum Łopuszańska 22 — opisane przy 401, przystanek Orzechowa.', places:[
+        { n:'Park Szczęśliwicki', q:'Park Szczęśliwicki, Warszawa', c:['natura','aktywnie'], d:'at', t:'30 ha z Górką Szczęśliwicką: całoroczny stok narciarski, grawitacyjna kolejka górska, odkryty basen, korty, stawy, place zabaw.', s:'basen odkryty latem' }
+      ]},
+      { n:'Jadwisin', q:'52.194053,20.969526', places:[
+        { n:'Okęcka Sala Widowiskowa', q:'Okęcka Sala Widowiskowa, 1 Sierpnia 36a, Warszawa', c:['kultura'], d:'at', t:'Scena Domu Kultury Włochy: spektakle, koncerty, teatr dla dzieci.' }
+      ]},
+      { n:'Zajezdnia Woronicza', q:'52.188828,20.997162', places:[
+        { n:'Instytut Fotografii Fort', q:'Instytut Fotografii Fort, Szpilmana 6, Warszawa', c:['kultura'], d:null, t:'Galeria i czytelnia fotografii w Forcie Mokotów, ok. 6 wystaw rocznie, na większość wstęp wolny. Śr–pt 14–19, sb–nd 12–19.' }
+      ]},
+      { n:'Woronicza', q:'52.188863,21.00306', places:[
+        { n:'Teatr Druga Strefa', q:'Teatr Druga Strefa, Magazynowa 14a, Warszawa', c:['kultura'], d:'at', t:'Od 2006 r. w postindustrialnej przestrzeni przy Magazynowej: od spektakli dla dzieci i lalkowych po teatr tańca i burleskę, także goście z offu.' }
+      ]},
+      { n:'Metro Wierzbno', q:'52.189224,21.018351', terminus:true, places:[
+        { n:'Dwór Ksawerów', q:'Dwór Ksawerów, Ksawerów 13, Warszawa', c:['zabytki'], d:'at', t:'Klasycystyczny dwór z 1840 r. (proj. Wojciech Bobiński) dla Ksawerego Pusłowskiego; zniszczony w 1944 r., odbudowany. Dziś departament ministerstwa kultury — ogląda się z zewnątrz.' },
+        { n:'Park Arkadia', q:'Park Arkadia, Warszawa', c:['natura','zabytki'], d:null, t:'Ok. 11 ha na skarpie i pod nią, ze stawami. Założenie Stanisława Herakliusza Lubomirskiego z 1680 r. (proj. Tylman z Gameren), dzisiejszy park z lat 1968–70; wpisany do rejestru zabytków.' },
+        { n:'Królikarnia — Muzeum Rzeźby', q:'Królikarnia, Puławska 113a, Warszawa', c:['kultura','zabytki'], d:null, t:'Muzeum Rzeźby im. Xawerego Dunikowskiego w pałacu nad Arkadią i park rzeźby, otwarty codziennie od świtu do zmierzchu. Muzeum śr–czw 10–18, pt 10–20, sb–nd 10–18. Pałac zbudowano w latach 1782–86 według projektu Dominika Merliniego; zniszczony w czasie wojny, odbudowany w 1964 r.' },
+        { n:'Wodny Park Warszawianka', q:'Wodny Park Warszawianka, Merliniego 4, Warszawa', c:['aktywnie'], d:null, t:'Basen olimpijski 50 × 25 m na 10 torów; basen rekreacyjny ze zjeżdżalniami rurowymi 43 i 78 m, sztuczną rzeką o nurcie górskiego potoku i jacuzzi; **sauny**: bania, kamienna, aromatyczna i łaźnia solankowa (druga część strefy w remoncie). Codziennie, w weekendy od 6:30.' }
+      ]}
     ]}
   ];
 
@@ -736,7 +946,7 @@ footer p{margin:0;max-width:90ch}
       { n:'Warszawa Wola Grzybowska', q:'Warszawa Wola Grzybowska stacja kolejowa', minor:true, zone:true },
       { n:'Sulejówek', q:'Sulejówek stacja kolejowa', places:[
         { n:'Muzeum Józefa Piłsudskiego', q:'Muzeum Józefa Piłsudskiego, Oleandrów 5, Sulejówek', c:['kultura','zabytki'], d:null, t:'Dworek Milusin, w którym Piłsudski mieszkał z rodziną w latach 1923–26, i nowy gmach z 2020 r. z wystawą stałą w podziemiach. We wtorki nieczynne, pt–nd 10–18. Dworek Milusin jest od 2020 r. pomnikiem historii.' },
-        { n:'Pływalnia Miejska Wilia', q:'Pływalnia Wilia, Paderewskiego 31, Sulejówek', c:['aktywnie'], d:null, t:'Miejska kryta pływalnia ze strefą saun.' }
+        { n:'Pływalnia Miejska Wilia', q:'Pływalnia Wilia, Paderewskiego 31, Sulejówek', c:['aktywnie'], d:null, t:'Miejska kryta pływalnia ze **strefą saun**.' }
       ]},
       { n:'Sulejówek Miłosna', q:'Sulejówek Miłosna stacja kolejowa', zEnd:true, places:[
         { n:'Kino-Teatr Kurtyna', q:'Kino-Teatr Kurtyna, Armii Krajowej 34, Sulejówek', c:['kino'], d:null, t:'Kino na 116 miejsc w budynku parafii Przemienienia Pańskiego, z bieżącym repertuarem.' }
@@ -745,7 +955,7 @@ footer p{margin:0;max-width:90ch}
         { n:'Muzeum Ziemi Mińskiej', q:'Muzeum Ziemi Mińskiej, Okrzei 16, Mińsk Mazowiecki', c:['kultura'], d:null, t:'Historia miasta i regionu oraz pamiątki 7. Pułku Ułanów Lubelskich, w dworku z 1937 r.' },
         { n:'Park i pałac Dernałowiczów', q:'Pałac Dernałowiczów, Warszawska 173, Mińsk Mazowiecki', c:['natura','zabytki'], d:null, t:'Zabytkowy park z pałacem, ok. 1,3 km od stacji.' },
         { n:'Kino Muza', q:'Kino Muza, Jana Pawła II 23, Mińsk Mazowiecki', c:['kino'], d:null, t:'Kino w budynku Miejskiej Szkoły Artystycznej; wejście od zachodniej strony.' },
-        { n:'Aquapark MOSiR', q:'Aquapark, Wyszyńskiego 56, Mińsk Mazowiecki', c:['aktywnie'], d:null, t:'Basen sportowy, basen rekreacyjny i zjeżdżalnia, a w tym samym budynku sztuczne lodowisko; otwarty w 2010 r.' }
+        { n:'Aquapark MOSiR', q:'Aquapark, Wyszyńskiego 56, Mińsk Mazowiecki', c:['aktywnie'], d:null, t:'Basen sportowy, basen rekreacyjny ze sztuczną rzeką, 73-metrowa zjeżdżalnia i wanna z hydromasażem; codziennie 6–22. W tym samym budynku sztuczne lodowisko; otwarty w 2010 r.', s:'lodowisko zimą' }
       ]},
       { n:'Siedlce', q:'Siedlce stacja kolejowa', terminus:true, blurb:'Tu dojeżdża tylko jeden pociąg, w dni robocze.', places:[
         { n:'Muzeum Diecezjalne', q:'Muzeum Diecezjalne, Świrskiego 56, Siedlce', c:['kultura'], d:null, t:'„Ekstaza św. Franciszka” (1575–80) — jedyny obraz El Greca w polskich zbiorach.' },
@@ -769,7 +979,7 @@ footer p{margin:0;max-width:90ch}
       { n:'Wołomin', q:'Wołomin stacja kolejowa', places:[
         { n:'Muzeum Zofii i Wacława Nałkowskich', q:'Muzeum Nałkowskich, Nałkowskiego 17, Wołomin', c:['kultura','zabytki'], d:null, t:'„Dom nad Łąkami”, w którym mieszkali pisarka i jej ojciec, geograf. Wt–nd 10–15, w niedziele wstęp wolny. Drewniany dom z 1895 r., zbudowany przez Wacława Nałkowskiego.' },
         { n:'Kino Kultura', q:'Kino Kultura, Mickiewicza 9, Wołomin', c:['kino','kultura'], d:null, t:'Kino ze sceną, na której wystawiane są też spektakle teatralne i kabarety.' },
-        { n:'Pływalnia OSiR Huragan', q:'Pływalnia OSiR Huragan, Korsaka 4, Wołomin', c:['aktywnie'], d:null, t:'Kryta pływalnia: pon.–pt. 7–22, weekendy 8–22.' }
+        { n:'Pływalnia OSiR Huragan', q:'Pływalnia OSiR Huragan, Korsaka 4, Wołomin', c:['aktywnie'], d:null, t:'Kryta pływalnia: pon.–pt. 7–22, weekendy 8–22; **sauny** suche i parowa, grota solna i studnia lodowa.' }
       ]},
       { n:'Zagościniec', q:'Zagościniec stacja kolejowa', minor:true, zEnd:true },
       { n:'Tłuszcz', q:'Tłuszcz stacja kolejowa', terminus:true }
@@ -791,7 +1001,7 @@ footer p{margin:0;max-width:90ch}
     ]}
   ];
 
-  var BADGE = { r1:['r1','R1'], s1:['s1','S1'], r3:['r3','R3'], '517':['bus','517'] };
+  var BADGE = { r1:['r1','R1'], s1:['s1','S1'], r3:['r3','R3'], '517':['bus','517'], '187':['bus','187'], '194':['bus','194'], '228':['bus','228'] };
 
   var state = { line:'all', cat:'all', dist:'all' };
   try { var saved = JSON.parse(localStorage.getItem('ursus-filters') || 'null'); if (saved) { state = Object.assign(state, saved); } } catch(e) {}
@@ -813,8 +1023,9 @@ footer p{margin:0;max-width:90ch}
     var dist = p.d === 'at' ? '<span class="dist at">' + (bus ? 'przy przystanku' : 'przy stacji') + '</span>' : (p.d === 'far' ? '<span class="dist">rower / autobus</span>' : '');
     li.innerHTML =
       '<div class="pn">' + link(gm(p.q), esc(p.n)) + '</div>' +
-      '<div class="pd">' + esc(p.t) + '</div>' +
-      '<div class="meta">' + p.c.map(function(c){ return '<span class="cat"><span class="dot ' + c + '"></span>' + CAT[c] + '</span>'; }).join('') + dist +
+      '<div class="pd">' + esc(p.t).replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>') + '</div>' +
+      '<div class="meta">' + p.c.map(function(c){ return '<span class="cat"><span class="dot ' + c + '"></span>' + CAT[c] + '</span>'; }).join('') +
+      (p.s ? '<span class="season">sezonowo: ' + esc(p.s) + '</span>' : '') + dist +
       link(walk(fromQ, p.q), 'trasa pieszo ↗') + '</div>';
     return li;
   }
@@ -857,6 +1068,111 @@ footer p{margin:0;max-width:90ch}
   }
 
   function show(id, visible){ document.getElementById(id).hidden = !visible; }
+
+  // The map draws every route column from routes.js, rare trains first so the rest lies on top. A pressed
+  // line filter dims what it does not name; rare trains, as in the list, show under "Wszystkie" only.
+  var mapParts = [], mapView = null;
+
+  function mapFilter(){
+    if (mapView) mapView();
+    mapParts.forEach(function(p){
+      var off = !!p.rare && state.line !== 'all';
+      var dim = !off && state.line !== 'all' && p.lines.indexOf(state.line) < 0;
+      var tip = p.layer.getTooltip && p.layer.getTooltip();
+      [p.layer.getElement(), tip && tip.getElement()].forEach(function(e){
+        if (e) { e.classList.toggle('m-off', off); e.classList.toggle('m-dim', dim); }
+      });
+    });
+  }
+
+  function drawMap(){
+    if (!window.L || !window.ROUTES) { show('map-box', false); return; }
+    var touch = window.matchMedia && matchMedia('(pointer: coarse)').matches;
+    // Whole zoom levels only: Chromium leaves seams between tiles scaled to a fractional one.
+    var map = L.map('map', { scrollWheelZoom:false, dragging:!touch });
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom:19,
+      attribution:'&copy; ' + link('https://www.openstreetmap.org/copyright', 'OpenStreetMap') + ' · trasy: ' + link('https://mkuran.pl/gtfs/', 'GTFS') }).addTo(map);
+
+    var routes = [].concat(
+      RARE.map(function(l){ return { line:l, f:'rare', cls:'rare', kind:'rare' }; }),
+      BUSES.map(function(l){ return { line:l, f:l.f, cls:'bus', kind:'bus' }; }),
+      LINES.map(function(l){ return { line:l, f:l.id, cls:l.id, kind:'train' }; }));
+    // A station's dot follows its frequent line: Otwock ends S1 but is a minor stop of R7.
+    var onPage = {};
+    RARE.concat(LINES).forEach(function(l){ l.stops.forEach(function(s){ onPage[s.n] = s; }); });
+    HUB.forEach(function(s){ onPage[s.n] = s; });
+
+    // One dot per name: a station several lines call at, or a bus stop several buses share.
+    var dots = {}, order = [];
+    function dot(name, ll, r, s){
+      var d = dots[name];
+      if (!d) {
+        d = dots[name] = { ll:ll, q:(s && s.q) || name + ' stacja kolejowa', lines:[], badges:[], rare:true, bus:r.kind === 'bus', minor:true, end:false };
+        order.push(name);
+      }
+      if (d.lines.indexOf(r.f) < 0) d.lines.push(r.f);
+      var badge = '<span class="badge ' + r.cls + '">' + r.line.badge + '</span>';
+      if (d.badges.indexOf(badge) < 0) d.badges.push(badge);
+      if (r.kind !== 'rare') { d.rare = false; if (!d.cls) d.cls = r.cls; }
+      if (s && !s.minor) d.minor = false;
+      if (s && s.terminus) d.end = true;
+      if (s && s.lines) s.lines.forEach(function(f){ if (d.lines.indexOf(f) < 0) d.lines.push(f); });
+    }
+
+    var bounds = {};
+    function extend(f, path){ (bounds[f] || (bounds[f] = L.latLngBounds([]))).extend(path); }
+    routes.forEach(function(r){
+      var data = ROUTES[r.line.id];
+      if (!data) return;
+      var cls = 'm-rt ' + r.cls;
+      if (r.kind === 'train') {
+        mapParts.push({ layer:L.polyline(data.path, { className:'m-case', weight:9, interactive:false }).addTo(map), lines:[r.f] });
+      }
+      var path = L.polyline(data.path, { className:cls, weight:r.kind === 'train' ? 5 : 3, dashArray:r.kind === 'rare' ? '6 6' : null, interactive:false }).addTo(map);
+      mapParts.push({ layer:path, lines:[r.f], rare:r.kind === 'rare' });
+      if (r.kind !== 'rare') { extend('all', data.path); extend(r.f, data.path); }
+      if (r.kind === 'bus') {
+        r.line.stops.forEach(function(s){ dot(s.n, s.q.split(',').map(Number), r, s); });
+      } else {
+        // A frequent train shows every station it calls at, a rare one the stations on the page.
+        var page = r.line.stops.map(function(s){ return s.n; });
+        data.stops.forEach(function(st){
+          if (r.kind === 'rare' && page.indexOf(st[0]) < 0) return;
+          dot(st[0], [st[1], st[2]], r, onPage[st[0]]);
+        });
+      }
+    });
+
+    order.forEach(function(name){
+      var d = dots[name];
+      var cls = 'm-st ' + (d.cls || 'rare') + (d.bus ? ' m-bus' : '') + (d.badges.length > 1 && !d.bus ? ' m-multi' : '') + (d.end ? ' m-end' : d.minor ? ' m-minor' : '');
+      var m = L.circleMarker(d.ll, { className:cls, radius:d.end ? 6 : (d.minor ? 3.5 : 5), weight:d.minor ? 2 : 3, fillOpacity:1 }).addTo(map);
+      m.bindPopup('<strong>' + esc(name) + '</strong><div class="pl">' + d.badges.join('') + '</div>' + link(gm(d.q), d.bus ? 'przystanek na mapie ↗' : 'stacja na mapie ↗'));
+      if (d.end) {
+        // Under the dot, so a terminus at the edge of the map keeps its name; Ursus Północny is north of Ursus.
+        var top = name === 'Warszawa Ursus Północny';
+        m.bindTooltip(esc(name.replace(/^Warszawa /, '')), { permanent:true, direction:top ? 'top' : 'bottom', offset:[0, top ? -8 : 8], className:'m-lbl' + (d.bus ? ' m-bus' : '') });
+      }
+      mapParts.push({ layer:m, lines:d.lines, rare:d.rare });
+    });
+
+    // Zoomed out, bus stops and then minor stations would crowd the lines.
+    function far(){
+      var box = document.getElementById('map');
+      box.classList.toggle('m-far', map.getZoom() < 11);
+      box.classList.toggle('m-wide', map.getZoom() < 9);
+    }
+    map.on('zoomend', far);
+    // A pressed filter brings its line into view. Room for a terminus's name, half of it either side of the dot.
+    var shown;
+    mapView = function(){
+      if (shown === state.line) return;
+      shown = state.line;
+      map.fitBounds(bounds[state.line] || bounds.all, { paddingTopLeft:[50, 24], paddingBottomRight:[50, 36] });
+    };
+    mapFilter();
+    far();
+  }
 
   function render(){
     var total = 0;
@@ -904,6 +1220,7 @@ footer p{margin:0;max-width:90ch}
     document.querySelectorAll('[data-line]').forEach(function(b){ b.setAttribute('aria-pressed', String(b.dataset.line === state.line)); });
     document.querySelectorAll('[data-cat]').forEach(function(b){ b.setAttribute('aria-pressed', String(b.dataset.cat === state.cat)); });
     document.querySelectorAll('[data-dist]').forEach(function(b){ b.setAttribute('aria-pressed', String(b.dataset.dist === state.dist)); });
+    mapFilter();
     try { localStorage.setItem('ursus-filters', JSON.stringify(state)); } catch(e) {}
   }
 
@@ -916,6 +1233,7 @@ footer p{margin:0;max-width:90ch}
   });
 
   render();
+  drawMap();
 })();
 </script>
 
