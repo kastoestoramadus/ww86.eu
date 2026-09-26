@@ -55,5 +55,9 @@ about a stacked PR, say which PR to merge first and that you retarget this one a
 
 - `gh pr checks` has no `--json`. A loop that parses JSON from it gets "unknown flag", and with the error
   silenced it spins until its timeout. Parse the tab-separated plain output, as above.
+- `gh pr checks` lists the jobs of a cancelled run as `fail`. A push and a base change a second apart
+  started two runs of one commit, and the concurrency group cancelled one (#23, 2026-09-26): before you
+  report `CHECKS FAILED`, look at the run (`gh run view <id> --json conclusion`); if it is `cancelled`,
+  wait again for the other.
 - `gh pr edit` fails with a GraphQL error about Projects (classic). Edit the body through REST instead:
   `gh api -X PATCH repos/kastoestoramadus/ww86.eu/pulls/<N> -F body=@body.md`.
