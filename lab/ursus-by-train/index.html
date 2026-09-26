@@ -116,6 +116,7 @@ ol.stops{list-style:none;margin:14px 0 0;padding:0}
 .cat{display:inline-flex;gap:6px;align-items:center}
 .dist{font-family:var(--mono);font-size:11px;letter-spacing:.04em;text-transform:uppercase;padding:3px 6px;border-radius:4px;background:var(--surface-2);color:var(--ink)}
 .dist.at{background:var(--lcs);color:var(--ink)}
+.season{font-size:12px;padding:2px 7px;border:1px dashed var(--muted);border-radius:999px;color:var(--ink)}
 .meta a{margin-left:auto}
 .empty{font-size:13px;color:var(--muted);margin:6px 0 0;font-style:italic}
 .r1{--lc:var(--r1);--lcs:var(--r1-soft)} .r3{--lc:var(--r3);--lcs:var(--r3-soft)} .s1{--lc:var(--s1);--lcs:var(--s1-soft)}
@@ -427,7 +428,8 @@ footer p{margin:0;max-width:90ch}
   // Stop fields: minor = small dot, terminus = filled dot, zone = border station of ZTM zones 1 and 2,
   // zEnd = zone 2 ends after this stop. Bus stops use coordinates as q, a stop name alone is ambiguous.
   // Place fields: c = one or two categories, the most important first, which gives the order of the dots;
-  // dist: "at" = kilka minut pieszo, "far" = rower/autobus, null = sprawdź trasę
+  // dist: "at" = kilka minut pieszo, "far" = rower/autobus, null = sprawdź trasę;
+  // t: **…** is bold; s (optional): what runs part of the year only, and when
   var LINES = [
     { id:'r1', badge:'R1', title:'Ursus → Skierniewice', from:'Z przystanku Warszawa Ursus · R1 Koleje Mazowieckie: do Skierniewic 25 pociągów w dzień roboczy i 21 w weekend (ok. 56 min), do Żyrardowa razem 32 i 26 (ok. 34 min) · SKM S1 dojeżdża tylko do Pruszkowa', stops:[
       { n:'Warszawa Ursus', q:'Warszawa Ursus stacja kolejowa', terminus:true, blurb:'Start.' },
@@ -940,8 +942,9 @@ footer p{margin:0;max-width:90ch}
     var dist = p.d === 'at' ? '<span class="dist at">' + (bus ? 'przy przystanku' : 'przy stacji') + '</span>' : (p.d === 'far' ? '<span class="dist">rower / autobus</span>' : '');
     li.innerHTML =
       '<div class="pn">' + link(gm(p.q), esc(p.n)) + '</div>' +
-      '<div class="pd">' + esc(p.t) + '</div>' +
-      '<div class="meta">' + p.c.map(function(c){ return '<span class="cat"><span class="dot ' + c + '"></span>' + CAT[c] + '</span>'; }).join('') + dist +
+      '<div class="pd">' + esc(p.t).replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>') + '</div>' +
+      '<div class="meta">' + p.c.map(function(c){ return '<span class="cat"><span class="dot ' + c + '"></span>' + CAT[c] + '</span>'; }).join('') +
+      (p.s ? '<span class="season">sezonowo: ' + esc(p.s) + '</span>' : '') + dist +
       link(walk(fromQ, p.q), 'trasa pieszo ↗') + '</div>';
     return li;
   }
