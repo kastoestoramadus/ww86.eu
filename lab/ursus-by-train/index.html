@@ -432,6 +432,10 @@ footer p{margin:0;max-width:90ch}
       <a href="https://sport.um.warszawa.pl/waw/osir-bemowo/-/plywalni-pingwin" target="_blank" rel="noopener">Pływalnia Pingwin</a>,
       <a href="https://sport.um.warszawa.pl/waw/crs-bielany/-/plywalnia-conrada-6" target="_blank" rel="noopener">pływalnia CRS Bielany</a>,
       <a href="https://sport.um.warszawa.pl/waw/crs-bielany/-/sauna-conrada-6" target="_blank" rel="noopener">sauny CRS Bielany</a>,
+      <a href="https://sport.um.warszawa.pl/waw/osir-ursus/-/sauna-sosnkowskiego-3" target="_blank" rel="noopener">sauny na Skalarze</a>,
+      <a href="https://sportowa.warszawa.pl/osrodki-sportu/skalar-sosnkowskiego-3/" target="_blank" rel="noopener">Skalar — baseny</a>,
+      <a href="https://sport.um.warszawa.pl/waw/osir-ursus/-/plywalnia-kryta-orlat-lwowskich" target="_blank" rel="noopener">Pływalnia Albatros</a>,
+      <a href="https://sport.um.warszawa.pl/waw/osir-ursus/-/sauna-orlat-lwowskich-1" target="_blank" rel="noopener">sauny na Albatrosie</a>,
       <a href="https://www.wodnypark.com.pl/" target="_blank" rel="noopener">Wodny Park Warszawianka</a>.
     </p>
     <p><a href="../index.html">← lab ww86.eu</a></p>
@@ -455,7 +459,9 @@ footer p{margin:0;max-width:90ch}
   var LINES = [
     { id:'r1', badge:'R1', title:'Ursus → Skierniewice', from:'Z przystanku Warszawa Ursus · R1 Koleje Mazowieckie: do Skierniewic 25 pociągów w dzień roboczy i 21 w weekend (ok. 56 min), do Żyrardowa razem 32 i 26 (ok. 34 min) · SKM S1 dojeżdża tylko do Pruszkowa', stops:[
       { n:'Warszawa Ursus', q:'Warszawa Ursus stacja kolejowa', terminus:true, blurb:'Start.' },
-      { n:'Warszawa Ursus-Niedźwiadek', q:'Warszawa Ursus-Niedźwiadek stacja kolejowa', minor:true, zone:true },
+      { n:'Warszawa Ursus-Niedźwiadek', q:'Warszawa Ursus-Niedźwiadek stacja kolejowa', zone:true, places:[
+        { n:'Pływalnia Albatros', q:'Pływalnia Albatros, Orląt Lwowskich 1, Warszawa', c:['aktywnie'], d:null, t:'Pływalnia OSiR Ursus: basen sportowy 25 × 12,5 m na sześć torów i basen rekreacyjny z wodą o temperaturze 32–34 °C; **sauny**: sucha, parowa, infrared i **biosauna**. Pn–pt 6–22, sb–nd 8–22.' }
+      ]},
       { n:'Piastów', q:'Piastów stacja kolejowa', blurb:'Park Handlowy Piast z Kauflandem jest ok. 1,1 km od stacji — opisany niżej, przy autobusie 716.', places:[
         { n:'Kino Baśń (MOK Piastów)', q:'Kino Baśń, Piastów', c:['kino','kultura'], d:null, t:'Kameralne kino Miejskiego Ośrodka Kultury; są też koncerty i spektakle.' }
       ]},
@@ -801,8 +807,8 @@ footer p{margin:0;max-width:90ch}
         { n:'Centrum Skorosze', q:'Centrum Skorosze, Składkowskiego 4, Warszawa', c:['zakupy'], d:'at', t:'Centrum handlowe z 2007 r., ok. 12 tys. m²: supermarket Carrefour, Smyk, CCC, Home&You, Super-Pharm, Empik.' },
         { n:'Leroy Merlin i Bistro Kantyna', q:'Leroy Merlin, Aleje Jerozolimskie 244, Warszawa', c:['zakupy'], d:'at', t:'Market budowlany Leroy Merlin, a w nim Bistro Kantyna z obiadami domowymi gotowanymi na miejscu. Polecam: tanio i dobrze karmią, a nie każdy Leroy Merlin ma tak udaną kantynę.' },
         { n:'Mini Zoo Warszawa', q:'Mini Zoo Warszawa, Kolorowa 19, Warszawa', c:['natura'], d:null, t:'Zoo kontaktowe: surykatki, fretki, króliki, szynszyle, ostronos, skunks, żółwie, agamy — zwierzęta można karmić i głaskać. Czynne cały rok, pn–pt 11–19, sb–nd 10–18.' },
-        { n:'Park Linowy Ursus', q:'Park Linowy Ursus, Sosnkowskiego 3, Warszawa', c:['aktywnie'], d:null, t:'Trzy trasy na terenie OSiR Ursus, dla dzieci od 3 lat. Działa sezonowo — sprawdź przed wizytą.' },
-        { n:'Pływalnia Skalar', q:'Pływalnia Skalar, Sosnkowskiego 3, Warszawa', c:['aktywnie'], d:null, t:'Pływalnia OSiR Ursus: pn–pt 6–22, sb–nd 8–22.' }
+        { n:'Park Linowy Ursus', q:'Park Linowy Ursus, Sosnkowskiego 3, Warszawa', c:['aktywnie'], d:null, t:'Trzy trasy na terenie OSiR Ursus, dla dzieci od 3 lat. Działa sezonowo — sprawdź przed wizytą.', s:'trasy linowe' },
+        { n:'Pływalnia Skalar', q:'Pływalnia Skalar, Sosnkowskiego 3, Warszawa', c:['aktywnie'], d:null, t:'Pływalnia OSiR Ursus: basen sportowy i rekreacyjny, brodzik, zjeżdżalnia, masaż wodny i powietrzny, a obok **kompleks siedmiu saun**, w tym solna i parowo-ziołowa, z lodospadem. Pn–pt 6–22, sb–nd 8–22.' }
       ]},
       { n:'Regulska', q:'52.18332,20.870516', minor:true, terminus:true }
     ]},
