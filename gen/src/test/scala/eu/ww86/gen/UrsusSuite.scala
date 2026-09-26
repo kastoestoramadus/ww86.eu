@@ -83,7 +83,7 @@ class UrsusSuite extends munit.FunSuite:
     page.substring(start, page.indexOf("\n  ];", start))
 
   // An entry opens at four spaces, its stops at six, their places deeper.
-  private val lines = List("LINES" -> false, "BUSES" -> true, "RARE" -> false).flatMap { (name, bus) =>
+  private val lines = List("LINES" -> false, "BUSES" -> true).flatMap { (name, bus) =>
     block(name).split("\n    \\{ id:'").toList.tail.map { entry =>
       val stops = """(?m)^      \{ n:'([^']*)', q:'([^']*)'""".r.findAllMatchIn(entry).map(m => m.group(1) -> m.group(2))
       Line(entry.takeWhile(_ != '\''), bus, stops.toList)
@@ -126,6 +126,11 @@ class UrsusSuite extends munit.FunSuite:
 
   test("every line on the page has its route on the map") {
     assertEquals(lines.map(_.id).filterNot(routes.contains), Nil)
+  }
+
+  test("the map draws only the lines on the page") {
+    // rare trains, R2, R6 and R7, are off both: see lab/ursus-by-train.md
+    assertEquals(routes.keys.toList.filterNot(lines.map(_.id).contains).sorted, Nil)
   }
 
   test("a train's route calls at the stations of its line, in the page's order") {
