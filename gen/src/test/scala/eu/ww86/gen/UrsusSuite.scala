@@ -91,8 +91,9 @@ class UrsusSuite extends munit.FunSuite:
   private type Point = (Double, Double)
 
   /** A route column of the page; `stops` are (name, q), and a bus stop's q is its coordinates. `zones` are the
-    * stops after which a ticket zone starts, with its number. */
-  private case class Line(id: String, bus: Boolean, stops: List[(String, String)], zones: List[(String, Int)])
+    * stops after which a ticket zone starts, with its number; `places` are (stop, place). */
+  private case class Line(id: String, bus: Boolean, stops: List[(String, String)], zones: List[(String, Int)],
+      places: List[(String, String)])
 
   private def block(name: String): String =
     val start = page.indexOf(s"var $name = [")
@@ -101,9 +102,14 @@ class UrsusSuite extends munit.FunSuite:
   // An entry opens at four spaces, its stops at six, their places deeper.
   private val lines = List("LINES" -> false, "BUSES" -> true, "RARE" -> false).flatMap { (name, bus) =>
     block(name).split("\n    \\{ id:'").toList.tail.map { entry =>
-      val stops = """(?m)^      \{ n:'([^']*)', q:'([^']*)'""".r.findAllMatchIn(entry).map(m => m.group(1) -> m.group(2))
-      val zones = """(?m)^      \{ n:'([^']*)',[^\n]*? zone:(\d)""".r.findAllMatchIn(entry).map(m => m.group(1) -> m.group(2).toInt)
-      Line(entry.takeWhile(_ != '\''), bus, stops.toList, zones.toList)
+      val starts = """(?m)^      \{ n:'([^']*)', q:'([^']*)'""".r.findAllMatchIn(entry).toList
+      val stops  = starts.map(m => m.group(1) -> m.group(2))
+      val zones  = """(?m)^      \{ n:'([^']*)',[^\n]*? zone:(\d)""".r.findAllMatchIn(entry).map(m => m.group(1) -> m.group(2).toInt)
+      // a stop's places follow it, up to the next stop
+      val places = starts.zip(starts.map(_.start).tail :+ entry.length).flatMap { (m, end) =>
+        """\{ n:'([^']*)', q:'[^']*', c:""".r.findAllMatchIn(entry.substring(m.end, end)).map(p => m.group(1) -> p.group(1))
+      }
+      Line(entry.takeWhile(_ != '\''), bus, stops, zones.toList, places)
     }
   }
 
@@ -203,6 +209,24 @@ class UrsusSuite extends munit.FunSuite:
       if l.zones != expected
     yield s"${l.id}: ${l.zones}, expected $expected"
     assertEquals(wrong, Nil)
+  }
+
+  test("the bathing sites of the sanepid's 2026 lists near a line are on it, at the stop nearest to them") {
+    // WSSE Warszawa's list of bathing sites and of places occasionally used for bathing; the farther ones are in
+    // lab/ursus-by-train.md
+    val sites = List(
+      ("r1", "Pruszków", "Park Mazowsze"),
+      ("r1", "Brwinów", "Wake Family Brwinów"),
+      ("r1", "Grodzisk Mazowiecki", "Stawy Walczewskiego"),
+      ("r1", "Żyrardów", "Zalew Żyrardowski"),
+      ("r3", "Sochaczew", "Plaża miejska nad Bzurą"),
+      ("r6", "Zielonka", "Kąpielisko Glinianki"),
+      ("b187", "Goraszewska", "Jeziorko Czerniakowskie")
+    )
+    val missing = sites.collect {
+      case (line, stop, name) if !lines.exists(l => l.id == line && l.places.contains(stop -> name)) => s"$line, $stop: $name"
+    }
+    assertEquals(missing, Nil)
   }
 
   test("a chain has at most three big stores on the page, and besides them its biggest within 30 minutes' ride") {
