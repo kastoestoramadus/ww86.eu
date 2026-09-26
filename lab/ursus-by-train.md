@@ -81,12 +81,13 @@ is that near; the nearest are Albatros (24 min), Mini Zoo (27), Kino ADA (28), S
     Filharmonia, Amfiteatr Bemowo). Sala Kongresowa comes back when its renovation ends (mid-2028 at
     the earliest);
   - `aktywnie` (doing sport: pools, tracks, trampolines), `zabytki` (a building or site worth seeing for
-    itself, not a museum about history), `natura`, `zakupy`.
+    itself, not a museum about history), `natura`, `zakupy`;
+  - `targi` (label "Targi i giełdy"): fairs held on set days (see Fairs).
   There is no catch-all: a place that fits none is reported to the user, who names a new category.
   A category needs a label in `CAT`, a colour in the light and both dark blocks, a dot class and a chip.
   `gen/.../UrsusSuite` checks that, and files cinemas by name (Kino, Multikino, Cinema City, Helios) first
-  under `kino`, with `occasional` as the list of names that sound like a cinema but screen rarely, and
-  stadiums (Stadion, Narodowy) under `mecze`.
+  under `kino`, with `occasional` as the list of names that sound like a cinema but screen rarely,
+  stadiums (Stadion, Narodowy) under `mecze`, and fairs (Targ, Giełda, Pchli, Market) under `targi`.
 - **Shops**: malls only when they hold a cinema or a hypermarket, or the user asked. **Of one chain at
   most three big stores, the nearest by ride time**, and besides them **one of its biggest**: its
   biggest within 30 minutes' ride, or, when the biggest on the lines is farther, a closer one; its text
@@ -113,6 +114,17 @@ is that near; the nearest are Albatros (24 min), Mini Zoo (27), Kino ADA (28), S
   only markup: it renders as bold, and `UrsusSuite` fails on a sauna that is not.
 - **Seasonal**: a place whose attraction runs part of the year only (a bathing beach, an outdoor pool, a
   rink) carries `s`, a few words on what and when, shown as a chip after the categories ("sezonowo: …").
+- **Fairs**: antiques, collectors' and flea markets, and the seasonal Nocny Market, held on set days.
+  The text says when, a day of the week or of the month, with hours when a source gives them; there is
+  no date filter (the user, 2026-09-26), and `UrsusSuite` fails on a fair whose text names no day. Not:
+  markets open every day or Monday to Saturday (Łowicz, Milanówek, Żyrardów, Ożarów, the markets in
+  Błonie and Falenica, Hala Mirowska, Bazar Różyckiego, Bazarek Ursus), nor produce markets on their
+  market days (Piastów, Pruszków, Grodzisk, Wołomin, Bazar Szwedzka). Checked and left out, September
+  2026: Targ Śniadaniowy (on Mokotów at Puławska and Woronicza, no line near; in Wawer 1.5 km from
+  Anin), the Bemowo breakfast fairs (a 2024 participatory-budget project), Otwock's children's flea
+  market, Siedlce's antiques fair and Cegłów's Saturday market (no direct train at weekends), parkrun
+  (the user). Brwinów's Targ Przydasiów: only its January 2026 edition is confirmed; add it when a
+  source gives its rhythm.
 - **Every fact has a source** in the footer; say what a place is and has, nothing a source does not
   back. Hours only when a source gives them, "sprawdź przed wizytą" for anything irregular. Check that a
   place still operates (the Ossów centre closed at the end of 2025; starekinomilanowek.pl became a parked
@@ -132,6 +144,11 @@ is that near; the nearest are Albatros (24 min), Mini Zoo (27), Kino ADA (28), S
   only for a standalone store, and ranks a chain's stores well enough to know which one to look up. For
   discounters the notes rarely give a size (Lidl, Biedronka, Netto); chain-wide figures do (dlahandlu.pl,
   August 2026: Lidl 1,000–1,400 m² a store, Biedronka 600–700 m²).
+  Fairs: `amenity=marketplace` and names starting Bazar, Targ, Giełda, Jarmark, Pchli or Hala in the
+  routes' bounding box, kept within 1.6 km of a station or 700 m of a bus path. OSM has the market, not
+  the fair held on it, so search each town for "targ staroci", "giełda staroci" and "pchli targ" too. An
+  address point can sit far from the place: Towarowa 3 is 250 m from Warszawa Ochota, Nocny Market's own
+  OSM node 589 m.
 - **Walking times** from Szamoty: the FOSSGIS router's `table` service from node 410515045 to the place;
   check a new measure against a walk the user knows before cutting anything with it.
 - **Nominatim and Overpass** want a User-Agent; send a neutral one (`ww86-research/1.0`), never a
@@ -141,8 +158,10 @@ is that near; the nearest are Albatros (24 min), Mini Zoo (27), Kino ADA (28), S
 - **Site quirks**: Leroy Merlin store URLs change (OSM's link for Al. Jerozolimskie 244 is a 404, the
   current page is `warszawa-al-jerozolimskie-gigamarket.html`) and the store pages do not list the
   canteens, their Facebook pages do. Carrefour store pages do not state the format; the name does
-  ("Carrefour Market …" is a supermarket). Sites that refuse scripts: see the browser note in
-  [AGENTS.md](../AGENTS.md).
+  ("Carrefour Market …" is a supermarket). 100.pkp.pl sends no intermediate certificate, so curl fails
+  it and Nocny Market's source is Nasze Miasto. cekis.pl numbers a repeated event's pages `-2`, `-3`, …,
+  which lists its past dates (the collectors' fair left the first Saturday in January 2026). Sites that
+  refuse scripts: see the browser note in [AGENTS.md](../AGENTS.md).
 - **Before a PR**: `sbt test buildSite`, every new link answers, the page in a browser at 1280 and 360 px
   with no script error or horizontal scroll under every line and category filter.
 
@@ -195,6 +214,8 @@ misses a line or a station, draws a line the page no longer has, or a route no l
   (no capacity found).
 - 2026-09-26: rare trains stay when they run often on weekdays, even with none at weekends; one train a
   day to Siedlce or Dęblin is far too little, R61's two too few (the user). R7 now ends at Pilawa.
+- 2026-09-26: Targi i giełdy, the user's name, for fairs held on set days; when goes into the text, with
+  no date filter; no parkrun; produce markets on their market days stay out.
 
 ## Work log
 
@@ -236,5 +257,10 @@ misses a line or a station, draws a line the page no longer has, or a route no l
   not checked: the nature reserves Grądy Celestynowskie (1.5 km from Celestynów) and Rogalec (1.6 km from
   Pilawa), Pilawa's cultural centre (540 m). Found: #20 and #21 had merged into the branches they were
   stacked on, not master; #22 landed them (see [PULL_REQUESTS.md](../PULL_REQUESTS.md)).
+- **2026-09-26, #24**: category Targi i giełdy with seven fairs (see Fairs). Found: the palette already
+  has closer pairs than a new colour needs to beat (#A23B72 and #B23A48 ΔE 7.2 in normal vision, #3A7636
+  and #86662A 2.2 for protanopes, dark #6DBBE6 and #B6A0DD 1.4 for deutanopes; the dataviz skill's
+  validator), so #753C00, dark #C0A239, were picked as the farthest from all seven within their
+  lightness and chroma, and add no closer pair; every place names its category next to the dot.
 - Not checked so far: GTFS counts against KOLEO or the printed timetable; walking routes other than from
   Szamoty (distances are straight lines).
