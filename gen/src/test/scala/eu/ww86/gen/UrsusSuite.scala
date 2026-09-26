@@ -138,6 +138,13 @@ class UrsusSuite extends munit.FunSuite:
     assertEquals(wrong, Nil)
   }
 
+  test("every line a Po drodze card lists has a badge") {
+    val badges = """var BADGE = \{([^}]*)\}""".r.findFirstMatchIn(page).map(_.group(1)).getOrElse("")
+    val via    = """\{ b:\[([^\]]*)\]""".r.findAllMatchIn(block("HUB")).flatMap(m => "'([^']+)'".r.findAllMatchIn(m.group(1)).map(_.group(1)))
+    val wrong  = via.toList.distinct.filterNot(id => badges.contains(s"'$id':[") || badges.contains(s"$id:["))
+    assertEquals(wrong, Nil)
+  }
+
   test("a train with a Po drodze station on its card calls there on the map") {
     val trains = lines.filterNot(_.bus).map(_.id).toSet
     val wrong = for
