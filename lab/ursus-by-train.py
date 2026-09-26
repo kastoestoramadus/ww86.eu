@@ -14,7 +14,7 @@ import argparse, collections, csv, datetime, io, json, math, os, re, statistics,
 
 FEEDS = {'trains': 'https://mkuran.pl/gtfs/polish_trains.zip', 'ztm': 'https://mkuran.pl/gtfs/warsaw.zip'}
 HOME_STATIONS = ('Warszawa Ursus', 'Warszawa Ursus Północny')
-HOME_STOPS = ('Lalki', 'Habicha', 'Gierdziejewskiego')
+HOME_STOPS = ('Lalki', 'Habicha', 'Gierdziejewskiego', 'Ursus - Ratusz')
 CENTRE = ('Warszawa Włochy', 'Warszawa Ochota', 'Warszawa Śródmieście', 'Warszawa Powiśle', 'Warszawa Stadion',
           'Warszawa Wschodnia')
 FAR = ('Żyrardów', 'Skierniewice', 'Sochaczew', 'Łowicz Główny', 'Otwock')
@@ -26,6 +26,9 @@ BUS_TARGETS = {
     '716': ('Fort Wola', 'Cm. Wolski', 'Piastów Lelewela', 'Piastów Ogińskiego'),
     '207': ('Hassa',),
     '401': ('Orzechowa', 'Rondo Unii Europejskiej', 'Metro Służew'),
+    '194': ('PKP Włochy', 'Fort Wola', 'Cm. Wolski', 'PKP Gołąbki'),
+    '220': ('Hassa', 'Kolumba', 'P+R Al. Krakowska', 'Os. Górczewska', 'Kocjana', 'Piastów Śląskich', 'Nowe Bemowo'),
+    '228': ('PKP Włochy', 'Rakowska', 'Jadwisin', 'Woronicza', 'Metro Wierzbno'),
 }
 
 
