@@ -28,7 +28,8 @@ is that near; the nearest are Albatros (24 min), Mini Zoo (27), Kino ADA (28), S
    Po drodze cards have them cross the centre; buses thin, with the stops their columns list; rare
    trains dashed, with their columns' stations, only under "Wszystkie". A line filter dims the rest and
    brings its line into view. Paths and station positions come from `routes.js` (see Refreshing), the
-   tiles from OpenStreetMap, credited on the map and in the footer.
+   tiles from OpenStreetMap, credited on the map and in the footer. Leaflet 1.9.4 loads from cdnjs with
+   SRI hashes: a new version needs new ones.
 2. **Frequent trains**: a column per line and direction, every station (minor ones as small dots), up to
    the regular terminus: R1 Skierniewice, R3 Łowicz, S1 Otwock.
 3. **Po drodze w Warszawie**: the stations every train from both home stations stops at, Włochy to
@@ -41,9 +42,12 @@ is that near; the nearest are Albatros (24 min), Mini Zoo (27), Kino ADA (28), S
 
 ## Rules
 
-- **Frequent** = daily, about ten departures a day or more also at weekends; the rest is rare. September
-  2026, weekday/weekend: R1 Skierniewice 25/21, R3 Łowicz 14/12, S1 Otwock 19/19; R2 Mińsk 13/3, R6
-  5–6/0, R7 Pilawa 6/0, Dęblin 1/0, R2 Siedlce 1/0.
+- **Frequent** = daily, about ten departures a day or more also at weekends; the rest is rare. A rare
+  train stays when it runs often on weekdays, about five times a day or more, with a direct train back
+  the same day, weekends or not; one or two a day are too few (the user, 2026-09-26). September 2026,
+  weekday/weekend: R1 Skierniewice 25/21, R3 Łowicz 14/12, S1 Otwock 19/19; R2 Mińsk 13/3, R6 Wołomin
+  6/0, R7 Pilawa 7/0. Left out, and said so on the page: R2 to Siedlce and R7 to Dęblin (one train
+  each), R61 to Mostówka (two).
 - **Buses** on the page and why: 517 (fast, every 15 min also at weekends), 187 (far but slow), 177
   (Bemowo), 716 (Mon–Sat, for the shops at both ends), 207 (loops within Ursus, but stops 160–240 m from
   Centrum Skorosze and Leroy Merlin, where 517 is 700 m away), 401 (weekdays only; the only direct line to
@@ -160,9 +164,9 @@ python3 lab/ursus-by-train.py --map
 ```
 
 Rewrites `lab/ursus-by-train/routes.js` from the same feeds: each column's path, cut from the shape of
-its most common trip (or of the trips it joins: the only R2 to Siedlce starts at Ursus, the others from
-Ursus Północny end at Mińsk), and the stations each train calls at. Run it after changing a route column;
-`UrsusSuite` fails while the map misses a line or a station, or a route no longer passes a stop.
+its most common trip (or of the trips it joins, when no single trip runs a column's whole length), and
+the stations each train calls at. Run it after changing a route column; `UrsusSuite` fails while the map
+misses a line or a station, draws a line the page no longer has, or a route no longer passes a stop.
 
 ## Decisions taken with the user
 
@@ -189,6 +193,8 @@ Ursus Północny end at Mińsk), and the stations each train calls at. Run it af
   Stadion Znicza, the Służew pond park). Left out of them: Highline in Varso (a viewpoint fits no
   category: the user names one), Fort VIIA (remnants, nothing shows it open to visitors), Znicz's hall
   (no capacity found).
+- 2026-09-26: rare trains stay when they run often on weekdays, even with none at weekends; one train a
+  day to Siedlce or Dęblin is far too little, R61's two too few (the user). R7 now ends at Pilawa.
 
 ## Work log
 
@@ -225,5 +231,10 @@ Ursus Północny end at Mińsk), and the stations each train calls at. Run it af
   measure is checked against a walk the user knows first; Stacja Muzeum is shut 21 September–2 October
   2026; the Aldi at Warszawa Zachodnia (February 2026) is the chain's first at a station and opens on
   Sundays too.
+- **2026-09-26, #23**: Siedlce and Dęblin off R2 and R7, with their three places (the El Greco museum,
+  Helios, the Air Force Museum); R7 ends at Pilawa and has no places yet. Candidates near its stations,
+  not checked: the nature reserves Grądy Celestynowskie (1.5 km from Celestynów) and Rogalec (1.6 km from
+  Pilawa), Pilawa's cultural centre (540 m). Found: #20 and #21 had merged into the branches they were
+  stacked on, not master; #22 landed them (see [PULL_REQUESTS.md](../PULL_REQUESTS.md)).
 - Not checked so far: GTFS counts against KOLEO or the printed timetable; walking routes other than from
   Szamoty (distances are straight lines).

@@ -300,8 +300,8 @@ def train_routes(z, days, lines, hub):
             calls[r['trip_id']].append((int(r['stop_sequence']), station[r['stop_id']]))
     calls = {t: [s for _, s in sorted(c)] for t, c in calls.items()}
 
-    # A column may join trips: most R2 trains from Ursus Północny end at Mińsk, the one to Siedlce starts
-    # at Ursus. Each piece is the most common shape among the trips reaching furthest down the column.
+    # A column may join trips when no single trip runs its whole length. Each piece is the most common
+    # shape among the trips reaching furthest down the column.
     chosen = {}
     for lid, line, bus, page_stops in lines:
         if bus:

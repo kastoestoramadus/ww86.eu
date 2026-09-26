@@ -128,6 +128,10 @@ class UrsusSuite extends munit.FunSuite:
     assertEquals(lines.map(_.id).filterNot(routes.contains), Nil)
   }
 
+  test("the map draws only the lines on the page") {
+    assertEquals(routes.keys.toList.filterNot(lines.map(_.id).contains).sorted, Nil)
+  }
+
   test("a train's route calls at the stations of its line, in the page's order") {
     val wrong = for
       l <- lines if !l.bus
