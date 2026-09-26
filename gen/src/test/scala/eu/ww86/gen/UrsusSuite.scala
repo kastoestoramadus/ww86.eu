@@ -176,6 +176,13 @@ class UrsusSuite extends munit.FunSuite:
     assertEquals(over, Nil)
   }
 
+  test("Aldi and Netto are on the page; Lidl, Biedronka and Stokrotka are not, the user walks to those") {
+    val names   = places.map(_.name)
+    val missing = List("Aldi", "Netto").filterNot(chain => names.exists(_.contains(chain)))
+    val walked  = names.filter(name => List("Lidl", "Biedronka", "Stokrotka").exists(name.contains))
+    assertEquals(missing ++ walked, Nil)
+  }
+
   test("a sauna is in bold wherever a text names one") {
     // **…** is the only markup a text has
     val wrong = places.filter(p => "(?i)saun".r.findFirstIn(p.text.replaceAll("""\*\*[^*]+\*\*""", "")).isDefined).map(_.name)
