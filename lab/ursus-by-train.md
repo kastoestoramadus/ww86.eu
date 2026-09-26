@@ -9,8 +9,9 @@ the same PR (skip only when the user calls the work a check of a concept).
 
 Places worth a trip that a person living in **Szamoty** (Ursus, Warsaw) reaches with **no change**. Fixed
 starting points: the stations **Warszawa Ursus** (R1, S1) and **Warszawa Ursus Północny** (R3; the user
-says "Ursus Północ", it is by ul. Szamoty but is not named after it), and the bus stops **Gierdziejewskiego,
-Habicha and Lalki**, within about 500 m. The home address stays out of this public repository.
+says "Ursus Północ", it is by ul. Szamoty but is not named after it), the bus stops **Gierdziejewskiego,
+Habicha and Lalki**, within about 500 m, and, at the user's request, **Ursus - Ratusz**, 0.9–1.2 km from
+Lalki (its four poles). The home address stays out of this public repository.
 
 ## Sections, in this order
 
@@ -26,7 +27,7 @@ Habicha and Lalki**, within about 500 m. The home address stays out of this publ
    Wschodnia. A card lists each direct line with its ride time, trains and buses alike; a place near such
    a station lives only here, and route columns point to it. Zachodnia has no card: nothing is close, and
    Blue City and Reduta (1–1.2 km) sit at the Berestecka stop of 517 and 187.
-4. **Buses** from the three stops: a column per line and direction, selected stops only.
+4. **Buses** from the three stops and from Ursus - Ratusz: a column per line and direction, selected stops only.
 5. **Rare trains**: direct but a few times a day or weekdays only; stations with places and zone borders
    only, a "Tam / Z powrotem" summary, shown only under the "Wszystkie" line filter.
 
@@ -39,8 +40,11 @@ Habicha and Lalki**, within about 500 m. The home address stays out of this publ
   (Bemowo), 716 (Mon–Sat, for the shops at both ends), 207 (loops within Ursus, but stops 160–240 m from
   Centrum Skorosze and Leroy Merlin, where 517 is 700 m away), 401 (weekdays only; the only direct line to
   Centrum Łopuszańska 22, 517 and 187 stop 1.5 km away). The GTFS ends 401 at Metro Wilanowska, a stop with
-  no boarding; its passenger terminus is Metro Służew. Left out, and said so on the page: N35, N85 (night),
-  194 and 129 (they stop at PKP Ursus). The hop of 517, 187 and 177 to the Ursus-Niedźwiadek loop is a
+  no boarding; its passenger terminus is Metro Służew. From Ursus - Ratusz: 194 to Włochy, Fort Wola and
+  Cm. Wolski (also on Sundays, when 716 does not run), 220 both ways (Okęcie, Bemowo), 228 to Rakowiec and
+  Mokotów; 194 and 228 stop at PKP Włochy, so its hub card lists them. 194 the other way stays in Ursus and
+  is a sentence in the start stop's blurb. Left out, and said so on the page: N35, N85 (night), 129 (it
+  stops at PKP Ursus). The hop of 517, 187 and 177 to the Ursus-Niedźwiadek loop is a
   sentence in the start stop's blurb.
 - **Ticket zones**: zone 1 is Warsaw; a 1+2 ticket is valid on KM and SKM trains up to Pruszków (R1),
   Płochocin (R3), Otwock Śródborów (R7; S1 ends at Otwock, in zone 2), Sulejówek Miłosna (R2), Zagościniec
@@ -123,6 +127,7 @@ Ursus Północny end at Mińsk), and the stations each train calls at. Run it af
   name; hypermarkets only big; the Leroy Merlin canteens at Skorosze and on 716 north; cinemas as their
   own category; a cultural centre with a regular cinema is `kino`, with occasional screenings `kultura`.
 - The map shows where the connections reach and nothing else: no places, the list has them.
+- The buses from Ursus - Ratusz, though farther than the other stops: the user asked for them.
 - Rozrywka, the catch-all, is dropped. What was left went to `kultura` (the railway museums, PKiN's
   theatres, Koneser) and to a new `mecze`, "Mecze i koncerty", for the stadiums: the user's suggestion.
 
@@ -141,5 +146,11 @@ Ursus Północny end at Mińsk), and the stations each train calls at. Run it af
 - **2026-09-25, #19**: the map. Found: the R2 column joins two trips (see Refreshing); a bus shape can
   end 43 m short of the terminus pole (177 at Os. Górczewska); tiles scaled to a fractional zoom show
   seams in Chromium, so the map keeps whole zoom levels; CARTO tiles now need an API key, OSM's do not.
+- **2026-09-25, #20**: buses 194, 220 and 228 from Ursus - Ratusz on the map and the page, 14 places with
+  them, and six at existing stops (Park Kombatantów at Włochy, Izba Pamięci at Cm. Wolski, Murall at Os.
+  Górczewska, Mini Zoo, Park Linowy and Skalar at Hassa). Left out: the Polish Fiat museum (its domain
+  serves a casino, nothing else shows it open), Fort III Blizne (private, a paintball field), Kino
+  Akademickie at WAT (no programme found), the Bemowo ice rink (its page did not answer). Teatr IMKA's
+  domain is gone; its stage at Kocjana 3 is now Bemowskie Centrum Kultury's Scena Kocjana.
 - Not checked so far: GTFS counts against KOLEO or the printed timetable; walking routes (distances are
   straight lines).
