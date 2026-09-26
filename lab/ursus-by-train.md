@@ -61,7 +61,10 @@ is that near; the nearest are Albatros (24 min), Mini Zoo (27), Kino ADA (28), S
 - **Ticket zones**: zone 1 is Warsaw; a 1+2 ticket is valid on KM and SKM trains up to Pruszków (R1),
   Płochocin (R3), Otwock Śródborów (R7; S1 ends at Otwock, in zone 2), Sulejówek Miłosna (R2), Zagościniec
   (R6). Border stops belong to both: Ursus-Niedźwiadek, Gołąbki, Falenica, Wola Grzybowska, Mokry Ług, and
-  Ursus - Sanktuarium on 716. `zone:true` marks a border, `zEnd:true` the last stop inside zone 2.
+  Ursus - Sanktuarium on 716. A trip starts in zone 1, and the page marks where the next zones start:
+  `zone:2` on a border stop (a zone 1 ticket reaches it), `zone:3` on the last stop inside zone 2. ZTM has
+  two zones; zone 3 is the page's name for where a KM ticket is needed. `UrsusSuite` checks the marks
+  against the stations the Wspólny Bilet lists.
 - **A place** is `{ n, q, c, d, t }`. `q` is a Google Maps query; bus stops use their GTFS coordinates,
   because a stop name is ambiguous. `d` is `'at'` up to about 400 m, `null` for a walk, `'far'` for a bike
   or bus ride with "Ok. N km od stacji." in `t`; give the distance in `t` for walks of a kilometre or more
@@ -216,6 +219,8 @@ misses a line or a station, draws a line the page no longer has, or a route no l
   day to Siedlce or Dęblin is far too little, R61's two too few (the user). R7 now ends at Pilawa.
 - 2026-09-26: Targi i giełdy, the user's name, for fairs held on set days; when goes into the text, with
   no date filter; no parkrun; produce markets on their market days stay out.
+- 2026-09-26: zones shown where they start, 2 and 3, not as borders; a trip from the user starts in zone 1,
+  so zone 1 has no mark (the user).
 
 ## Work log
 
@@ -262,5 +267,9 @@ misses a line or a station, draws a line the page no longer has, or a route no l
   and #86662A 2.2 for protanopes, dark #6DBBE6 and #B6A0DD 1.4 for deutanopes; the dataviz skill's
   validator), so #753C00, dark #C0A239, were picked as the farthest from all seven within their
   lightness and chroma, and add no closer pair; every place names its category next to the dot.
+- **2026-09-26, #25**: a line shows where zone 2 and zone 3 start and which ticket each needs; the
+  "granica stref 1 i 2" chip is gone. Found: KM's Wspólny Bilet page lists the same border stations and
+  zone 2 ends as WTP's; WTP warns that an accelerated KM train takes a ZTM ticket only to its last stop in
+  zone 2 (Otwock, not Otwock Śródborów).
 - Not checked so far: GTFS counts against KOLEO or the printed timetable; walking routes other than from
   Szamoty (distances are straight lines).
