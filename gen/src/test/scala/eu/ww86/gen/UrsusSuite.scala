@@ -8,12 +8,12 @@ class UrsusSuite extends munit.FunSuite:
   // sbt runs the tests in the root of the build, where lab/ is
   private val page = Files.readString(Path.of("lab/ursus-by-train/index.html"))
 
-  /** A place of the page; stops have no category. */
-  private case class Place(name: String, cats: List[String], text: String)
+  /** A place of the page; stops have no category. `season` says what runs part of the year only, and when. */
+  private case class Place(name: String, cats: List[String], text: String, season: Option[String])
 
-  private val places = """\{ n:'([^']*)', q:'[^']*', c:\[([^\]]*)\], d:[^,]*, t:'([^']*)'""".r
+  private val places = """\{ n:'([^']*)', q:'[^']*', c:\[([^\]]*)\], d:[^,]*, t:'([^']*)'(?:, s:'([^']*)')?""".r
     .findAllMatchIn(page)
-    .map(m => Place(m.group(1), "'([a-z]+)'".r.findAllMatchIn(m.group(2)).map(_.group(1)).toList, m.group(3)))
+    .map(m => Place(m.group(1), "'([a-z]+)'".r.findAllMatchIn(m.group(2)).map(_.group(1)).toList, m.group(3), Option(m.group(4))))
     .toList
 
   test("every place is read") {
@@ -48,10 +48,10 @@ class UrsusSuite extends munit.FunSuite:
 
   test("every cinema with a regular programme is first under Kino, and nothing else is under it") {
     val wrong = places.collect {
-      case Place(name, cats, _) if occasional(name) && (!cats.contains("kultura") || cats.contains("kino")) => s"$name: $cats"
-      case Place(name, cats, _) if !occasional(name) && cinema.findFirstIn(name).isDefined != cats.contains("kino") =>
+      case Place(name, cats, _, _) if occasional(name) && (!cats.contains("kultura") || cats.contains("kino")) => s"$name: $cats"
+      case Place(name, cats, _, _) if !occasional(name) && cinema.findFirstIn(name).isDefined != cats.contains("kino") =>
         s"$name: $cats"
-      case Place(name, cats, _) if cats.contains("kino") && cats.head != "kino" => s"$name: $cats"
+      case Place(name, cats, _, _) if cats.contains("kino") && cats.head != "kino" => s"$name: $cats"
     }
     assertEquals(wrong, Nil)
   }
@@ -59,7 +59,7 @@ class UrsusSuite extends munit.FunSuite:
   test("a cultural centre is under Kultura, and first under Kino when it runs a cinema with a regular programme") {
     val centre = "Centrum Kultury|Ośrodek Kultury|Dom Kultury|Kulturoteka".r
     val wrong = places.collect {
-      case Place(name, cats, _) if centre.findFirstIn(name).isDefined &&
+      case Place(name, cats, _, _) if centre.findFirstIn(name).isDefined &&
             (if cinema.findFirstIn(name).isDefined then cats != List("kino", "kultura") else !cats.contains("kultura")) =>
         s"$name: $cats"
     }
@@ -69,7 +69,7 @@ class UrsusSuite extends munit.FunSuite:
   test("every stadium is under Mecze i koncerty") {
     // where you watch a match or a concert; a track you ride yourself is Aktywnie (Arena Pruszków)
     val stadium = "Stadion|Narodowy".r
-    val wrong = places.collect { case Place(name, cats, _) if stadium.findFirstIn(name).isDefined && !cats.contains("mecze") => s"$name: $cats" }
+    val wrong = places.collect { case Place(name, cats, _, _) if stadium.findFirstIn(name).isDefined && !cats.contains("mecze") => s"$name: $cats" }
     assertEquals(wrong, Nil)
   }
 
@@ -161,14 +161,29 @@ class UrsusSuite extends munit.FunSuite:
     assertEquals(wrong, Nil)
   }
 
-  test("no chain has more than three hypermarkets on the page") {
-    // A place counts for every chain its name or text names, unless as a supermarket (the Carrefour in Centrum Skorosze).
-    val chains = List("Kaufland", "Carrefour", "Auchan", "E.Leclerc", "Lidl", "Biedronka", "Netto", "Aldi", "Intermarché", "Stokrotka")
+  test("a chain has at most three big stores on the page, and besides them its biggest within 30 minutes' ride") {
+    // A place counts for every chain its name or text names, unless as a supermarket (the Carrefour in Centrum Skorosze);
+    // the one over three says it is the chain's biggest within 30 minutes.
+    val chains = List("Kaufland", "Carrefour", "Auchan", "E.Leclerc", "Lidl", "Biedronka", "Netto", "Aldi", "Intermarché", "Stokrotka",
+      "Selgros", "Eurospar")
     val over = for
-      chain <- chains
-      named  = s"(?<!supermarket )${java.util.regex.Pattern.quote(chain)}".r
-      n      = places.count(p => p.cats.contains("zakupy") && named.findFirstIn(s"${p.name} ${p.text}").isDefined)
-      if n > 3
-    yield s"$chain: $n"
+      chain  <- chains
+      named   = s"(?<!supermarket )${java.util.regex.Pattern.quote(chain)}".r
+      stores  = places.filter(p => p.cats.contains("zakupy") && named.findFirstIn(s"${p.name} ${p.text}").isDefined)
+      biggest = stores.exists(p => p.text.contains("największy") && p.text.contains("30 minut"))
+      if stores.size > (if biggest then 4 else 3)
+    yield s"$chain: ${stores.size}"
     assertEquals(over, Nil)
+  }
+
+  test("a sauna is in bold wherever a text names one") {
+    // **…** is the only markup a text has
+    val wrong = places.filter(p => "(?i)saun".r.findFirstIn(p.text.replaceAll("""\*\*[^*]+\*\*""", "")).isDefined).map(_.name)
+    assertEquals(wrong, Nil)
+  }
+
+  test("a bathing beach, an outdoor pool or a rink says when it runs") {
+    val seasonal = "(?i)kąpielisk|odkryt|zewnętrzn|ślizgawk|lodowisk".r
+    val wrong    = places.filter(p => seasonal.findFirstIn(p.text).isDefined && p.season.isEmpty).map(_.name)
+    assertEquals(wrong, Nil)
   }
