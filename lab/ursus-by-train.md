@@ -115,6 +115,13 @@ is that near; the nearest are Albatros (24 min), Mini Zoo (27), Kino ADA (28), S
   have (a wave pool, a long slide, a 50 m pool, a diving tower, a lazy river, a salt grotto) and warns,
   in bold too, when it is **closed at weekends** (the user, 2026-09-26). `**…**` in `t` is the page's
   only markup: it renders as bold, and `UrsusSuite` fails on a sauna that is not.
+- **Bathing sites**: every site on the sanepid's lists of bathing sites and of places occasionally used for
+  bathing (WSSE Warszawa, 2026) within about 2 km of a station or stop, at the stop nearest to it;
+  `UrsusSuite` lists them. The lists' Glinianka Hosera is Park Mazowsze's pond. Left out: Kąck (over 3 km
+  from any station), Zalew Zadębie in Skierniewice (over 3 km; the Łódź sanepid's list, which covers
+  Skierniewice and Łowicz, was not checked), the beaches on the Vistula (Poniatówka, Plaża Saska, Kopa
+  Cwila) and on the Świder in Otwock (none on the list), Park Wodny Moczydło (a pool 2 km from Cm.
+  Wolski, past the pools' 1.5 km), Baseny Błękit (no 2026 season found).
 - **Seasonal**: a place whose attraction runs part of the year only (a bathing beach, an outdoor pool, a
   rink) carries `s`, a few words on what and when, shown as a chip after the categories ("sezonowo: …").
 - **Fairs**: antiques, collectors' and flea markets, and the seasonal Nocny Market, held on set days.
@@ -221,6 +228,8 @@ misses a line or a station, draws a line the page no longer has, or a route no l
   no date filter; no parkrun; produce markets on their market days stay out.
 - 2026-09-26: zones shown where they start, 2 and 3, not as borders; a trip from the user starts in zone 1,
   so zone 1 has no mark (the user).
+- 2026-09-26: open-air bathing sites where one may swim in season, Jeziorko Czerniakowskie first; 187's
+  stop nearest to it and to Sadyba was missing (the user).
 
 ## Work log
 
@@ -270,6 +279,10 @@ misses a line or a station, draws a line the page no longer has, or a route no l
 - **2026-09-26, #25**: a line shows where zone 2 and zone 3 start and which ticket each needs; the
   "granica stref 1 i 2" chip is gone. Found: KM's Wspólny Bilet page lists the same border stations and
   zone 2 ends as WTP's; WTP warns that an accelerated KM train takes a ZTM ticket only to its last stop in
-  zone 2 (Otwock, not Otwock Śródborów).
+  zone 2 (Otwock, not Otwock Śródborów). Bathing sites (see Rules): Jeziorko Czerniakowskie at a new 187
+  stop, Goraszewska, with Cinema City Sadyba, which sat 1.3 km away at Stegny and is 130–190 m from
+  Goraszewska; Glinianki in Zielonka, Zalew Żyrardowski, the Bzura beach in Sochaczew and Wake Family in
+  Brwinów. Found: GIS's bathing service (sk.gis.gov.pl) asks for an hCaptcha, so the lists come from
+  WSSE Warszawa's PDFs; Sochaczew's and Brwinów's sites were on the list for August only.
 - Not checked so far: GTFS counts against KOLEO or the printed timetable; walking routes other than from
   Szamoty (distances are straight lines).
