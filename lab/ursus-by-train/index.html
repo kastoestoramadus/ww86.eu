@@ -1,4 +1,4 @@
-<!doctype html><html lang="pl"><head><meta charset=utf8><meta name="description" content="Co zobaczyć bez przesiadek z Szamot w warszawskim Ursusie: pociągi z Ursusa i Ursusa Północnego (R1 do Skierniewic, R3 do Łowicza, S1 do Otwocka), autobusy 517, 187, 177, 716, 207 i 401, a z Ursusa - Ratusza 194, 220 i 228, ze strefami biletowymi ZTM. Muzea, kina, zabytki, zieleń, zakupy i hipermarkety."><meta name="author" content="Waldemar Wosiński"><meta name="tdm-reservation" content="1"><link rel="license" href="../../copyright.html"><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<!doctype html><html lang="pl"><head><meta charset=utf8><meta name="description" content="Co zobaczyć bez przesiadek z Szamot w warszawskim Ursusie: pociągi z Ursusa i Ursusa Północnego (R1 do Skierniewic, R3 do Łowicza, S1 do Otwocka), autobusy 517, 187, 177, 716, 207 i 401, a z Ursusa - Ratusza 194, 220 i 228, oraz rzadsze pociągi, ze strefami biletowymi ZTM. Muzea, kina, zabytki, zieleń, zakupy i hipermarkety."><meta name="author" content="Waldemar Wosiński"><meta name="tdm-reservation" content="1"><link rel="license" href="../../copyright.html"><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
 <title>Z Ursusa pociągiem</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -8,7 +8,7 @@
 :root{
   --bg:#F3F4EF; --surface:#FFFFFF; --surface-2:#E8EAE3; --ink:#17201C; --muted:#58625C; --rule:#D3D8CE;
   --r1:#B9531A; --r1-soft:#F5E2D4; --r3:#136B75; --r3-soft:#D5EBED; --s1:#2D5BA8; --s1-soft:#DCE5F5;
-  --bus:#4E5B66; --bus-soft:#E1E6EA;
+  --bus:#4E5B66; --bus-soft:#E1E6EA; --rare:#7A6E52; --rare-soft:#ECE6D8;
   --c-kultura:#6A4C93; --c-mecze:#B23A48; --c-zabytki:#86662A; --c-natura:#3A7636; --c-aktywnie:#1C78A8; --c-zakupy:#A23B72; --c-kino:#2F3B45;
   --link:#136B75; --focus:#136B75;
   --display:"Barlow Condensed","Arial Narrow",system-ui,sans-serif;
@@ -19,7 +19,7 @@
   :root:not([data-theme="light"]){
     --bg:#0F1311; --surface:#161B18; --surface-2:#1F2622; --ink:#E3E8E4; --muted:#9BA69F; --rule:#2B332E;
     --r1:#E88A4F; --r1-soft:#37241A; --r3:#4DB3BD; --r3-soft:#132E2F; --s1:#86A8E6; --s1-soft:#1A2438;
-    --bus:#A7B6C3; --bus-soft:#1E252B;
+    --bus:#A7B6C3; --bus-soft:#1E252B; --rare:#C9B98F; --rare-soft:#2A261D;
     --c-kultura:#B6A0DD; --c-mecze:#EE8C96; --c-zabytki:#D6B46B; --c-natura:#8CC580; --c-aktywnie:#6DBBE6; --c-zakupy:#E48BB9; --c-kino:#C9D2DA;
     --link:#6CC3CC; --focus:#6CC3CC;
   }
@@ -27,7 +27,7 @@
 :root[data-theme="dark"]{
   --bg:#0F1311; --surface:#161B18; --surface-2:#1F2622; --ink:#E3E8E4; --muted:#9BA69F; --rule:#2B332E;
   --r1:#E88A4F; --r1-soft:#37241A; --r3:#4DB3BD; --r3-soft:#132E2F; --s1:#86A8E6; --s1-soft:#1A2438;
-  --bus:#A7B6C3; --bus-soft:#1E252B;
+  --bus:#A7B6C3; --bus-soft:#1E252B; --rare:#C9B98F; --rare-soft:#2A261D;
   --c-kultura:#B6A0DD; --c-mecze:#EE8C96; --c-zabytki:#D6B46B; --c-natura:#8CC580; --c-aktywnie:#6DBBE6; --c-zakupy:#E48BB9; --c-kino:#C9D2DA;
   --link:#6CC3CC; --focus:#6CC3CC;
 }
@@ -42,7 +42,7 @@ header.top h1{font-size:clamp(40px,7vw,68px);font-weight:700;letter-spacing:-.01
 header.top .lead{max-width:62ch;color:var(--muted);font-size:17px;margin:12px 0 0}
 header.top .zones{max-width:62ch;color:var(--muted);font-size:15px;margin:10px 0 0;padding-left:12px;border-left:2px dashed var(--rule)}
 .badge{display:inline-flex;align-items:center;justify-content:center;font-family:var(--mono);font-weight:600;font-size:13px;line-height:1;padding:5px 7px;border-radius:4px;color:#fff;letter-spacing:.02em}
-.badge.r1{background:var(--r1)} .badge.r3{background:var(--r3)} .badge.s1{background:var(--s1)} .badge.bus{background:var(--bus)}
+.badge.r1{background:var(--r1)} .badge.r3{background:var(--r3)} .badge.s1{background:var(--s1)} .badge.bus{background:var(--bus)} .badge.rare{background:var(--rare)}
 @media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .badge{color:#0F1311} }
 :root[data-theme="dark"] .badge{color:#0F1311}
 .tnum{font-variant-numeric:tabular-nums}
@@ -76,7 +76,7 @@ header.top .zones{max-width:62ch;color:var(--muted);font-size:15px;margin:10px 0
 #map path.m-st.m-multi.m-end{fill:var(--ink)}
 #map .m-dim{opacity:.15}
 #map .leaflet-tooltip.m-dim{opacity:.15!important} /* Leaflet sets a tooltip's opacity inline */
-#map.m-far .m-bus,#map.m-wide .m-minor{display:none}
+#map .m-off,#map.m-far .m-bus,#map.m-wide .m-minor{display:none}
 #map .leaflet-tooltip.m-lbl{background:none;border:0;box-shadow:none;padding:0;color:var(--ink);font:600 14px/1 var(--display);text-shadow:0 0 3px var(--bg),0 0 3px var(--bg),0 0 3px var(--bg)}
 #map .leaflet-tooltip.m-lbl::before{display:none}
 #map .leaflet-popup-content-wrapper,#map .leaflet-popup-tip{background:var(--surface);color:var(--ink)}
@@ -91,6 +91,7 @@ header.top .zones{max-width:62ch;color:var(--muted);font-size:15px;margin:10px 0
 .line-head{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:6px}
 .line-head h2{font-size:32px;font-weight:700}
 .line-head .from{color:var(--muted);font-size:14px;width:100%}
+.when{font-size:14px;margin:4px 0 0;max-width:62ch}
 ol.stops{list-style:none;margin:14px 0 0;padding:0}
 .stop{position:relative;padding:0 0 18px 34px}
 .stop::before{content:"";position:absolute;left:10px;top:6px;bottom:-6px;width:4px;background:var(--lc)}
@@ -119,7 +120,7 @@ ol.stops{list-style:none;margin:14px 0 0;padding:0}
 .meta a{margin-left:auto}
 .empty{font-size:13px;color:var(--muted);margin:6px 0 0;font-style:italic}
 .r1{--lc:var(--r1);--lcs:var(--r1-soft)} .r3{--lc:var(--r3);--lcs:var(--r3-soft)} .s1{--lc:var(--s1);--lcs:var(--s1-soft)}
-.bus{--lc:var(--bus);--lcs:var(--bus-soft)} .hub{--lcs:var(--surface-2)}
+.bus{--lc:var(--bus);--lcs:var(--bus-soft)} .rare{--lc:var(--rare);--lcs:var(--rare-soft)} .hub{--lcs:var(--surface-2)}
 
 /* Sections after the train lines */
 section.sec{margin-top:44px;border-top:1px solid var(--rule);padding-top:22px}
@@ -146,7 +147,7 @@ footer p{margin:0;max-width:90ch}
   <header class="top">
     <p class="eyebrow">Koleje Mazowieckie, SKM i autobusy ZTM · bez przesiadek · stan: wrzesień 2026</p>
     <h1>Z Ursusa pociągiem</h1>
-    <p class="lead">Opracowanie optymalne dla <strong>Szamot</strong>: stąd blisko do obu stacji — <strong>Warszawa Ursus</strong> i <strong>Warszawa Ursus Północny</strong> — i do przystanków autobusów 517, 187, 177, 716, 207 i 401; ok. 1 km dalej, z Ursusa - Ratusza, jeżdżą jeszcze 194, 220 i 228. Wypad bez samochodu i bez przesiadek: co jest przy stacjach na zachód — linią <span class="badge r1">R1</span> do Skierniewic i linią <span class="badge r3">R3</span> do Łowicza — i na wschód, linią <span class="badge s1">S1</span> przez centrum do Otwocka. Dalej autobusy. Pomijam rzadsze pociągi R2, R6, R7 i R61: R6, R7 i R61 jadą tam tylko w dni robocze, a z R2 w weekend nie wrócisz bez przesiadki po południu. Każda nazwa to link do Google Maps, a „trasa pieszo” pokazuje realny czas dojścia od stacji lub przystanku.</p>
+    <p class="lead">Opracowanie optymalne dla <strong>Szamot</strong>: stąd blisko do obu stacji — <strong>Warszawa Ursus</strong> i <strong>Warszawa Ursus Północny</strong> — i do przystanków autobusów 517, 187, 177, 716, 207 i 401; ok. 1 km dalej, z Ursusa - Ratusza, jeżdżą jeszcze 194, 220 i 228. Wypad bez samochodu i bez przesiadek: co jest przy stacjach na zachód — linią <span class="badge r1">R1</span> do Skierniewic i linią <span class="badge r3">R3</span> do Łowicza — i na wschód, linią <span class="badge s1">S1</span> przez centrum do Otwocka. Dalej autobusy i pociągi, które jeżdżą rzadko. Każda nazwa to link do Google Maps, a „trasa pieszo” pokazuje realny czas dojścia od stacji lub przystanku.</p>
     <p class="zones"><strong>Strefy biletowe ZTM.</strong> 1. strefa to Warszawa. Bilet na strefy 1 i 2 obowiązuje też w pociągach KM i SKM — do Pruszkowa (R1), Płochocina (R3) i Otwocka (S1). Stacje graniczne, Ursus-Niedźwiadek, Gołąbki i Falenica, należą do obu stref; dalej potrzebny jest bilet Kolei Mazowieckich. Na trasach granice są zaznaczone przerywaną linią.</p>
   </header>
 
@@ -188,7 +189,7 @@ footer p{margin:0;max-width:90ch}
 
   <figure class="routes-map" id="map-box">
     <div id="map" aria-label="Mapa połączeń"></div>
-    <figcaption><strong>Dokąd bez przesiadki.</strong> Pociągi grubą linią, autobusy cienką. Filtr linii wyróżnia jedną z nich; po kliknięciu stacji lub przystanku widać, co się tam zatrzymuje. Przystanki autobusów pojawiają się po przybliżeniu.<span class="touch"> Mapę przesuwa się dwoma palcami.</span></figcaption>
+    <figcaption><strong>Dokąd bez przesiadki.</strong> Pociągi grubą linią, autobusy cienką, rzadsze pociągi przerywaną. Filtr linii wyróżnia jedną z nich; po kliknięciu stacji lub przystanku widać, co się tam zatrzymuje. Przystanki autobusów pojawiają się po przybliżeniu.<span class="touch"> Mapę przesuwa się dwoma palcami.</span></figcaption>
   </figure>
 
   <div class="lines" id="lines"></div>
@@ -196,7 +197,7 @@ footer p{margin:0;max-width:90ch}
   <section class="sec" id="city-sec" aria-labelledby="city-h">
     <p class="eyebrow">Wspólny odcinek wszystkich pociągów</p>
     <h2 id="city-h">Po drodze w Warszawie</h2>
-    <p class="lead">Każdy pociąg z obu stacji jedzie do centrum tą samą linią średnicową i staje na tych samych stacjach: z Ursusa R1 i S1 razem w dzień co ok. 15 minut, z Ursusa Północnego R3 co ok. 30 minut. Do trzech z tych stacji dojeżdża bez przesiadki także autobus 517. Przy każdej stacji: czym i ile minut się jedzie.</p>
+    <p class="lead">Każdy pociąg z obu stacji jedzie do centrum tą samą linią średnicową i staje na tych samych stacjach: z Ursusa R1 i S1 razem w dzień co ok. 15 minut, z Ursusa Północnego R3 co ok. 30 minut, rzadziej też R2, R6 i R7. Do trzech z tych stacji dojeżdża bez przesiadki także autobus 517. Przy każdej stacji: czym i ile minut się jedzie.</p>
     <div class="city-grid" id="city"></div>
   </section>
 
@@ -207,6 +208,12 @@ footer p{margin:0;max-width:90ch}
     <div class="lines" id="buses"></div>
   </section>
 
+  <section class="sec" id="rare-sec" aria-labelledby="rare-h">
+    <p class="eyebrow">Bez przesiadki, ale kilka razy dziennie</p>
+    <h2 id="rare-h">Rzadsze pociągi</h2>
+    <p class="lead">Te pociągi jadą z Ursusa lub Ursusa Północnego dalej niż R1, R3 i S1, ale rzadko — zwykle tylko w dni robocze, a bezpośredni powrót bywa o zupełnie innej porze. Przed wyjazdem sprawdź rozkład. Pokazuję tylko stacje z atrakcjami i granice stref; sekcja jest widoczna przy filtrze „Wszystkie”. Pomijam R61 do Mostówki (2 pociągi w dni robocze) i pojedyncze pociągi do Siedlec (R2) i Dęblina (R7).</p>
+    <div class="lines" id="rare"></div>
+  </section>
 
   <footer>
     <p><strong>Jak czytać dojście:</strong> „przy stacji” i „przy przystanku” — kilka minut pieszo; pozostałe miejsca są w zasięgu spaceru, a „rower / autobus” — dalej; dokładny czas pokaże link „trasa pieszo”. Godziny otwarcia bywają sezonowe, przed wizytą zajrzyj na stronę miejsca.</p>
@@ -218,6 +225,7 @@ footer p{margin:0;max-width:90ch}
       <a href="https://koleo.pl/dworzec-pkp/warszawa-ursus/odjazdy" target="_blank" rel="noopener">KOLEO — odjazdy Warszawa Ursus</a>,
       <a href="https://koleo.pl/en/dworzec-pkp/warszawa-ursus-polnocny/odjazdy" target="_blank" rel="noopener">KOLEO — odjazdy Ursus Północny</a>,
       <a href="https://www.mazowieckie.com.pl/pl/podstawowe-informacje/rozklad-jazdy-pociagow-km-wazny-w-dniach-30-viii-24-x-2026r" target="_blank" rel="noopener">Koleje Mazowieckie — rozkład 30.08–24.10.2026</a>,
+      <a href="https://www.eostroleka.pl/nowy-rozklad-jazdy-kolei-mazowieckich-od-30-sierpnia,art130762.html" target="_blank" rel="noopener">eOstrołęka — ZKA Mostówka–Ostrołęka</a>,
       <a href="https://e-sochaczew.pl/mkw-sochaczew/strona-3769" target="_blank" rel="noopener">Muzeum Kolei Wąskotorowej — pociąg retro</a>,
       <a href="https://www.centrumkultury.eu/poczekalnia-pkp/o-nas/co-to-za-miejsce-poczekalnia-pkp/" target="_blank" rel="noopener">Poczekalnia PKP Grodzisk</a>,
       <a href="https://www.zyrardow.pl/muzeum-lniarstwa-im-filipa-de-girarda/" target="_blank" rel="noopener">Muzeum Lniarstwa</a>,
@@ -261,6 +269,11 @@ footer p{margin:0;max-width:90ch}
       <a href="https://amfiteatrbemowo.pl/" target="_blank" rel="noopener">Amfiteatr Bemowo</a>,
       <a href="https://pl.wikipedia.org/wiki/Cmentarz_Powsta%C5%84c%C3%B3w_Warszawy" target="_blank" rel="noopener">Cmentarz Powstańców Warszawy</a>,
       <a href="https://pl.wikipedia.org/wiki/Park_im._gen._J%C3%B3zefa_Sowi%C5%84skiego_w_Warszawie" target="_blank" rel="noopener">Park Sowińskiego</a>,
+      <a href="https://muzeumpilsudski.pl/zaplanuj-wizyte/" target="_blank" rel="noopener">Muzeum Józefa Piłsudskiego</a>,
+      <a href="https://mzm-minskmaz.pl/o-muzeum/" target="_blank" rel="noopener">Muzeum Ziemi Mińskiej</a>,
+      <a href="https://ossow1920.pl/" target="_blank" rel="noopener">Ossów — zamknięcie centrum</a>,
+      <a href="https://pl.wikipedia.org/wiki/Bazylika_%C5%9Awi%C4%99tej_Tr%C3%B3jcy_w_Koby%C5%82ce" target="_blank" rel="noopener">Bazylika w Kobyłce</a>,
+      <a href="https://muzeumnalkowskich.pl/godziny-pracy-muzeum/" target="_blank" rel="noopener">Muzeum Nałkowskich</a>,
       <a href="https://dkwlochy.pl/kino-ada" target="_blank" rel="noopener">Kino ADA</a>,
       <a href="https://pik.warszawa.pl/miejsca/kino-studyjne-ada-dom-kultury-wlochy/" target="_blank" rel="noopener">Kino ADA — PIK</a>,
       <a href="https://kinogram.pl/" target="_blank" rel="noopener">Kinogram</a>,
@@ -300,6 +313,10 @@ footer p{margin:0;max-width:90ch}
       <a href="https://mckmilanowek.pl/stare-kino-filia-mck/" target="_blank" rel="noopener">Stare Kino w Milanówku</a>,
       <a href="https://mckmilanowek.pl/aktualnosci/kino-kobiet/" target="_blank" rel="noopener">Kino Kobiet</a>,
       <a href="https://sklep.kaufland.pl/regulaminy/lista-sklepow.html" target="_blank" rel="noopener">lista sklepów Kaufland</a>,
+      <a href="https://cksulejowek.pl/kino-w-sulejowku/" target="_blank" rel="noopener">Kino-Teatr Kurtyna</a>,
+      <a href="https://www.filmweb.pl/showtimes/Sulej%C3%B3wek/Kino-Teatr+Kurtyna-2079" target="_blank" rel="noopener">jego repertuar</a>,
+      <a href="https://www.muzakino.pl/" target="_blank" rel="noopener">Kino Muza w Mińsku</a>,
+      <a href="https://www.kinowolomin.pl/" target="_blank" rel="noopener">Kino Kultura w Wołominie</a>,
       <a href="https://mshm.pl/o-muzeum/siedziba/" target="_blank" rel="noopener">siedziba MSHM</a>,
       <a href="https://pl.wikipedia.org/wiki/Arena_Pruszk%C3%B3w" target="_blank" rel="noopener">Arena Pruszków</a>,
       <a href="https://pl.wikipedia.org/wiki/Willa_%E2%80%9EWaleria%E2%80%9D_w_Milan%C3%B3wku" target="_blank" rel="noopener">Willa Waleria</a>,
@@ -323,6 +340,8 @@ footer p{margin:0;max-width:90ch}
       <a href="https://pl.wikipedia.org/wiki/Ogr%C3%B3d_Botaniczny_Uniwersytetu_Warszawskiego" target="_blank" rel="noopener">Ogród Botaniczny UW</a>,
       <a href="https://www.lazienki-krolewskie.pl/pl/zwiedzanie/godziny-otwarcia" target="_blank" rel="noopener">Łazienki — godziny</a>,
       <a href="https://www.lazienki-krolewskie.pl/pl/architektura/palac-na-wyspie" target="_blank" rel="noopener">Pałac na Wyspie</a>,
+      <a href="https://pl.wikipedia.org/wiki/Muzeum_J%C3%B3zefa_Pi%C5%82sudskiego_w_Sulej%C3%B3wku" target="_blank" rel="noopener">Milusin — pomnik historii</a>,
+      <a href="https://pl.wikipedia.org/wiki/Muzeum_im._Zofii_i_Wac%C5%82awa_Na%C5%82kowskich" target="_blank" rel="noopener">dom Nałkowskich</a>,
       <a href="https://www.plywalniakapry.pl/" target="_blank" rel="noopener">Pływalnia Kapry</a>,
       <a href="https://samorzad.gov.pl/web/powiat-pruszkowski/zapraszamy-wszystkich-mieszkancow-na-powiatowa-plywalnie" target="_blank" rel="noopener">pływalnia powiatowa w Pruszkowie</a>,
       <a href="https://smspruszkow.pl/p%C5%82ywalnia.html" target="_blank" rel="noopener">pływalnia SMS Pruszków</a>,
@@ -351,6 +370,9 @@ footer p{margin:0;max-width:90ch}
       <a href="https://sport.um.warszawa.pl/waw/osir-wlochy/-/gladka-godziny-otwarcia" target="_blank" rel="noopener">pływalnia OSiR Włochy</a>,
       <a href="https://sport.um.warszawa.pl/waw/osir-wlochy/obiekty-sportowe" target="_blank" rel="noopener">obiekty OSiR Włochy</a>,
       <a href="https://sport.um.warszawa.pl/waw/osir-wola/-/harmonogram-przerw-technologicznych-na-plywalniach-osir-wola-w-2026-roku" target="_blank" rel="noopener">Pływalnia Nowa Fala</a>,
+      <a href="https://sportsulejowek.pl/basen/" target="_blank" rel="noopener">Pływalnia Wilia</a>,
+      <a href="https://mosir.org.pl/obiekty/aquapark/aquapark/" target="_blank" rel="noopener">Aquapark w Mińsku</a>,
+      <a href="https://www.plywalniawolomin.pl/godziny-otwarcia" target="_blank" rel="noopener">Pływalnia Huragan</a>,
       <a href="https://eurobuildcee.com/news/42600-eurospar-w-blue-city-wystartowal" target="_blank" rel="noopener">Eurospar w Blue City</a>,
       <a href="https://www.selgros.pl/strefa-klienta/faq" target="_blank" rel="noopener">Selgros — kto może kupować</a>,
       <a href="https://www.selgros.pl/warszawa-polczynska" target="_blank" rel="noopener">Selgros Połczyńska</a>,
@@ -363,6 +385,7 @@ footer p{margin:0;max-width:90ch}
       <a href="https://torwar.cos.pl/7132/faq" target="_blank" rel="noopener">Hala COS Torwar</a>,
       <a href="https://torwar.cos.pl/" target="_blank" rel="noopener">COS Torwar Lodowisko</a>,
       <a href="https://www.ebilet.pl/miejsce/torwar" target="_blank" rel="noopener">Torwar — wydarzenia 2026</a>,
+      <a href="https://www.nocowanie.pl/kino_kultura_w_wolominie,162026.html" target="_blank" rel="noopener">Kino Kultura — opis</a>,
       <a href="https://eko.um.warszawa.pl/-/park-kombatantow" target="_blank" rel="noopener">Park Kombatantów</a>,
       <a href="https://izbapamieci.muzeumwarszawy.pl/" target="_blank" rel="noopener">Izba Pamięci przy Cmentarzu Powstańców</a>,
       <a href="https://minizoo.waw.pl/" target="_blank" rel="noopener">Mini Zoo Warszawa</a>,
@@ -401,6 +424,7 @@ footer p{margin:0;max-width:90ch}
       <a href="https://www.wodnypark.com.pl/basen-rekreacyjny/" target="_blank" rel="noopener">Warszawianka — basen rekreacyjny</a>,
       <a href="https://www.wodnypark.com.pl/2026/09/08/16-wrzesnia-otwieramy-wyremontowana-pierwsza-czesc-strefy-saun/" target="_blank" rel="noopener">Warszawianka — strefa saun</a>,
       <a href="https://www.wodnypark.com.pl/godziny-i-dni-otwarcia" target="_blank" rel="noopener">Warszawianka — godziny</a>,
+      <a href="https://mosir.org.pl/obiekty/lodowisko/" target="_blank" rel="noopener">lodowisko w Mińsku</a>,
       <a href="https://sport.um.warszawa.pl/waw/osir-ochota/-/plywalnia-otwarta-usypiskowa-18-park-szczesliwicki-" target="_blank" rel="noopener">odkryta pływalnia w Parku Szczęśliwickim</a>,
       <a href="https://sport.um.warszawa.pl/waw/osir-bemowo/-/plywalni-pingwin" target="_blank" rel="noopener">Pływalnia Pingwin</a>,
       <a href="https://sport.um.warszawa.pl/waw/crs-bielany/-/plywalnia-conrada-6" target="_blank" rel="noopener">pływalnia CRS Bielany</a>,
@@ -908,6 +932,63 @@ footer p{margin:0;max-width:90ch}
     ]}
   ];
 
+  var RARE = [
+    { id:'r2', badge:'R2', title:'Ursus Północny → Mińsk Mazowiecki', from:'Koleje Mazowieckie R2, przez centrum jak R1 i R3; do Sulejówka ok. 42 min, do Mińska ok. 65 min', when:[
+      ['Tam', 'w dni robocze 13 pociągów: z Ursusa 6:59, 7:26 i 8:00, z Ursusa Północnego 10 w godz. 11:00–20:00; w weekend 3, z Ursusa Północnego o 12:00, 13:00 i 16:41.'],
+      ['Z powrotem', 'w dni robocze 12 pociągów, ostatni z Mińska o 18:02; w weekend tylko rano (z Mińska 5:14, 8:40 i 9:36) — po południu wrócisz z przesiadką.']
+    ], stops:[
+      { n:'Warszawa Ursus Północny', q:'Warszawa Ursus Północny stacja kolejowa', terminus:true, blurb:'Start (rano z Warszawy Ursus). Przez centrum do Warszawy Wschodniej.' },
+      { n:'Warszawa Rembertów', q:'Warszawa Rembertów stacja kolejowa', minor:true },
+      { n:'Warszawa Wola Grzybowska', q:'Warszawa Wola Grzybowska stacja kolejowa', minor:true, zone:true },
+      { n:'Sulejówek', q:'Sulejówek stacja kolejowa', places:[
+        { n:'Muzeum Józefa Piłsudskiego', q:'Muzeum Józefa Piłsudskiego, Oleandrów 5, Sulejówek', c:['kultura','zabytki'], d:null, t:'Dworek Milusin, w którym Piłsudski mieszkał z rodziną w latach 1923–26, i nowy gmach z 2020 r. z wystawą stałą w podziemiach. We wtorki nieczynne, pt–nd 10–18. Dworek Milusin jest od 2020 r. pomnikiem historii.' },
+        { n:'Pływalnia Miejska Wilia', q:'Pływalnia Wilia, Paderewskiego 31, Sulejówek', c:['aktywnie'], d:null, t:'Miejska kryta pływalnia ze **strefą saun**.' }
+      ]},
+      { n:'Sulejówek Miłosna', q:'Sulejówek Miłosna stacja kolejowa', zEnd:true, places:[
+        { n:'Kino-Teatr Kurtyna', q:'Kino-Teatr Kurtyna, Armii Krajowej 34, Sulejówek', c:['kino'], d:null, t:'Kino na 116 miejsc w budynku parafii Przemienienia Pańskiego, z bieżącym repertuarem.' }
+      ]},
+      { n:'Mińsk Mazowiecki', q:'Mińsk Mazowiecki stacja kolejowa', terminus:true, places:[
+        { n:'Muzeum Ziemi Mińskiej', q:'Muzeum Ziemi Mińskiej, Okrzei 16, Mińsk Mazowiecki', c:['kultura'], d:null, t:'Historia miasta i regionu oraz pamiątki 7. Pułku Ułanów Lubelskich, w dworku z 1937 r.' },
+        { n:'Park i pałac Dernałowiczów', q:'Pałac Dernałowiczów, Warszawska 173, Mińsk Mazowiecki', c:['natura','zabytki'], d:null, t:'Zabytkowy park z pałacem, ok. 1,3 km od stacji.' },
+        { n:'Kino Muza', q:'Kino Muza, Jana Pawła II 23, Mińsk Mazowiecki', c:['kino'], d:null, t:'Kino w budynku Miejskiej Szkoły Artystycznej; wejście od zachodniej strony.' },
+        { n:'Aquapark MOSiR', q:'Aquapark, Wyszyńskiego 56, Mińsk Mazowiecki', c:['aktywnie'], d:null, t:'Basen sportowy, basen rekreacyjny ze sztuczną rzeką, 73-metrowa zjeżdżalnia i wanna z hydromasażem; codziennie 6–22. W tym samym budynku sztuczne lodowisko; otwarty w 2010 r.', s:'lodowisko zimą' }
+      ]}
+    ]},
+    { id:'r6', badge:'R6', title:'Ursus Północny → Tłuszcz', from:'Koleje Mazowieckie R6, przez centrum jak R1 i R3; do Wołomina ok. 52 min', when:[
+      ['Tam', 'tylko w dni robocze: z Ursusa Północnego 8:55, 15:30, 17:30 i 19:30, z Ursusa 16:29; do Wołomina także 7:11 z Ursusa Północnego (bez postoju w Kobyłce).'],
+      ['Z powrotem', 'z Wołomina 6 pociągów w dni robocze i 4 w weekend (6:22, 7:06, 14:59, 18:25).']
+    ], stops:[
+      { n:'Warszawa Ursus Północny', q:'Warszawa Ursus Północny stacja kolejowa', terminus:true, blurb:'Start (jeden pociąg z Warszawy Ursus). Przez centrum do Warszawy Wschodniej.' },
+      { n:'Warszawa Rembertów', q:'Warszawa Rembertów stacja kolejowa', minor:true },
+      { n:'Warszawa Mokry Ług', q:'Warszawa Mokry Ług stacja kolejowa', minor:true, zone:true },
+      { n:'Zielonka', q:'Zielonka stacja kolejowa', minor:true },
+      { n:'Kobyłka-Ossów', q:'Kobyłka-Ossów stacja kolejowa', places:[
+        { n:'Ossów — kaplica i cmentarz poległych w 1920 r.', q:'Kaplica Matki Boskiej Zwycięskiej, Matarewicza 152, Ossów', c:['zabytki'], d:'far', t:'Pole bitwy z 14 sierpnia 1920 r.: kaplica Matki Boskiej Zwycięskiej, cmentarz poległych i krzyż w miejscu śmierci ks. Ignacego Skorupki. Centrum informacyjne „Wrota Bitwy Warszawskiej” zamknięto z końcem 2025 r. Ok. 3 km od stacji.' }
+      ]},
+      { n:'Kobyłka', q:'Kobyłka stacja kolejowa', places:[
+        { n:'Bazylika Świętej Trójcy', q:'Bazylika Świętej Trójcy, Kościelna 2, Kobyłka', c:['zabytki'], d:null, t:'Późnobarokowy kościół z lat 1740–45 projektu Guida Antonia Longhiego, nazywany perłą baroku na Mazowszu.' }
+      ]},
+      { n:'Wołomin', q:'Wołomin stacja kolejowa', places:[
+        { n:'Muzeum Zofii i Wacława Nałkowskich', q:'Muzeum Nałkowskich, Nałkowskiego 17, Wołomin', c:['kultura','zabytki'], d:null, t:'„Dom nad Łąkami”, w którym mieszkali pisarka i jej ojciec, geograf. Wt–nd 10–15, w niedziele wstęp wolny. Drewniany dom z 1895 r., zbudowany przez Wacława Nałkowskiego.' },
+        { n:'Kino Kultura', q:'Kino Kultura, Mickiewicza 9, Wołomin', c:['kino','kultura'], d:null, t:'Kino ze sceną, na której wystawiane są też spektakle teatralne i kabarety.' },
+        { n:'Pływalnia OSiR Huragan', q:'Pływalnia OSiR Huragan, Korsaka 4, Wołomin', c:['aktywnie'], d:null, t:'Kryta pływalnia: pon.–pt. 7–22, weekendy 8–22; **sauny** suche i parowa, grota solna i studnia lodowa.' }
+      ]},
+      { n:'Zagościniec', q:'Zagościniec stacja kolejowa', minor:true, zEnd:true },
+      { n:'Tłuszcz', q:'Tłuszcz stacja kolejowa', terminus:true }
+    ]},
+    { id:'r7', badge:'R7', title:'Ursus → Pilawa', from:'Koleje Mazowieckie R7, przez centrum i Otwock, tą samą trasą co S1; do Pilawy ok. 1 h 35 min', when:[
+      ['Tam', 'tylko w dni robocze: z Ursusa 6:14, 13:48, 14:52, 15:52, 17:56 i 18:56, z Ursusa Północnego 8:10.'],
+      ['Z powrotem', 'z Pilawy 16 pociągów w dni robocze (ostatni 19:59), w weekend 7–8 (ostatni 18:51).']
+    ], stops:[
+      { n:'Warszawa Ursus', q:'Warszawa Ursus stacja kolejowa', terminus:true, blurb:'Start. Do Otwocka tą samą trasą co S1.' },
+      { n:'Warszawa Falenica', q:'Warszawa Falenica stacja kolejowa', minor:true, zone:true },
+      { n:'Otwock', q:'Otwock stacja kolejowa', minor:true },
+      { n:'Otwock Śródborów', q:'Otwock Śródborów stacja kolejowa', minor:true, zEnd:true },
+      { n:'Celestynów', q:'Celestynów stacja kolejowa', minor:true },
+      { n:'Pilawa', q:'Pilawa stacja kolejowa', terminus:true }
+    ]}
+  ];
+
   var BADGE = { r1:['r1','R1'], s1:['s1','S1'], r3:['r3','R3'], '517':['bus','517'], '187':['bus','187'], '194':['bus','194'], '228':['bus','228'] };
 
   var state = { line:'all', cat:'all', dist:'all' };
@@ -958,6 +1039,7 @@ footer p{margin:0;max-width:90ch}
     col.setAttribute('aria-label', 'Linia ' + line.badge + ', ' + line.title);
     var head = el('div', 'line-head', '<span class="badge ' + cls + '">' + line.badge + '</span><h2>' + esc(line.title) + '</h2><div class="from">' + esc(line.from) + '. ' + note + '</div>');
     col.appendChild(head);
+    (line.when || []).forEach(function(w){ col.appendChild(el('p', 'when', '<strong>' + esc(w[0]) + ':</strong> ' + esc(w[1]))); });
     var ol = el('ol', 'stops');
     line.stops.forEach(function(s){
       var li = el('li', 'stop' + (s.minor ? ' minor' : '') + (s.terminus ? ' terminus' : ''));
@@ -975,17 +1057,18 @@ footer p{margin:0;max-width:90ch}
 
   function show(id, visible){ document.getElementById(id).hidden = !visible; }
 
-  // The map draws every route column from routes.js, buses first so the trains lie on top. A pressed line
-  // filter dims what it does not name.
+  // The map draws every route column from routes.js, rare trains first so the rest lies on top. A pressed
+  // line filter dims what it does not name; rare trains, as in the list, show under "Wszystkie" only.
   var mapParts = [], mapView = null;
 
   function mapFilter(){
     if (mapView) mapView();
     mapParts.forEach(function(p){
-      var dim = state.line !== 'all' && p.lines.indexOf(state.line) < 0;
+      var off = !!p.rare && state.line !== 'all';
+      var dim = !off && state.line !== 'all' && p.lines.indexOf(state.line) < 0;
       var tip = p.layer.getTooltip && p.layer.getTooltip();
       [p.layer.getElement(), tip && tip.getElement()].forEach(function(e){
-        if (e) e.classList.toggle('m-dim', dim);
+        if (e) { e.classList.toggle('m-off', off); e.classList.toggle('m-dim', dim); }
       });
     });
   }
@@ -999,10 +1082,12 @@ footer p{margin:0;max-width:90ch}
       attribution:'&copy; ' + link('https://www.openstreetmap.org/copyright', 'OpenStreetMap') + ' · trasy: ' + link('https://mkuran.pl/gtfs/', 'GTFS') }).addTo(map);
 
     var routes = [].concat(
+      RARE.map(function(l){ return { line:l, f:'rare', cls:'rare', kind:'rare' }; }),
       BUSES.map(function(l){ return { line:l, f:l.f, cls:'bus', kind:'bus' }; }),
       LINES.map(function(l){ return { line:l, f:l.id, cls:l.id, kind:'train' }; }));
+    // A station's dot follows its frequent line: Otwock ends S1 but is a minor stop of R7.
     var onPage = {};
-    LINES.forEach(function(l){ l.stops.forEach(function(s){ onPage[s.n] = s; }); });
+    RARE.concat(LINES).forEach(function(l){ l.stops.forEach(function(s){ onPage[s.n] = s; }); });
     HUB.forEach(function(s){ onPage[s.n] = s; });
 
     // One dot per name: a station several lines call at, or a bus stop several buses share.
@@ -1010,13 +1095,13 @@ footer p{margin:0;max-width:90ch}
     function dot(name, ll, r, s){
       var d = dots[name];
       if (!d) {
-        d = dots[name] = { ll:ll, q:(s && s.q) || name + ' stacja kolejowa', lines:[], badges:[], bus:r.kind === 'bus', minor:true, end:false };
+        d = dots[name] = { ll:ll, q:(s && s.q) || name + ' stacja kolejowa', lines:[], badges:[], rare:true, bus:r.kind === 'bus', minor:true, end:false };
         order.push(name);
       }
       if (d.lines.indexOf(r.f) < 0) d.lines.push(r.f);
       var badge = '<span class="badge ' + r.cls + '">' + r.line.badge + '</span>';
       if (d.badges.indexOf(badge) < 0) d.badges.push(badge);
-      if (!d.cls) d.cls = r.cls;
+      if (r.kind !== 'rare') { d.rare = false; if (!d.cls) d.cls = r.cls; }
       if (s && !s.minor) d.minor = false;
       if (s && s.terminus) d.end = true;
       if (s && s.lines) s.lines.forEach(function(f){ if (d.lines.indexOf(f) < 0) d.lines.push(f); });
@@ -1031,14 +1116,16 @@ footer p{margin:0;max-width:90ch}
       if (r.kind === 'train') {
         mapParts.push({ layer:L.polyline(data.path, { className:'m-case', weight:9, interactive:false }).addTo(map), lines:[r.f] });
       }
-      var path = L.polyline(data.path, { className:cls, weight:r.kind === 'train' ? 5 : 3, interactive:false }).addTo(map);
-      mapParts.push({ layer:path, lines:[r.f] });
-      extend('all', data.path);
-      extend(r.f, data.path);
+      var path = L.polyline(data.path, { className:cls, weight:r.kind === 'train' ? 5 : 3, dashArray:r.kind === 'rare' ? '6 6' : null, interactive:false }).addTo(map);
+      mapParts.push({ layer:path, lines:[r.f], rare:r.kind === 'rare' });
+      if (r.kind !== 'rare') { extend('all', data.path); extend(r.f, data.path); }
       if (r.kind === 'bus') {
         r.line.stops.forEach(function(s){ dot(s.n, s.q.split(',').map(Number), r, s); });
       } else {
+        // A frequent train shows every station it calls at, a rare one the stations on the page.
+        var page = r.line.stops.map(function(s){ return s.n; });
         data.stops.forEach(function(st){
+          if (r.kind === 'rare' && page.indexOf(st[0]) < 0) return;
           dot(st[0], [st[1], st[2]], r, onPage[st[0]]);
         });
       }
@@ -1046,7 +1133,7 @@ footer p{margin:0;max-width:90ch}
 
     order.forEach(function(name){
       var d = dots[name];
-      var cls = 'm-st ' + d.cls + (d.bus ? ' m-bus' : '') + (d.badges.length > 1 && !d.bus ? ' m-multi' : '') + (d.end ? ' m-end' : d.minor ? ' m-minor' : '');
+      var cls = 'm-st ' + (d.cls || 'rare') + (d.bus ? ' m-bus' : '') + (d.badges.length > 1 && !d.bus ? ' m-multi' : '') + (d.end ? ' m-end' : d.minor ? ' m-minor' : '');
       var m = L.circleMarker(d.ll, { className:cls, radius:d.end ? 6 : (d.minor ? 3.5 : 5), weight:d.minor ? 2 : 3, fillOpacity:1 }).addTo(map);
       m.bindPopup('<strong>' + esc(name) + '</strong><div class="pl">' + d.badges.join('') + '</div>' + link(gm(d.q), d.bus ? 'przystanek na mapie ↗' : 'stacja na mapie ↗'));
       if (d.end) {
@@ -1054,7 +1141,7 @@ footer p{margin:0;max-width:90ch}
         var top = name === 'Warszawa Ursus Północny';
         m.bindTooltip(esc(name.replace(/^Warszawa /, '')), { permanent:true, direction:top ? 'top' : 'bottom', offset:[0, top ? -8 : 8], className:'m-lbl' + (d.bus ? ' m-bus' : '') });
       }
-      mapParts.push({ layer:m, lines:d.lines });
+      mapParts.push({ layer:m, lines:d.lines, rare:d.rare });
     });
 
     // Zoomed out, bus stops and then minor stations would crowd the lines.
@@ -1111,6 +1198,10 @@ footer p{margin:0;max-width:90ch}
     });
     show('bus-sec', busCount > 0);
 
+    var rare = document.getElementById('rare');
+    rare.innerHTML = '';
+    if (state.line === 'all') RARE.forEach(function(line){ total += routeNode(rare, line, 'rare', false, 'Pokazuję wybrane stacje.'); });
+    show('rare-sec', state.line === 'all');
 
     document.getElementById('count').textContent = total + ' ' + (total === 1 ? 'miejsce' : (total % 10 >= 2 && total % 10 <= 4 && (total % 100 < 12 || total % 100 > 14) ? 'miejsca' : 'miejsc'));
 

@@ -25,10 +25,11 @@ is that near; the nearest are Albatros (24 min), Mini Zoo (27), Kino ADA (28), S
 
 1. **Map**, under the filters: every route column as a line, with no places on it. Frequent trains are thick
    in their colours with every station they call at, R1 and R3 drawn from Warszawa Wschodnia because the
-   Po drodze cards have them cross the centre; buses thin, with the stops their columns list. A line
-   filter dims the rest and brings its line into view. Paths and station positions come from `routes.js`
-   (see Refreshing), the tiles from OpenStreetMap, credited on the map and in the footer. Leaflet 1.9.4
-   loads from cdnjs with SRI hashes: a new version needs new ones.
+   Po drodze cards have them cross the centre; buses thin, with the stops their columns list; rare
+   trains dashed, with their columns' stations, only under "Wszystkie". A line filter dims the rest and
+   brings its line into view. Paths and station positions come from `routes.js` (see Refreshing), the
+   tiles from OpenStreetMap, credited on the map and in the footer. Leaflet 1.9.4 loads from cdnjs with
+   SRI hashes: a new version needs new ones.
 2. **Frequent trains**: a column per line and direction, every station (minor ones as small dots), up to
    the regular terminus: R1 Skierniewice, R3 Łowicz, S1 Otwock.
 3. **Po drodze w Warszawie**: the stations every train from both home stations stops at, Włochy to
@@ -36,14 +37,17 @@ is that near; the nearest are Albatros (24 min), Mini Zoo (27), Kino ADA (28), S
    a station lives only here, and route columns point to it. Zachodnia's card holds only the Aldi under
    its platforms; Blue City and Reduta (1–1.2 km) sit at the Berestecka stop of 517 and 187.
 4. **Buses** from the three stops and from Ursus - Ratusz: a column per line and direction, selected stops only.
+5. **Rare trains**: direct but a few times a day or weekdays only; stations with places and zone borders
+   only, a "Tam / Z powrotem" summary, shown only under the "Wszystkie" line filter.
 
 ## Rules
 
-- **Only frequent trains**: daily, about ten departures a day or more also at weekends, and a direct
-  train back every evening. September 2026, weekday/weekend, and the last train back: R1 Skierniewice
-  25/21, 22:27; R3 Łowicz 14/12, 21:49; S1 Otwock 19/19, 23:16. Left out, and said so on the page: R2 to
-  Mińsk (13/3, and at weekends nothing back after 9:36) and Siedlce (one train), R6 to Wołomin and
-  Tłuszcz (6/0), R7 to Pilawa (7/0) and Dęblin (one train), R61 to Mostówka (2/0).
+- **Frequent** = daily, about ten departures a day or more also at weekends; the rest is rare. A rare
+  train stays when it runs often on weekdays, about five times a day or more, with a direct train back
+  the same day, weekends or not; one or two a day are too few (the user, 2026-09-26). September 2026,
+  weekday/weekend: R1 Skierniewice 25/21, R3 Łowicz 14/12, S1 Otwock 19/19; R2 Mińsk 13/3, R6 Wołomin
+  6/0, R7 Pilawa 7/0. Left out, and said so on the page: R2 to Siedlce and R7 to Dęblin (one train
+  each), R61 to Mostówka (two).
 - **Buses** on the page and why: 517 (fast, every 15 min also at weekends), 187 (far but slow), 177
   (Bemowo), 716 (Mon–Sat, for the shops at both ends), 207 (loops within Ursus, but stops 160–240 m from
   Centrum Skorosze and Leroy Merlin, where 517 is 700 m away), 401 (weekdays only; the only direct line to
@@ -55,9 +59,9 @@ is that near; the nearest are Albatros (24 min), Mini Zoo (27), Kino ADA (28), S
   stops at PKP Ursus). The hop of 517, 187 and 177 to the Ursus-Niedźwiadek loop is a
   sentence in the start stop's blurb.
 - **Ticket zones**: zone 1 is Warsaw; a 1+2 ticket is valid on KM and SKM trains up to Pruszków (R1),
-  Płochocin (R3) and Otwock, where S1 ends, in zone 2. Border stops belong to both: Ursus-Niedźwiadek,
-  Gołąbki, Falenica, and Ursus - Sanktuarium on 716. `zone:true` marks a border, `zEnd:true` the last
-  stop inside zone 2.
+  Płochocin (R3), Otwock Śródborów (R7; S1 ends at Otwock, in zone 2), Sulejówek Miłosna (R2), Zagościniec
+  (R6). Border stops belong to both: Ursus-Niedźwiadek, Gołąbki, Falenica, Wola Grzybowska, Mokry Ług, and
+  Ursus - Sanktuarium on 716. `zone:true` marks a border, `zEnd:true` the last stop inside zone 2.
 - **A place** is `{ n, q, c, d, t }`. `q` is a Google Maps query; bus stops use their GTFS coordinates,
   because a stop name is ambiguous. `d` is `'at'` up to about 400 m, `null` for a walk, `'far'` for a bike
   or bus ride with "Ok. N km od stacji." in `t`; give the distance in `t` for walks of a kilometre or more
@@ -151,9 +155,9 @@ python3 lab/ursus-by-train.py
 Downloads the ZTM and Koleje Mazowieckie/SKM GTFS feeds from https://mkuran.pl/gtfs/, picks a typical
 Tuesday, Saturday and Sunday (skipping one-off days), and prints departures per line, direction and
 terminus, daytime gaps, median ride times to the hub stations and the bus stops with places, and the
-direct trains there and back to the far stations, how many and the first and last, which decide whether
-a line stays (see Rules). After a timetable change (the KM timetable on the page runs until 24 October
-2026) update the `from` texts, the hub ride times, the "stan:" date and the footer note on counted days.
+direct trains there and back for the rare destinations. After a timetable change (the KM timetable on the
+page runs until 24 October 2026) update the `from` and `when` texts, the hub ride times, the "stan:" date
+and the footer note on counted days.
 
 ```bash
 python3 lab/ursus-by-train.py --map
@@ -189,9 +193,8 @@ misses a line or a station, draws a line the page no longer has, or a route no l
   Stadion Znicza, the Służew pond park). Left out of them: Highline in Varso (a viewpoint fits no
   category: the user names one), Fort VIIA (remnants, nothing shows it open to visitors), Znicz's hall
   (no capacity found).
-- 2026-09-26: no rare trains. A line stays only when it runs daily and has a direct train back in the
-  evening; one train a day is far too little (the user). R2, R6 and R7 had a section of their own, shown
-  under "Wszystkie" only, and dashed lines on the map out to Siedlce and Dęblin.
+- 2026-09-26: rare trains stay when they run often on weekdays, even with none at weekends; one train a
+  day to Siedlce or Dęblin is far too little, R61's two too few (the user). R7 now ends at Pilawa.
 
 ## Work log
 
@@ -228,9 +231,10 @@ misses a line or a station, draws a line the page no longer has, or a route no l
   measure is checked against a walk the user knows first; Stacja Muzeum is shut 21 September–2 October
   2026; the Aldi at Warszawa Zachodnia (February 2026) is the chain's first at a station and opens on
   Sundays too.
-- **2026-09-26, #23**: rare trains off the page and the map (see Decisions), 15 places with them, among
-  them the Piłsudski museum in Sulejówek and the pools in Sulejówek, Mińsk and Wołomin. Found: #20 and
-  #21 had merged into the branches they were stacked on, not master; #22 landed them (see
-  [PULL_REQUESTS.md](../PULL_REQUESTS.md)).
+- **2026-09-26, #23**: Siedlce and Dęblin off R2 and R7, with their three places (the El Greco museum,
+  Helios, the Air Force Museum); R7 ends at Pilawa and has no places yet. Candidates near its stations,
+  not checked: the nature reserves Grądy Celestynowskie (1.5 km from Celestynów) and Rogalec (1.6 km from
+  Pilawa), Pilawa's cultural centre (540 m). Found: #20 and #21 had merged into the branches they were
+  stacked on, not master; #22 landed them (see [PULL_REQUESTS.md](../PULL_REQUESTS.md)).
 - Not checked so far: GTFS counts against KOLEO or the printed timetable; walking routes other than from
   Szamoty (distances are straight lines).

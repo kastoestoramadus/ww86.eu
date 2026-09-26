@@ -49,7 +49,7 @@ object Catalog:
     LabItem(
       slug = "ursus-by-train",
       title = "Out of Warsaw by train, from Ursus",
-      blurb = "A day out with no car and no change, planned from Szamoty in Ursus: museums, cinemas, monuments, parks and shops by the stations of three train lines, to Skierniewice, Łowicz and Otwock, and nine bus lines, with ticket zones marked. A map of every route, filters and a walking route from each stop. Timetables as of September 2026.",
+      blurb = "A day out with no car and no change, planned from Szamoty in Ursus: museums, cinemas, monuments, parks and shops by the stations of three train lines, to Skierniewice, Łowicz and Otwock, and nine bus lines, with rarer trains apart and ticket zones marked. A map of every route, filters and a walking route from each stop. Timetables as of September 2026.",
       tech = List("JavaScript", "Leaflet"),
       year = 2026,
       language = Language.Polish

@@ -18,6 +18,7 @@ HOME_STOPS = ('Lalki', 'Habicha', 'Gierdziejewskiego', 'Ursus - Ratusz')
 CENTRE = ('Warszawa Włochy', 'Warszawa Ochota', 'Warszawa Śródmieście', 'Warszawa Powiśle', 'Warszawa Stadion',
           'Warszawa Wschodnia')
 FAR = ('Żyrardów', 'Skierniewice', 'Sochaczew', 'Łowicz Główny', 'Otwock')
+RARE = ('Sulejówek', 'Mińsk Mazowiecki', 'Siedlce', 'Kobyłka-Ossów', 'Kobyłka', 'Wołomin', 'Pilawa', 'Dęblin')
 BUS_TARGETS = {
     '517': ('Berestecka', 'Dw. Zachodni', 'Pl. Zawiszy', 'Dw. Centralny', 'Centrum', 'Pl. Trzech Krzyży'),
     '187': ('Dw. Zachodni', 'Pomnik Lotnika', 'Metro Politechnika', 'Pl. Na Rozdrożu', 'Legia - Stadion', 'Stegny'),
@@ -128,8 +129,9 @@ def trains(z, days):
     for (a, b), v in sorted(ride.items()):
         print(f'  {a:24} -> {b:22} {statistics.median(v):5}')
 
-    print('\n== Direct trains there and back: how many a day, first and last departure')
-    for dest in FAR:
+    print('\n== Rare destinations: direct trains there and back (U = Ursus, UP = Ursus Północny)')
+    short = {'Warszawa Ursus': 'U', 'Warszawa Ursus Północny': 'UP'}
+    for dest in RARE:
         for label, frm, to in (('there', HOME_STATIONS, (dest,)), ('back', (dest,), HOME_STATIONS)):
             got = collections.defaultdict(list)
             for tid, st in seq.items():
@@ -138,10 +140,10 @@ def trains(z, days):
                 j = next((j for j in range(i + 1, len(names)) if names[j] in to and st[j]['drop_off_type'] != '1'), None) if i is not None else None
                 if j is None:
                     continue
+                at = short.get(names[i]) or short.get(names[j])
                 for k in on(tid):
-                    got[k].append(st[i]['departure_time'][:5])
-            print(f'  {dest:15} {label:5} ' + ' | '.join(
-                f"{k} {len(got[k]):2} {min(got[k], default='-')}–{max(got[k], default='-')}" for k in days))
+                    got[k].append(f"{st[i]['departure_time'][:5]}({at})")
+            print(f'  {dest:17} {label:5} ' + ' | '.join(f"{k} {len(got[k])}: {' '.join(sorted(got[k]))}" for k in days))
 
 
 def buses(z, days):
@@ -202,7 +204,7 @@ def page_lines():
         return page[start:page.index('\n  ];', start)]
 
     lines = []
-    for name, bus in (('LINES', False), ('BUSES', True)):
+    for name, bus in (('LINES', False), ('BUSES', True), ('RARE', False)):
         for entry in block(name).split("\n    { id:'")[1:]:
             line = re.search(r"f:'([^']*)'" if bus else r"badge:'([^']*)'", entry).group(1)
             stops = re.findall(r"^      \{ n:'([^']*)', q:'([^']*)'", entry, re.M)
