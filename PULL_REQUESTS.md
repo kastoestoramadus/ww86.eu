@@ -42,6 +42,15 @@ link. In this order:
 4. **Tell the user about the PR only after that**, in one message with the PR link and the same preview
    links. If the wait printed `CHECKS FAILED` or `NOT READY`, report that, never a link.
 
+## Stacked pull requests
+
+A PR opened on another PR's branch merges into that branch, never into master. Once its base PR is merged,
+move it onto master before it is merged itself: the base is squashed, so rebase the stacked branch
+(`git rebase --onto origin/master <the base branch's last commit>`), push it and change its base through
+REST (`gh api -X PATCH repos/kastoestoramadus/ww86.eu/pulls/<N> -f base=master`). #20 and #21 were merged
+into their stacked bases and missed master until a later PR landed them (2026-09-26). When you tell the user
+about a stacked PR, say which PR to merge first and that you retarget this one afterwards.
+
 ## gh 2.45
 
 - `gh pr checks` has no `--json`. A loop that parses JSON from it gets "unknown flag", and with the error
