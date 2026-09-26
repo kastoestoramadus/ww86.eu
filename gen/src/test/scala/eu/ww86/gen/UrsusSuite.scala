@@ -73,6 +73,21 @@ class UrsusSuite extends munit.FunSuite:
     assertEquals(wrong, Nil)
   }
 
+  // A fair's name says what it is: antiques, collectors', flea market, the seasonal food market.
+  private val fair = "Targ|Giełda|Pchli|Market".r
+
+  test("every fair is under Targi i giełdy, and nothing else is") {
+    val wrong = places.collect { case Place(name, cats, _, _) if fair.findFirstIn(name).isDefined != cats.contains("targi") => s"$name: $cats" }
+    assertEquals(wrong, Nil)
+  }
+
+  test("a fair's description says on which days it is held") {
+    // there is no date filter; the day of the week or of the month is in the text
+    val day   = "poniedział|wtor|środ|czwart|piąt|sobot|niedziel".r
+    val wrong = places.filter(p => p.cats.contains("targi") && day.findFirstIn(p.text).isEmpty).map(_.name)
+    assertEquals(wrong, Nil)
+  }
+
   private type Point = (Double, Double)
 
   /** A route column of the page; `stops` are (name, q), and a bus stop's q is its coordinates. */
