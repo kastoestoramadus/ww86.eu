@@ -90,8 +90,9 @@ class UrsusSuite extends munit.FunSuite:
 
   private type Point = (Double, Double)
 
-  /** A route column of the page; `stops` are (name, q), and a bus stop's q is its coordinates. */
-  private case class Line(id: String, bus: Boolean, stops: List[(String, String)])
+  /** A route column of the page; `stops` are (name, q), and a bus stop's q is its coordinates. `zones` are the
+    * stops after which a ticket zone starts, with its number. */
+  private case class Line(id: String, bus: Boolean, stops: List[(String, String)], zones: List[(String, Int)])
 
   private def block(name: String): String =
     val start = page.indexOf(s"var $name = [")
@@ -101,7 +102,8 @@ class UrsusSuite extends munit.FunSuite:
   private val lines = List("LINES" -> false, "BUSES" -> true, "RARE" -> false).flatMap { (name, bus) =>
     block(name).split("\n    \\{ id:'").toList.tail.map { entry =>
       val stops = """(?m)^      \{ n:'([^']*)', q:'([^']*)'""".r.findAllMatchIn(entry).map(m => m.group(1) -> m.group(2))
-      Line(entry.takeWhile(_ != '\''), bus, stops.toList)
+      val zones = """(?m)^      \{ n:'([^']*)',[^\n]*? zone:(\d)""".r.findAllMatchIn(entry).map(m => m.group(1) -> m.group(2).toInt)
+      Line(entry.takeWhile(_ != '\''), bus, stops.toList, zones.toList)
     }
   }
 
@@ -184,6 +186,22 @@ class UrsusSuite extends munit.FunSuite:
       off     = metres(p, if i == points.size - 1 then List(r.path.last) else r.path)
       if off > 50
     yield f"${l.id}, stop ${i + 1}: $off%.0f m"
+    assertEquals(wrong, Nil)
+  }
+
+  test("a line shows where zone 2 starts, after a border stop, and zone 3 after the last stop a 1+2 ticket reaches") {
+    // The trip starts in zone 1. ZTM has two zones, a border stop is in both, and past zone 2 a KM ticket is
+    // needed: the page calls that zone 3. Stations as the Wspólny Bilet lists them, and 716's border stop.
+    val borders = Set("Warszawa Ursus-Niedźwiadek", "Warszawa Gołąbki", "Warszawa Choszczówka", "Warszawa Wola Grzybowska",
+      "Warszawa Zacisze-Wilno", "Warszawa Mokry Ług", "Warszawa Falenica", "Warszawa Jeziorki", "Warszawa Lotnisko Chopina",
+      "Ursus - Sanktuarium")
+    val lastIn2 = Set("Pruszków", "Płochocin", "Legionowo Przystanek", "Legionowo Piaski", "Sulejówek Miłosna", "Zagościniec",
+      "Otwock Śródborów", "Zalesie Górne")
+    val wrong = for
+      l       <- lines
+      expected = l.stops.map(_._1).collect { case n if borders(n) => n -> 2; case n if lastIn2(n) => n -> 3 }
+      if l.zones != expected
+    yield s"${l.id}: ${l.zones}, expected $expected"
     assertEquals(wrong, Nil)
   }
 
