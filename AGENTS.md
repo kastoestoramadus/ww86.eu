@@ -1,9 +1,8 @@
 # AGENTS.md
 
-Guide for AI coding agents working in this repository. This file holds what every task needs; the rest is
-split by topic, so read a topic file only when your task touches it. **Keep them up to date**: a change to
-the build, deployment, dependencies or conventions, or a new gotcha, updates the file that owns the topic
-in the same change. Each fact lives in one file.
+Guide for AI coding agents. This file holds what every task needs; read a topic file only when your task
+touches it. **Keep them up to date**: a change to the build, deployment, dependencies or conventions, or a new
+gotcha, updates the file that owns the topic in the same change. Each fact lives in one file.
 
 ## What this is
 
@@ -24,6 +23,7 @@ URLs from here either: Disqus threads and RSS GUIDs over there are keyed by URL.
 | The workflows, `scripts/`, `gh-pages`, a preview or production that looks wrong | [DEPLOY.md](DEPLOY.md) |
 | The domain, DNS records, `www` | [DNS.md](DNS.md) |
 | Opening a PR, or telling the user about one | [PULL_REQUESTS.md](PULL_REQUESTS.md) |
+| Checking a page in a real browser (Playwright, headless Chromium) | [BROWSER.md](BROWSER.md) |
 
 Link topic files, never import them with `@file`: an import loads them into every session again.
 
@@ -37,13 +37,6 @@ sbt "~core/testQuick"    # fast loop while changing logic
 python3 -m http.server -d target/site 4001   # serve it on http://127.0.0.1:4001
 ./scripts/test-publish-pages                 # the deploy script against a local bare repo, 1 second
 ```
-
-**In a browser**: `playwright-core@1.63.0` from npm in your scratchpad, browsers in `~/.cache/ms-playwright`.
-On this WSL unpack `libnspr4 libnss3 libasound2t64` without sudo (`apt-get download`, `dpkg-deb -x <deb>
-<scratch>/libs`) and run with `LD_LIBRARY_PATH=<scratch>/libs/usr/lib/x86_64-linux-gnu`. Sites that refuse
-curl, WebFetch and the headless shell (Leroy Merlin, Carrefour, Facebook) open in the full
-`chromium-1243/chrome-linux64/chrome`, headless, with a desktop user agent and
-`--disable-blink-features=AutomationControlled`; `DISPLAY=:0` (WSLg) gives a window if the user must log in.
 
 ## Rules for every change
 
