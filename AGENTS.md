@@ -66,3 +66,11 @@ python3 -m http.server -d target/site 4001   # serve it on http://127.0.0.1:4001
   `git worktree add <scratchpad>/<name> -b <branch> origin/master`. Several agent sessions share this
   checkout; a `git checkout` in it switches the branch under all of them, and another session's next
   commit lands on your branch (2026-09-24).
+
+## Commit and PR attribution
+
+- A commit carries no `Co-Authored-By:` trailer for an AI. Its message body ends with one line per helper,
+  `Helped by: <model-id>/<effort> by <coding assistant>`, e.g. `Helped by: haiku-5.5/m by Claude Code`.
+- A PR body ends with `Generated with <model-id>/<effort> through [<tool>](<url>)`, then one `Revised by` or
+  `Reviewed by` line per later pass in the same form.
+- Effort is `l`, `m`, `h`, `xh` or `max`, as given to the agent. Older commits keep their wording.
