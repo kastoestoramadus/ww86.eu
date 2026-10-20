@@ -23,10 +23,29 @@ object Pages:
   private val shareImage = s"https://${Site.domain}/share.png"
   private val shareAlt   = s"The ${Site.domain} share card: ${Site.author}, ${Site.tagline}"
 
+  /** The hero's contour-line field: strata wandering like wind through grass, drawn in code in the
+    * site's own colours (no photography exists for the hub; this is honest code-native art).
+    * Decorative only: `aria-hidden`, no text, nothing to load.
+    */
+  private val fieldArt: Frag =
+    raw(
+      s"""<svg class="field" aria-hidden="true" focusable="false" viewBox="0 0 672 132">
+         |<g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+         |<path d="M-2 114 C 120 102, 260 120, 380 110 C 500 100, 590 114, 674 106"/>
+         |<path d="M-2 96 C 110 108, 250 88, 372 96 C 494 104, 588 86, 674 94"/>
+         |<path d="M-2 80 C 96 66, 210 90, 336 76 C 462 62, 570 88, 674 74" stroke="var(--accent)" stroke-width="2" opacity="0.55"/>
+         |<path d="M-2 58 C 130 46, 240 70, 360 58 C 480 46, 580 66, 674 56"/>
+         |<path d="M-2 42 C 110 52, 250 30, 370 42 C 490 54, 590 32, 674 40"/>
+         |<path d="M-2 26 C 140 14, 280 34, 420 24 C 540 16, 610 30, 674 22" stroke="var(--accent)" opacity="0.35"/>
+         |</g>
+         |</svg>"""
+    )
+
   def landing: String =
     val at = At(0)
     layout("Waldemar Wosiński", Site.description, at, canonical = "")(
       section(cls := "hero")(
+        fieldArt,
         h1(Site.author),
         p(cls := "tagline")(Site.tagline),
         p(cls := "links")(
@@ -186,28 +205,29 @@ object Pages:
   private def glyph(slug: String): Frag =
     val mark = slug match
       case "scala-to-java" =>
-        """<path d="M5 6 L12 14 L5 22" fill="none" stroke="currentColor" stroke-width="2.5"
-          | stroke-linecap="round" stroke-linejoin="round"/>
-          |<path d="M23 6 L16 14 L23 22" fill="none" stroke="currentColor" stroke-width="2.5"
-          | stroke-linecap="round" stroke-linejoin="round"/>
-          |<circle cx="14" cy="14" r="2.2" fill="var(--accent)"/>""".stripMargin
+        """<path d="M14 25 C 14 19, 14 12, 14 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+          |<path d="M14 14 C 12 8, 7 5.5, 3 6.5 C 4 12, 9 15.5, 14 14 Z" fill="var(--accent)"/>
+          |<path d="M14 11 C 16 6, 20.5 3.8, 25 4.8 C 24 10, 19 12.8, 14 11 Z" fill="currentColor"/>""".stripMargin
       case "digits" =>
+        // a phyllotaxis: seeds on the golden-angle spiral a sunflower grows
         """<g fill="currentColor">
-          |<circle cx="7" cy="14" r="2.2"/><circle cx="14" cy="7" r="2.2"/><circle cx="14" cy="21" r="2.2"/>
-          |<circle cx="21" cy="14" r="2.2"/><circle cx="7" cy="21" r="2.2"/><circle cx="21" cy="7" r="2.2"/>
+          |<circle cx="11.5" cy="16.3" r="1.5"/><circle cx="17.6" cy="18.7" r="1.6"/>
+          |<circle cx="7.3" cy="12.8" r="1.65"/><circle cx="11.8" cy="22" r="1.75"/>
+          |<circle cx="9.8" cy="6" r="1.8"/><circle cx="23" cy="17.3" r="1.85"/>
+          |<circle cx="4.6" cy="17.9" r="1.9"/><circle cx="18.5" cy="4.3" r="1.95"/>
           |</g>
           |<g fill="var(--accent)">
-          |<circle cx="7" cy="7" r="2.2"/><circle cx="14" cy="14" r="2.2"/><circle cx="21" cy="21" r="2.2"/>
+          |<circle cx="14.4" cy="9.2" r="1.55"/><circle cx="20.4" cy="9.9" r="1.7"/>
           |</g>""".stripMargin
       case "ursus-by-train" =>
-        """<path d="M3.5 19 H24.5" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
-          |<circle cx="7" cy="19" r="2.6" fill="currentColor"/>
-          |<circle cx="14" cy="19" r="2.6" fill="currentColor"/>
-          |<circle cx="21" cy="19" r="2.6" fill="var(--accent)"/>
-          |<rect x="9" y="5.5" width="10" height="7" rx="2" fill="none" stroke="currentColor" stroke-width="2"/>""".stripMargin
+        """<path d="M3.5 22.5 C 9 18, 8.5 12, 14 11.5 C 19.5 11, 20 15.5, 24.5 10.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+          |<circle cx="3.5" cy="22.5" r="2.1" fill="currentColor"/>
+          |<circle cx="8.75" cy="15.5" r="1.7" fill="currentColor"/>
+          |<circle cx="19.6" cy="12.7" r="1.7" fill="currentColor"/>
+          |<circle cx="24.5" cy="10.5" r="2.3" fill="var(--accent)"/>""".stripMargin
       case _ =>
-        """<circle cx="14" cy="14" r="9" fill="none" stroke="currentColor" stroke-width="2.5"/>
-          |<circle cx="14" cy="14" r="3" fill="var(--accent)"/>""".stripMargin
+        """<path d="M14 4.5 C 20.5 4.5, 24.5 9, 24.5 14.5 C 24.5 20.5, 19.5 23.5, 13.5 23.5 C 8 23.5, 3.5 19.5, 3.5 14 C 3.5 8.5, 8 4.5, 14 4.5 Z" fill="none" stroke="currentColor" stroke-width="2.2"/>
+          |<circle cx="10.5" cy="11.5" r="2.2" fill="var(--accent)"/>""".stripMargin
     raw(
       s"""<svg class="glyph" aria-hidden="true" focusable="false" viewBox="0 0 28 28">$mark</svg>"""
     )
