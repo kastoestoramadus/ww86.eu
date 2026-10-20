@@ -1,0 +1,232 @@
+:root {
+  /* palette: an ink sketchbook on a night desk — deep ink-violet ground, parchment text,
+     one gold accent; every pair passes AA */
+  --bg: #181521;
+  --surface: #211d2e;
+  --border: #37313f;
+  --border-strong: #918ba0; /* interactive control boundaries: 4.9:1 on the ground */
+  --text: #efe7d6;
+  --muted: #a89fb0;
+  --accent: #d9a04b;
+  --ink-line: #cfc6e8;   /* illustration strokes: chalk-lilac ink */
+  --wash: rgba(217, 160, 75, 0.16); /* a marker swipe over the special numbers */
+  --max: 42rem; /* one spine: ~75 characters of body text, cards included */
+
+  /* the five font sizes of the site; body sets the 16px root */
+  --text-xs: 0.8125rem;
+  --text-s: 0.875rem;
+  --text-m: 1rem;
+  --text-l: 1.25rem;
+  --text-xl: 1.9rem;
+
+  /* spacing on a 4px base */
+  --s1: 0.25rem;
+  --s2: 0.5rem;
+  --s3: 1rem;
+  --s4: 1.5rem;
+  --s5: 2rem;
+  --s6: 3rem;
+
+  /* the illustration-led face of the site: a serif with plates and drawn rules */
+  --serif: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, "Times New Roman", serif;
+  --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+
+  color-scheme: dark;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background-color: var(--bg);
+  /* faint dot grid, the paper a sketch is drawn on */
+  background-image: radial-gradient(rgba(207, 198, 232, 0.07) 1px, transparent 1.5px);
+  background-size: 22px 22px;
+  color: var(--text);
+  font: 16px/1.6 var(--serif);
+  -webkit-text-size-adjust: 100%;
+}
+
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+/* links inside running text say what they are; navigation and cards stay quiet */
+main p a, .breadcrumb a, footer a, .about .links a {
+  text-decoration: underline;
+  text-decoration-thickness: max(1px, 0.0625rem);
+  text-underline-offset: 0.15em;
+  text-decoration-color: color-mix(in srgb, var(--accent) 70%, transparent);
+}
+main p a:hover, .breadcrumb a:hover, footer a:hover, .about .links a:hover {
+  text-decoration-thickness: 3px;
+  text-decoration-color: var(--accent);
+}
+
+/* one focus pattern for everything the keyboard reaches */
+a:focus-visible, .card:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+nav.top {
+  display: flex;
+  flex-wrap: wrap; /* guard: wraps instead of overflowing when a link is added */
+  justify-content: space-between;
+  align-items: baseline;
+  gap: var(--s3) var(--s4);
+  padding: var(--s3) 1rem;
+  max-width: var(--max);
+  margin: 0 auto;
+  border-bottom: 1px dashed var(--border-strong);
+  font-family: var(--sans);
+}
+nav.top .brand { font-weight: 600; letter-spacing: 0.02em; color: var(--text); }
+nav.top .top-links a { margin-left: var(--s3); font-size: var(--text-s); }
+
+main { max-width: var(--max); margin: 0 auto; padding: 0 1rem var(--s6); }
+
+/* headings are plate captions: serif, with a drawn double rule under the page title */
+h1 {
+  font-size: var(--text-xl);
+  line-height: 1.2;
+  margin: var(--s5) 0 var(--s2);
+  text-wrap: balance;
+  padding-bottom: var(--s2);
+  border-bottom: 3px double var(--border-strong);
+}
+h2 {
+  font-size: var(--text-l);
+  line-height: 1.2;
+  margin: var(--s6) 0 var(--s2);
+  text-wrap: balance;
+}
+h2::after {
+  content: "";
+  display: block;
+  width: var(--s6);
+  margin-top: var(--s1);
+  border-bottom: 3px dotted var(--accent);
+}
+h3 { font-size: var(--text-l); line-height: 1.2; margin: 0 0 var(--s2); font-family: var(--sans); }
+
+p { margin: var(--s2) 0; }
+.muted { color: var(--muted); }
+.tagline { font-size: var(--text-l); color: var(--muted); margin-top: 0; font-style: italic; }
+
+.hero { padding-top: var(--s3); }
+.links a { margin-right: var(--s3); }
+
+/* the hero plate: an illustration drawn in the page, framed like a field sketch */
+.plate {
+  margin: var(--s4) 0 var(--s2);
+  padding: var(--s3);
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  background: linear-gradient(var(--surface), var(--surface)) padding-box;
+  position: relative;
+}
+.plate::before, .plate::after {
+  content: "";
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  border-color: var(--accent);
+  border-style: solid;
+}
+.plate::before { top: -1px; left: -1px; border-width: 2px 0 0 2px; }
+.plate::after { bottom: -1px; right: -1px; border-width: 0 2px 2px 0; }
+.plate svg { display: block; width: 100%; height: auto; color: var(--ink-line); }
+
+.cards { display: grid; gap: var(--s3); grid-template-columns: 1fr; margin-top: var(--s4); }
+@media (min-width: 40rem) { .cards { grid-template-columns: 1fr 1fr; } }
+
+/* a card is a torn plate from the sketchbook: stitched edge, ink spot drawing on top */
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s2);
+  padding: var(--s3);
+  background: var(--surface);
+  border: 1px dashed var(--border-strong);
+  border-radius: 2px;
+  color: var(--text);
+}
+.card:hover { border-color: var(--accent); border-style: solid; text-decoration: none; }
+.card p { color: var(--muted); font-size: var(--text-s); margin: 0; }
+.card .glyph { width: 28px; height: 28px; color: var(--ink-line); }
+.card:hover .glyph { color: var(--accent); }
+.card .tech { display: flex; justify-content: space-between; gap: var(--s3); font-size: var(--text-xs); color: var(--muted); margin-top: auto; font-family: var(--sans); }
+.card .meta { display: inline-flex; align-items: center; gap: var(--s2); white-space: nowrap; }
+.card .flag { display: block; height: 12px; width: auto; border-radius: 2px; box-shadow: 0 0 0 1px rgba(239, 231, 214, 0.25); }
+
+.breadcrumb { margin-top: var(--s4); font-size: var(--text-s); font-family: var(--sans); }
+
+/* the widget is a framed worksheet glued onto the page */
+.widget {
+  margin: var(--s4) 0;
+  padding: var(--s3);
+  background: var(--surface);
+  border: 1px solid var(--border-strong);
+  border-radius: 2px;
+  box-shadow: 2px 2px 0 0 var(--wash);
+  overflow-x: auto; /* a table wider than the phone scrolls here, not the page */
+  font-family: var(--sans);
+}
+.field { display: block; }
+.field span { display: block; font-size: var(--text-xs); color: var(--muted); margin-bottom: var(--s1); }
+.field input, .field select {
+  width: 100%;
+  padding: 0.55rem 0.7rem;
+  font-size: var(--text-m);
+  font-family: var(--sans);
+  color: var(--text);
+  background: var(--bg);
+  border: 1px solid var(--border-strong);
+  border-radius: 4px;
+}
+.field input:focus, .field select:focus { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+table.sums { width: 100%; border-collapse: collapse; margin-top: var(--s3); font-variant-numeric: tabular-nums; }
+table.sums th, table.sums td { padding: 0.35rem 0.5rem; text-align: right; border-bottom: 1px solid var(--border); }
+table.sums thead th { font-size: var(--text-xs); text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); font-weight: 500; }
+table.sums tbody th { text-align: left; font-weight: 500; overflow-wrap: anywhere; }
+table.sums tr.total th, table.sums tr.total td { color: var(--accent); }
+/* the special numbers carry a highlighter swipe, as if marked on the worksheet */
+table.sums td.special, .sum.special { font-weight: 600; background: var(--wash); }
+table.sums td.special { box-shadow: inset 0 0 0 3px var(--surface); }
+.sum.special { padding: 0 0.25rem; border-radius: 3px; }
+table.counts { margin-top: var(--s4); }
+table.counts tbody th { overflow-wrap: anywhere; }
+table.counts th, table.counts td { padding-left: 0.3rem; padding-right: 0.3rem; }
+table.counts thead th:first-child { text-align: left; }
+table.counts td.zero, table.counts tr.total td.zero { color: var(--muted); }
+.summary { margin-top: var(--s2); font-size: var(--text-s); color: var(--muted); }
+
+.search { margin-top: var(--s5); padding-top: var(--s3); border-top: 1px dashed var(--border-strong); }
+.search h3 { margin: 0 0 var(--s2); }
+.filters { display: flex; flex-wrap: wrap; gap: var(--s1) var(--s3); margin: var(--s3) 0 var(--s1); font-size: var(--text-s); color: var(--muted); }
+.filters label { display: inline-flex; align-items: center; gap: 0.3rem; }
+.filters input { accent-color: var(--accent); }
+.filters select {
+  font: inherit;
+  color: var(--text);
+  background: var(--bg);
+  border: 1px solid var(--border-strong);
+  border-radius: 4px;
+  padding: 0.15rem 0.3rem;
+}
+table.found th, table.found td { padding-left: 0.3rem; padding-right: 0.3rem; }
+table.found thead th:first-child { text-align: left; }
+table.found tbody th { overflow-wrap: anywhere; }
+table.found td:last-child { white-space: nowrap; }
+
+footer {
+  max-width: var(--max);
+  margin: 0 auto;
+  padding: var(--s4) 1rem var(--s5);
+  border-top: 1px dashed var(--border-strong);
+  font-size: var(--text-s);
+  color: var(--muted);
+  font-family: var(--sans);
+}
+footer p { margin: 0.2rem 0; }
