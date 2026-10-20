@@ -49,6 +49,7 @@ class StyleSuite extends munit.FunSuite:
   test("both sums tables wrap a typed name, so a 360px phone needs no sideways scroll") {
     assert(rule("table.sums tbody th").exists(_.contains("overflow-wrap: anywhere")))
     assert(rule("table.counts tbody th").exists(_.contains("overflow-wrap: anywhere")))
+    assert(rule(".widget").exists(_.contains("overflow-x: auto")), "a table wider than the phone must scroll inside the widget, not the page")
   }
 
   test("interactive control boundaries use the strong border colour") {
