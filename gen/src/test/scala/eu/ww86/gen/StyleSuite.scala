@@ -34,6 +34,10 @@ class StyleSuite extends munit.FunSuite:
     assert(rule("h2").exists(_.contains("margin: var(--s6)")), "h2 no longer opens a section")
   }
 
+  test("the measure is one 42rem spine, wide enough for cards and narrow enough for reading") {
+    assert(rule(":root").exists(_.contains("--max: 42rem")))
+  }
+
   test("keyboard focus is one visible pattern, on the accent colour") {
     val focus = rule("a:focus-visible, .card:focus-visible")
     assert(focus.exists(_.contains("outline: 2px solid var(--accent)")))

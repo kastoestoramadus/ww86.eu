@@ -2,6 +2,11 @@ package eu.ww86.site
 
 class SiteSuite extends munit.FunSuite:
 
+  test("Droga has its own address, distinct from the technology blog") {
+    assertEquals(Site.drogaUrl, "https://droga.ww86.eu")
+    assertNotEquals(Site.drogaUrl, Site.blogUrl)
+  }
+
   test("the rights notice names the year and reserves text and data mining, in the language of the page") {
     assertEquals(
       Site.rights(Language.English, 2027),

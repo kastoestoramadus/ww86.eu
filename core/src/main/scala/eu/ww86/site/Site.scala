@@ -13,6 +13,7 @@ object Site:
   )
 
   val blogUrl     = "https://blog.ww86.eu"
+  val drogaUrl    = "https://droga.ww86.eu"
   val githubUrl   = "https://github.com/kastoestoramadus"
   val linkedInUrl = "https://www.linkedin.com/in/waldemar-wosi%C5%84ski-a9936144/"
   val contactUrl  = s"$blogUrl/#contact"
