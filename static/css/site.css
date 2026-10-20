@@ -87,7 +87,9 @@ p { margin: var(--s2) 0; }
 @media (min-width: 40rem) { .cards { grid-template-columns: 1fr 1fr; } }
 
 .card {
-  display: block;
+  display: flex;
+  flex-direction: column;
+  gap: var(--s2);
   padding: var(--s3);
   background: var(--surface);
   border: 1px solid var(--border);
@@ -95,8 +97,8 @@ p { margin: var(--s2) 0; }
   color: var(--text);
 }
 .card:hover { border-color: var(--accent); text-decoration: none; }
-.card p { color: var(--muted); font-size: var(--text-s); }
-.card .tech { display: flex; justify-content: space-between; gap: var(--s3); font-size: var(--text-xs); color: var(--muted); margin-bottom: 0; }
+.card p { color: var(--muted); font-size: var(--text-s); margin: 0; }
+.card .tech { display: flex; justify-content: space-between; gap: var(--s3); font-size: var(--text-xs); color: var(--muted); margin-top: auto; }
 .card .meta { display: inline-flex; align-items: center; gap: var(--s2); white-space: nowrap; }
 .card .flag { display: block; height: 12px; width: auto; border-radius: 2px; box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.18); }
 

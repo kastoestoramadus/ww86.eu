@@ -33,7 +33,7 @@ object Catalog:
     LabItem(
       slug = "scala-to-java",
       title = "Thinking in Scala, writing Java",
-      blurb = "A cheat sheet for Scala developers who have to write Java, in a live-coding interview or someone else's codebase: 35 idioms side by side, 10 problems and 14 stream tasks solved in both languages with the output, and 22 traps that compile and still give the wrong answer. Handy in both directions: reading today's Java with Scala habits, or moving from Java to Scala.",
+      blurb = "35 idioms side by side in Scala and Java, 10 problems and 14 stream tasks solved in both with the output, and 22 traps that compile and still give the wrong answer. Handy for a live-coding interview or someone else's codebase, in both directions.",
       tech = List("Java 25", "Scala 3"),
       year = 2026,
       language = Language.Polish
