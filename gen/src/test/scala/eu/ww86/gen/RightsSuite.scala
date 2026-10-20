@@ -45,3 +45,12 @@ class RightsSuite extends munit.FunSuite:
       assert(page.contains(text), s"the terms page does not mention $text")
     }
   }
+
+  test("the terms page names every third-party component the lab pages really use") {
+    val page = files.toMap.getOrElse(Path.of("copyright.html"), fail("copyright.html is not generated"))
+    // highlight.js (scala-to-java), Google Fonts (lab pages), PESEL names (digits) were named already;
+    // Leaflet and the OpenStreetMap tiles it draws (ursus-by-train) are third-party work too.
+    List("highlight.js", "Google Fonts", "CC0", "Leaflet", "OpenStreetMap").foreach { text =>
+      assert(page.contains(text), s"the third-party list does not mention $text")
+    }
+  }
