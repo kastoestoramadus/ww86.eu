@@ -1,6 +1,6 @@
 package eu.ww86.gen
 
-import eu.ww86.site.{Catalog, Language, Site}
+import eu.ww86.site.{Catalog, LabItem, Language, Site}
 
 class PagesSuite extends munit.FunSuite:
 
@@ -49,6 +49,35 @@ class PagesSuite extends munit.FunSuite:
     val landing = Pages.landing
     val missing = Catalog.items.filterNot(item => landing.contains(s"""<a class="card" href="${item.path}""""))
     assertEquals(missing.map(_.slug), Nil)
+  }
+
+  test("the landing and the Lab page share one card list, newest first") {
+    val cardHref = """class="card" href="([^"]*)"""".r
+    val onLanding = cardHref.findAllMatchIn(Pages.landing).map(_.group(1)).toList
+    val inCatalog = cardHref.findAllMatchIn(Pages.labIndex).map(_.group(1)).toList
+    assertEquals(onLanding, Catalog.items.map(_.path))
+    assertEquals(inCatalog, Catalog.items.map(item => "../" + item.path))
+  }
+
+  test("a card heading carries a title past forty characters whole, so it can wrap") {
+    val longTitle = "A deliberately long lab item title that runs well past forty characters"
+    val item = LabItem(slug = "fixture", title = longTitle, blurb = "Blurb.", tech = List("Scala 3"), year = 2026)
+    assert(Pages.cardMarkup(item, 0).contains(s"<h3>$longTitle</h3>"))
+  }
+
+  test("a card names its technologies and the language of the page behind it") {
+    val item = LabItem(
+      slug = "fixture",
+      title = "Title",
+      blurb = "Blurb.",
+      tech = List("Scala 3", "Scala.js"),
+      year = 2026,
+      language = Language.Polish
+    )
+    val html = Pages.cardMarkup(item, 0)
+    assert(html.contains("Scala 3 · Scala.js"))
+    assert(html.contains("""alt="In Polish""""))
+    assert(html.contains("""hreflang="pl""""))
   }
 
   test("the digits page lists the special sums as bare numbers and never names a group") {

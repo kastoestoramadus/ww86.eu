@@ -169,6 +169,11 @@ object Pages:
       )
     )
 
+  /** One lab card exactly as the catalog pages show it; public with a plain depth so generator
+    * tests can render fixture items (a long title, a language) the same way the pages do.
+    */
+  def cardMarkup(item: LabItem, depth: Int): String = card(item, At(depth)).render
+
   private def aboutSection: Frag =
     section(cls := "about", id := "about")(
       h2("About me"),

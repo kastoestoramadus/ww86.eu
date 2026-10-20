@@ -50,6 +50,13 @@ class StyleSuite extends munit.FunSuite:
     )
   }
 
+  test("cards are equal-height columns: the tech row anchors at every card's foot") {
+    val card = rule(".card")
+    assert(card.exists(_.contains("display: flex")), "a card is not a flex column yet")
+    assert(card.exists(_.contains("flex-direction: column")))
+    assert(rule(".card .tech").exists(_.contains("margin-top: auto")), "the tech row does not sit at the bottom")
+  }
+
   test("both sums tables wrap a typed name, so a 360px phone needs no sideways scroll") {
     assert(rule("table.sums tbody th").exists(_.contains("overflow-wrap: anywhere")))
     assert(rule("table.counts tbody th").exists(_.contains("overflow-wrap: anywhere")))
