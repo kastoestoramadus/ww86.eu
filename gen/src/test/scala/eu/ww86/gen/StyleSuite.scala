@@ -57,6 +57,12 @@ class StyleSuite extends munit.FunSuite:
     assert(rule(".card .tech").exists(_.contains("margin-top: auto")), "the tech row does not sit at the bottom")
   }
 
+  test("a card monogram is a small fixed-size decoration, not a layout participant") {
+    val glyph = rule(".card .glyph")
+    assert(glyph.exists(_.contains("width: 28px")), "the monogram has no pinned width")
+    assert(glyph.exists(_.contains("height: 28px")), "the monogram has no pinned height")
+  }
+
   test("both sums tables wrap a typed name, so a 360px phone needs no sideways scroll") {
     assert(rule("table.sums tbody th").exists(_.contains("overflow-wrap: anywhere")))
     assert(rule("table.counts tbody th").exists(_.contains("overflow-wrap: anywhere")))

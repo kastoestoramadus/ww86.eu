@@ -51,6 +51,21 @@ class PagesSuite extends munit.FunSuite:
     assertEquals(missing.map(_.slug), Nil)
   }
 
+  test("every card opens with a decorative monogram the tab order never enters") {
+    val glyph = """(?s)<svg class="glyph"[^>]*aria-hidden="true"[^>]*>(.*?)</svg>""".r
+    val marks = glyph.findAllMatchIn(Pages.landing).map(_.group(1)).toList
+    assertEquals(marks.size, Catalog.items.size, "one monogram per card")
+    assertEquals(marks.distinct.size, Catalog.items.size, "each lab page has its own monogram")
+    val first = region(Pages.landing, """<a class="card""", "<h3>")
+    assert(first.contains("""<svg class="glyph""""), "the monogram comes before the heading")
+  }
+
+  test("a fixture card carries a monogram too, decorative and unfocusable") {
+    val item = LabItem(slug = "fixture", title = "Title", blurb = "Blurb.", tech = List("Scala 3"), year = 2026)
+    val html = Pages.cardMarkup(item, 0)
+    assert(html.contains("""<svg class="glyph" aria-hidden="true" focusable="false""""))
+  }
+
   test("the landing and the Lab page share one card list, newest first") {
     val cardHref = """class="card" href="([^"]*)"""".r
     val onLanding = cardHref.findAllMatchIn(Pages.landing).map(_.group(1)).toList
