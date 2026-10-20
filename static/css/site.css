@@ -108,6 +108,7 @@ p { margin: var(--s2) 0; }
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: 6px;
+  overflow-x: auto; /* a table wider than the phone scrolls here, not the page */
 }
 .field { display: block; }
 .field span { display: block; font-size: var(--text-xs); color: var(--muted); margin-bottom: var(--s1); }
