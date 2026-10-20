@@ -1,11 +1,30 @@
 :root {
+  /* palette: near-black ground, one mint accent; every pair passes AA */
   --bg: #111112;
   --surface: #1a1a1c;
   --border: #2c2c30;
+  --border-strong: #80828a; /* interactive control boundaries: 4.9:1 on the ground */
   --text: #e8e8e6;
   --muted: #9a9a97;
   --accent: #7fd1c1;
   --max: 46rem;
+
+  /* the five font sizes of the site; body sets the 16px root */
+  --text-xs: 0.8125rem;
+  --text-s: 0.875rem;
+  --text-m: 1rem;
+  --text-l: 1.25rem;
+  --text-xl: 1.9rem;
+
+  /* spacing on a 4px base */
+  --s1: 0.25rem;
+  --s2: 0.5rem;
+  --s3: 1rem;
+  --s4: 1.5rem;
+  --s5: 2rem;
+  --s6: 3rem;
+
+  color-scheme: dark;
 }
 
 *, *::before, *::after { box-sizing: border-box; }
@@ -14,103 +33,120 @@ body {
   margin: 0;
   background: var(--bg);
   color: var(--text);
-  font: 16px/1.65 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font: 16px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   -webkit-text-size-adjust: 100%;
 }
 
 a { color: var(--accent); text-decoration: none; }
 a:hover { text-decoration: underline; }
 
+/* links inside running text say what they are; navigation and cards stay quiet */
+main p a, .breadcrumb a, footer a, .about .links a {
+  text-decoration: underline;
+  text-decoration-thickness: max(1px, 0.0625rem);
+  text-underline-offset: 0.15em;
+}
+main p a:hover, .breadcrumb a:hover, footer a:hover, .about .links a:hover {
+  text-decoration-thickness: 3px;
+}
+
+/* one focus pattern for everything the keyboard reaches */
+a:focus-visible, .card:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
 nav.top {
   display: flex;
+  flex-wrap: wrap; /* guard: wraps instead of overflowing when a link is added */
   justify-content: space-between;
   align-items: baseline;
-  gap: 1rem;
-  padding: 1.1rem 1rem;
+  gap: var(--s3) var(--s4);
+  padding: var(--s3) 1rem;
   max-width: var(--max);
   margin: 0 auto;
   border-bottom: 1px solid var(--border);
 }
 nav.top .brand { font-weight: 600; letter-spacing: 0.02em; color: var(--text); }
-nav.top .top-links a { margin-left: 1rem; font-size: 0.93rem; }
+nav.top .top-links a { margin-left: var(--s3); font-size: var(--text-s); }
 
-main { max-width: var(--max); margin: 0 auto; padding: 0 1rem 3rem; }
+main { max-width: var(--max); margin: 0 auto; padding: 0 1rem var(--s6); }
 
-h1 { font-size: 1.9rem; line-height: 1.2; margin: 2.2rem 0 0.4rem; }
-h2 { font-size: 1.25rem; margin: 2.4rem 0 0.6rem; }
-h3 { font-size: 1.05rem; margin: 0 0 0.4rem; }
+h1 { font-size: var(--text-xl); line-height: 1.2; margin: var(--s5) 0 var(--s2); text-wrap: balance; }
+h2 { font-size: var(--text-l); line-height: 1.2; margin: var(--s6) 0 var(--s2); text-wrap: balance; }
+h3 { font-size: var(--text-l); line-height: 1.2; margin: 0 0 var(--s2); }
 
-p { margin: 0.6rem 0; }
+p { margin: var(--s2) 0; }
 .muted { color: var(--muted); }
-.tagline { font-size: 1.1rem; color: var(--muted); margin-top: 0; }
+.tagline { font-size: var(--text-l); color: var(--muted); margin-top: 0; }
 
-.hero { padding-top: 1rem; }
-.links a { margin-right: 1.1rem; }
+.hero { padding-top: var(--s3); }
+.links a { margin-right: var(--s3); }
 
-.cards { display: grid; gap: 0.9rem; grid-template-columns: 1fr; margin-top: 1.2rem; }
+.cards { display: grid; gap: var(--s3); grid-template-columns: 1fr; margin-top: var(--s4); }
 @media (min-width: 40rem) { .cards { grid-template-columns: 1fr 1fr; } }
 
 .card {
   display: block;
-  padding: 1rem 1.1rem;
+  padding: var(--s3);
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: 6px;
   color: var(--text);
 }
 .card:hover { border-color: var(--accent); text-decoration: none; }
-.card p { color: var(--muted); font-size: 0.93rem; }
-.card .tech { display: flex; justify-content: space-between; gap: 1rem; font-size: 0.82rem; color: var(--muted); margin-bottom: 0; }
-.card .meta { display: inline-flex; align-items: center; gap: 0.5rem; white-space: nowrap; }
+.card p { color: var(--muted); font-size: var(--text-s); }
+.card .tech { display: flex; justify-content: space-between; gap: var(--s3); font-size: var(--text-xs); color: var(--muted); margin-bottom: 0; }
+.card .meta { display: inline-flex; align-items: center; gap: var(--s2); white-space: nowrap; }
 .card .flag { display: block; height: 12px; width: auto; border-radius: 2px; box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.18); }
 
-.breadcrumb { margin-top: 1.4rem; font-size: 0.9rem; }
+.breadcrumb { margin-top: var(--s4); font-size: var(--text-s); }
 
 .widget {
-  margin: 1.4rem 0;
-  padding: 1.1rem;
+  margin: var(--s4) 0;
+  padding: var(--s3);
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: 6px;
 }
 .field { display: block; }
-.field span { display: block; font-size: 0.85rem; color: var(--muted); margin-bottom: 0.35rem; }
+.field span { display: block; font-size: var(--text-xs); color: var(--muted); margin-bottom: var(--s1); }
 .field input, .field select {
   width: 100%;
   padding: 0.55rem 0.7rem;
-  font-size: 1rem;
+  font-size: var(--text-m);
   color: var(--text);
   background: var(--bg);
-  border: 1px solid var(--border);
+  border: 1px solid var(--border-strong);
   border-radius: 4px;
 }
-.field input:focus, .field select:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
+.field input:focus, .field select:focus { outline: 2px solid var(--accent); outline-offset: 2px; }
 
-table.sums { width: 100%; border-collapse: collapse; margin-top: 1.1rem; font-variant-numeric: tabular-nums; }
+table.sums { width: 100%; border-collapse: collapse; margin-top: var(--s3); font-variant-numeric: tabular-nums; }
 table.sums th, table.sums td { padding: 0.35rem 0.5rem; text-align: right; border-bottom: 1px solid var(--border); }
-table.sums thead th { font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); font-weight: 500; }
-table.sums tbody th { text-align: left; font-weight: 500; }
+table.sums thead th { font-size: var(--text-xs); text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); font-weight: 500; }
+table.sums tbody th { text-align: left; font-weight: 500; overflow-wrap: anywhere; }
 table.sums tr.total th, table.sums tr.total td { color: var(--accent); }
 table.sums td.special, .sum.special { font-weight: 600; background: color-mix(in srgb, var(--accent) 22%, transparent); }
 table.sums td.special { box-shadow: inset 0 0 0 3px var(--surface); }
 .sum.special { padding: 0 0.25rem; border-radius: 3px; }
-table.counts { margin-top: 1.4rem; }
+table.counts { margin-top: var(--s4); }
 table.counts tbody th { overflow-wrap: anywhere; }
 table.counts th, table.counts td { padding-left: 0.3rem; padding-right: 0.3rem; }
 table.counts thead th:first-child { text-align: left; }
 table.counts td.zero, table.counts tr.total td.zero { color: var(--muted); }
-.summary { margin-top: 0.8rem; font-size: 0.95rem; color: var(--muted); }
+.summary { margin-top: var(--s2); font-size: var(--text-s); color: var(--muted); }
 
-.search { margin-top: 1.8rem; padding-top: 1.1rem; border-top: 1px solid var(--border); }
-.search h3 { margin: 0 0 0.8rem; font-size: 1.05rem; }
-.filters { display: flex; flex-wrap: wrap; gap: 0.45rem 1.2rem; margin: 0.9rem 0 0.4rem; font-size: 0.9rem; color: var(--muted); }
+.search { margin-top: var(--s5); padding-top: var(--s3); border-top: 1px solid var(--border); }
+.search h3 { margin: 0 0 var(--s2); }
+.filters { display: flex; flex-wrap: wrap; gap: var(--s1) var(--s3); margin: var(--s3) 0 var(--s1); font-size: var(--text-s); color: var(--muted); }
 .filters label { display: inline-flex; align-items: center; gap: 0.3rem; }
 .filters input { accent-color: var(--accent); }
 .filters select {
   font: inherit;
   color: var(--text);
   background: var(--bg);
-  border: 1px solid var(--border);
+  border: 1px solid var(--border-strong);
   border-radius: 4px;
   padding: 0.15rem 0.3rem;
 }
@@ -122,9 +158,9 @@ table.found td:last-child { white-space: nowrap; }
 footer {
   max-width: var(--max);
   margin: 0 auto;
-  padding: 1.4rem 1rem 2.5rem;
+  padding: var(--s4) 1rem var(--s5);
   border-top: 1px solid var(--border);
-  font-size: 0.87rem;
+  font-size: var(--text-s);
   color: var(--muted);
 }
 footer p { margin: 0.2rem 0; }
