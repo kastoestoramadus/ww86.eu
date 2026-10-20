@@ -7,7 +7,7 @@
   --text: #e8e8e6;
   --muted: #9a9a97;
   --accent: #7fd1c1;
-  --max: 46rem;
+  --max: 42rem; /* one spine: ~75 characters of body text, cards included */
 
   /* the five font sizes of the site; body sets the 16px root */
   --text-xs: 0.8125rem;

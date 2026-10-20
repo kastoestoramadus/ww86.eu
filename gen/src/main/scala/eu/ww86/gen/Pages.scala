@@ -27,6 +27,7 @@ object Pages:
         p(cls := "tagline")(Site.tagline),
         p(cls := "links")(
           a(href := Site.blogUrl)("Blog"),
+          a(href := Site.drogaUrl)("Droga"),
           a(href := at("lab/index.html"))("Lab"),
           a(href := Site.githubUrl)("GitHub"),
           a(href := Site.linkedInUrl)("LinkedIn")
@@ -179,6 +180,7 @@ object Pages:
       ),
       p(cls := "links")(
         a(href := Site.blogUrl)("Blog"),
+        a(href := Site.drogaUrl)("Droga"),
         a(href := Site.githubUrl)("GitHub"),
         a(href := Site.linkedInUrl)("LinkedIn"),
         a(href := Site.contactUrl)("Contact")
@@ -209,16 +211,19 @@ object Pages:
             span(cls := "top-links")(
               a(href := at("lab/index.html"))("Lab"),
               a(href := at("index.html#about"))("About"),
-              a(href := Site.blogUrl)("Blog")
+              a(href := Site.blogUrl)("Blog"),
+              a(href := Site.drogaUrl)("Droga")
             )
           ),
           mainTag(sections),
           footerTag(
-            p(Site.rights(Language.English, Site.since), " ", a(href := at("copyright.html"))("Terms of use")),
+            p(Site.rights(Language.English, Site.since)),
             p(cls := "muted")(
               a(href := Site.blogUrl)("blog.ww86.eu"),
               " · ",
-              a(href := Site.githubUrl)("GitHub")
+              a(href := Site.githubUrl)("GitHub"),
+              " · ",
+              a(href := at("copyright.html"))("Terms of use")
             )
           )
         )
