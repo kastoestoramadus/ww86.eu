@@ -1,14 +1,46 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
-  <!-- Share card of ww86.eu, rasterised to share.png for Open Graph; colours are the site's tokens. -->
-  <rect width="1200" height="630" fill="#111112"/>
-  <rect x="24" y="24" width="1152" height="582" rx="16" fill="none" stroke="#2c2c30" stroke-width="1"/>
-  <rect x="96" y="118" width="96" height="96" rx="20" fill="#1a1a1c"/>
-  <text x="144" y="184" text-anchor="middle" font-family="Helvetica, Arial, sans-serif"
-        font-size="44" font-weight="700" fill="#7fd1c1">ww</text>
-  <text x="96" y="334" font-family="Helvetica, Arial, sans-serif" font-size="72" font-weight="700"
-        fill="#e8e8e6">Waldemar Wosiński</text>
-  <text x="96" y="398" font-family="Helvetica, Arial, sans-serif" font-size="36"
-        fill="#9a9a97">Scala &amp; Big Data engineer from Warsaw.</text>
-  <text x="96" y="528" font-family="Helvetica, Arial, sans-serif" font-size="28" letter-spacing="2"
-        fill="#7fd1c1">ww86.eu</text>
+  <!-- Share card of ww86.eu, rasterised to share.png for Open Graph; the illustrated edition:
+       ink on a night desk, dot-grid paper, one gold accent. Colours are the site's tokens. -->
+  <defs>
+    <pattern id="dots" width="26" height="26" patternUnits="userSpaceOnUse">
+      <circle cx="4" cy="4" r="1.6" fill="#cfc6e8" opacity="0.10"/>
+    </pattern>
+  </defs>
+  <rect width="1200" height="630" fill="#181521"/>
+  <rect width="1200" height="630" fill="url(#dots)"/>
+  <rect x="36" y="36" width="1128" height="558" fill="none" stroke="#918ba0" stroke-width="2" stroke-dasharray="2 10" stroke-linecap="round"/>
+  <rect x="52" y="52" width="1096" height="526" fill="none" stroke="#37313f" stroke-width="1.5"/>
+
+  <!-- the hero plate sketch: notebook, pips, chevrons, the train of ideas -->
+  <g transform="translate(96 84)" fill="none" stroke="#cfc6e8" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M60 118 C48 111 32 110 18 112 L18 61 C32 59 48 60 60 66 C72 60 88 59 102 61 L102 112 C88 110 72 111 60 118 Z"/>
+    <path d="M60 66 L60 118" stroke-width="2.4"/>
+    <path d="M27 71 C36 69 46 70 54 73 M27 83 C36 81 46 82 54 85 M66 73 C74 70 84 69 93 71 M66 85 C74 82 84 81 93 83" stroke-width="1.8"/>
+    <circle cx="35" cy="97" r="3.2" fill="#cfc6e8" stroke="none"/>
+    <circle cx="45" cy="103" r="3.2" fill="#cfc6e8" stroke="none"/>
+    <circle cx="55" cy="97" r="3.2" fill="#cfc6e8" stroke="none"/>
+    <path d="M70 94 L77 99 L70 104 M90 104 L83 99 L90 94" stroke-width="2.2"/>
+    <path d="M102 78 L113 78 L108 84 L113 90 L102 90" fill="#d9a04b" stroke="none"/>
+    <path d="M158 118 C158 100 158 88 158 76 C158 70 163 66 168 66 L226 66 C232 66 236 70 236 75 L236 88 C236 93 232 97 227 97 L158 97"/>
+    <rect x="172" y="52" width="10" height="14" rx="3"/>
+    <path d="M169 42 C74 40 76 34 172 36 M181 40 C186 36 186 30 181 27" stroke-width="2.2"/>
+    <circle cx="178" cy="118" r="6"/>
+    <circle cx="204" cy="118" r="6"/>
+    <circle cx="227" cy="118" r="6" fill="#d9a04b" stroke="none"/>
+    <rect x="188" y="74" width="17" height="12" rx="2" fill="#d9a04b" stroke="none"/>
+    <path d="M118 92 C132 82 146 84 156 94" stroke-width="2.4" stroke-dasharray="1 9"/>
+    <circle cx="137" cy="86" r="10"/>
+    <circle cx="137" cy="86" r="2.6" fill="#cfc6e8" stroke="none"/>
+  </g>
+
+  <text x="96" y="384" font-family="Iowan Old Style, Palatino, Georgia, serif" font-size="74" font-weight="700"
+        fill="#efe7d6">Waldemar Wosiński</text>
+  <text x="96" y="446" font-family="Iowan Old Style, Palatino, Georgia, serif" font-size="36"
+        fill="#a89fb0">Scala &amp; Big Data engineer from Warsaw.</text>
+  <g fill="none" stroke="#d9a04b" stroke-width="3" stroke-linecap="round">
+    <path d="M96 494 C220 490 420 490 544 494"/>
+  </g>
+  <text x="96" y="542" font-family="Iowan Old Style, Palatino, Georgia, serif" font-size="30" letter-spacing="4"
+        fill="#d9a04b">ww86.eu</text>
+  <path d="M1104 518 l3.4 9 L1117 530 l-9.6 3.4 L1104 543 l-3.4 -9.6 L1091 530 l9.6 -3 Z" fill="#d9a04b"/>
 </svg>
