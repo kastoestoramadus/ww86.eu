@@ -1,5 +1,8 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <rect width="64" height="64" rx="10" fill="#111112"/>
-  <text x="32" y="43" text-anchor="middle" font-family="Helvetica, Arial, sans-serif"
-        font-size="30" font-weight="700" fill="#7fd1c1">ww</text>
+  <!-- Favicon of ww86.eu, geometric direction: a four-module chequerboard mark. -->
+  <rect width="64" height="64" fill="#0f0f11"/>
+  <rect x="9" y="9" width="20" height="20" fill="#eceae4"/>
+  <rect x="35" y="9" width="20" height="20" fill="none" stroke="#8a8c96" stroke-width="3"/>
+  <rect x="9" y="35" width="20" height="20" fill="none" stroke="#8a8c96" stroke-width="3"/>
+  <rect x="35" y="35" width="20" height="20" fill="#ffc247"/>
 </svg>

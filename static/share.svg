@@ -1,14 +1,22 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
-  <!-- Share card of ww86.eu, rasterised to share.png for Open Graph; colours are the site's tokens. -->
-  <rect width="1200" height="630" fill="#111112"/>
-  <rect x="24" y="24" width="1152" height="582" rx="16" fill="none" stroke="#2c2c30" stroke-width="1"/>
-  <rect x="96" y="118" width="96" height="96" rx="20" fill="#1a1a1c"/>
-  <text x="144" y="184" text-anchor="middle" font-family="Helvetica, Arial, sans-serif"
-        font-size="44" font-weight="700" fill="#7fd1c1">ww</text>
-  <text x="96" y="334" font-family="Helvetica, Arial, sans-serif" font-size="72" font-weight="700"
-        fill="#e8e8e6">Waldemar Wosiński</text>
-  <text x="96" y="398" font-family="Helvetica, Arial, sans-serif" font-size="36"
-        fill="#9a9a97">Scala &amp; Big Data engineer from Warsaw.</text>
-  <text x="96" y="528" font-family="Helvetica, Arial, sans-serif" font-size="28" letter-spacing="2"
-        fill="#7fd1c1">ww86.eu</text>
+  <!-- Share card of ww86.eu, rasterised to share.png for Open Graph; colours are the site's tokens.
+    Geometric/typographic direction: ink plate, module grid, amber spine, heavy tracked caps. -->
+  <defs>
+    <pattern id="grid" width="60" height="60" patternUnits="userSpaceOnUse">
+      <path d="M60 0 H0 V60" fill="none" stroke="#1b1b21" stroke-width="1"/>
+    </pattern>
+  </defs>
+  <rect width="1200" height="630" fill="#0f0f11"/>
+  <rect width="1200" height="630" fill="url(#grid)"/>
+  <rect x="0" y="0" width="16" height="630" fill="#ffc247"/>
+  <rect x="120" y="96" width="110" height="110" fill="none" stroke="#eceae4" stroke-width="6"/>
+  <rect x="230" y="206" width="110" height="110" fill="#ffc247"/>
+  <rect x="340" y="96" width="110" height="110" fill="none" stroke="#8a8c96" stroke-width="2"/>
+  <text x="120" y="430" font-family="Helvetica, Arial, sans-serif" font-size="84" font-weight="800"
+        letter-spacing="-2" style="text-transform:uppercase" fill="#eceae4">Waldemar Wosiński</text>
+  <text x="120" y="486" font-family="Helvetica, Arial, sans-serif" font-size="32"
+        fill="#a3a1a8">Scala &amp; Big Data engineer from Warsaw.</text>
+  <rect x="120" y="516" width="960" height="1" fill="#26262c"/>
+  <text x="1080" y="566" text-anchor="end" font-family="Menlo, Consolas, monospace" font-size="30"
+        letter-spacing="6" style="text-transform:uppercase" fill="#ffc247">ww86.eu</text>
 </svg>

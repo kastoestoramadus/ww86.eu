@@ -159,8 +159,10 @@ object Pages:
 
   private def card(item: LabItem, at: At): Frag =
     a(cls := "card", href := at(item.path), attr("hreflang") := item.language.code)(
-      glyph(item.slug),
-      h3(item.title),
+      div(cls := "card-head")(
+        glyph(item.slug),
+        h3(item.title)
+      ),
       p(item.blurb),
       p(cls := "tech")(
         item.tech.mkString(" · "),
@@ -181,33 +183,34 @@ object Pages:
     */
   def cardMarkup(item: LabItem, depth: Int): String = card(item, At(depth)).render
 
-  /** A small decorative monogram for a lab page, drawn in the site's own colours. Pure geometry:
-    * no text to localise, nothing to load, and `aria-hidden` keeps it out of the way. */
+  /** A small decorative monogram for a lab page, drawn in the site's own colours. Pure geometry,
+    * squared for the typographic direction: blocks on a module grid, no curves to soften them.
+    * No text to localise, nothing to load, and `aria-hidden` keeps it out of the way. */
   private def glyph(slug: String): Frag =
     val mark = slug match
       case "scala-to-java" =>
-        """<path d="M5 6 L12 14 L5 22" fill="none" stroke="currentColor" stroke-width="2.5"
-          | stroke-linecap="round" stroke-linejoin="round"/>
-          |<path d="M23 6 L16 14 L23 22" fill="none" stroke="currentColor" stroke-width="2.5"
-          | stroke-linecap="round" stroke-linejoin="round"/>
-          |<circle cx="14" cy="14" r="2.2" fill="var(--accent)"/>""".stripMargin
+        """<rect x="4" y="4" width="9" height="9" fill="none" stroke="currentColor" stroke-width="2.5"/>
+          |<rect x="15" y="15" width="9" height="9" fill="currentColor"/>
+          |<rect x="15" y="4" width="4" height="4" fill="var(--accent)"/>""".stripMargin
       case "digits" =>
         """<g fill="currentColor">
-          |<circle cx="7" cy="14" r="2.2"/><circle cx="14" cy="7" r="2.2"/><circle cx="14" cy="21" r="2.2"/>
-          |<circle cx="21" cy="14" r="2.2"/><circle cx="7" cy="21" r="2.2"/><circle cx="21" cy="7" r="2.2"/>
+          |<rect x="4" y="12" width="4.5" height="4.5"/><rect x="12" y="4" width="4.5" height="4.5"/>
+          |<rect x="12" y="20" width="4.5" height="4.5"/><rect x="20" y="12" width="4.5" height="4.5"/>
+          |<rect x="4" y="20" width="4.5" height="4.5"/><rect x="20" y="4" width="4.5" height="4.5"/>
           |</g>
           |<g fill="var(--accent)">
-          |<circle cx="7" cy="7" r="2.2"/><circle cx="14" cy="14" r="2.2"/><circle cx="21" cy="21" r="2.2"/>
+          |<rect x="4" y="4" width="4.5" height="4.5"/><rect x="12" y="12" width="4.5" height="4.5"/>
+          |<rect x="20" y="20" width="4.5" height="4.5"/>
           |</g>""".stripMargin
       case "ursus-by-train" =>
-        """<path d="M3.5 19 H24.5" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
-          |<circle cx="7" cy="19" r="2.6" fill="currentColor"/>
-          |<circle cx="14" cy="19" r="2.6" fill="currentColor"/>
-          |<circle cx="21" cy="19" r="2.6" fill="var(--accent)"/>
-          |<rect x="9" y="5.5" width="10" height="7" rx="2" fill="none" stroke="currentColor" stroke-width="2"/>""".stripMargin
+        """<path d="M3.5 20.5 H24.5" fill="none" stroke="currentColor" stroke-width="2.5"/>
+          |<rect x="5" y="17.5" width="5" height="5" fill="currentColor"/>
+          |<rect x="11.5" y="17.5" width="5" height="5" fill="currentColor"/>
+          |<rect x="18" y="17.5" width="5" height="5" fill="var(--accent)"/>
+          |<rect x="9" y="5.5" width="10" height="7" fill="none" stroke="currentColor" stroke-width="2"/>""".stripMargin
       case _ =>
-        """<circle cx="14" cy="14" r="9" fill="none" stroke="currentColor" stroke-width="2.5"/>
-          |<circle cx="14" cy="14" r="3" fill="var(--accent)"/>""".stripMargin
+        """<rect x="5" y="5" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5"/>
+          |<rect x="11" y="11" width="6" height="6" fill="var(--accent)"/>""".stripMargin
     raw(
       s"""<svg class="glyph" aria-hidden="true" focusable="false" viewBox="0 0 28 28">$mark</svg>"""
     )
