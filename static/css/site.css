@@ -98,6 +98,7 @@ p { margin: var(--s2) 0; }
 }
 .card:hover { border-color: var(--accent); text-decoration: none; }
 .card p { color: var(--muted); font-size: var(--text-s); margin: 0; }
+.card .glyph { width: 28px; height: 28px; color: var(--muted); }
 .card .tech { display: flex; justify-content: space-between; gap: var(--s3); font-size: var(--text-xs); color: var(--muted); margin-top: auto; }
 .card .meta { display: inline-flex; align-items: center; gap: var(--s2); white-space: nowrap; }
 .card .flag { display: block; height: 12px; width: auto; border-radius: 2px; box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.18); }

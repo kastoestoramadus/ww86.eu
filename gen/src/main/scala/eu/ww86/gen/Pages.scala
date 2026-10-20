@@ -19,9 +19,13 @@ private final case class At(depth: Int):
 /** Every page of the hub. Plain HTML: the pages work without JavaScript, widgets are opt-in. */
 object Pages:
 
+  /** The share card every page points its Open Graph image at; `static/share.svg` is its source. */
+  private val shareImage = s"https://${Site.domain}/share.png"
+  private val shareAlt   = s"The ${Site.domain} share card: ${Site.author}, ${Site.tagline}"
+
   def landing: String =
     val at = At(0)
-    layout("Waldemar Wosiński", Site.description, at)(
+    layout("Waldemar Wosiński", Site.description, at, canonical = "")(
       section(cls := "hero")(
         h1(Site.author),
         p(cls := "tagline")(Site.tagline),
@@ -43,7 +47,7 @@ object Pages:
 
   def labIndex: String =
     val at = At(1)
-    layout("Lab", "Demos, tools and experiments by Waldemar Wosiński.", at)(
+    layout("Lab", "Demos, tools and experiments by Waldemar Wosiński.", at, canonical = "lab/")(
       section(cls := "cards-section")(
         h1("Lab"),
         p(cls := "muted")("Working pages rather than screenshots."),
@@ -54,7 +58,7 @@ object Pages:
   def digits: String =
     val at   = At(2)
     val item = Catalog.items.find(_.slug == "digits").get
-    layout(item.title, item.blurb, at, withScript = true)(
+    layout(item.title, item.blurb, at, withScript = true, canonical = "lab/digits/")(
       section(cls := "page")(
         p(cls := "breadcrumb")(a(href := at("lab/index.html"))("← Lab")),
         h1(item.title),
@@ -106,7 +110,7 @@ object Pages:
 
   def copyright: String =
     val at = At(0)
-    layout("Copyright and terms of use", s"Who owns the pages of ${Site.domain} and what you may do with them.", at)(
+    layout("Copyright and terms of use", s"Who owns the pages of ${Site.domain} and what you may do with them.", at, canonical = "copyright.html")(
       section(cls := "page")(
         h1("Copyright and terms of use"),
         p(
@@ -146,13 +150,16 @@ object Pages:
         p(
           "Facts such as timetables, opening hours and addresses are not anyone's to own; each lab page links its sources. ",
           "Work by others keeps its own license: highlight.js under the BSD 3-Clause License, its notice kept in the pages that bundle it; ",
-          "fonts from Google Fonts under the SIL Open Font License; the first names on the digits page, from the PESEL register, under CC0."
+          "fonts from Google Fonts under the SIL Open Font License; the first names on the digits page, from the PESEL register, under CC0; ",
+          "the map on the Ursus page is drawn by Leaflet under the BSD 2-Clause License over map tiles from OpenStreetMap contributors, ",
+          "under the Open Database License, with the attribution the map itself keeps."
         )
       )
     )
 
   private def card(item: LabItem, at: At): Frag =
     a(cls := "card", href := at(item.path), attr("hreflang") := item.language.code)(
+      glyph(item.slug),
       h3(item.title),
       p(item.blurb),
       p(cls := "tech")(
@@ -174,6 +181,37 @@ object Pages:
     */
   def cardMarkup(item: LabItem, depth: Int): String = card(item, At(depth)).render
 
+  /** A small decorative monogram for a lab page, drawn in the site's own colours. Pure geometry:
+    * no text to localise, nothing to load, and `aria-hidden` keeps it out of the way. */
+  private def glyph(slug: String): Frag =
+    val mark = slug match
+      case "scala-to-java" =>
+        """<path d="M5 6 L12 14 L5 22" fill="none" stroke="currentColor" stroke-width="2.5"
+          | stroke-linecap="round" stroke-linejoin="round"/>
+          |<path d="M23 6 L16 14 L23 22" fill="none" stroke="currentColor" stroke-width="2.5"
+          | stroke-linecap="round" stroke-linejoin="round"/>
+          |<circle cx="14" cy="14" r="2.2" fill="var(--accent)"/>""".stripMargin
+      case "digits" =>
+        """<g fill="currentColor">
+          |<circle cx="7" cy="14" r="2.2"/><circle cx="14" cy="7" r="2.2"/><circle cx="14" cy="21" r="2.2"/>
+          |<circle cx="21" cy="14" r="2.2"/><circle cx="7" cy="21" r="2.2"/><circle cx="21" cy="7" r="2.2"/>
+          |</g>
+          |<g fill="var(--accent)">
+          |<circle cx="7" cy="7" r="2.2"/><circle cx="14" cy="14" r="2.2"/><circle cx="21" cy="21" r="2.2"/>
+          |</g>""".stripMargin
+      case "ursus-by-train" =>
+        """<path d="M3.5 19 H24.5" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+          |<circle cx="7" cy="19" r="2.6" fill="currentColor"/>
+          |<circle cx="14" cy="19" r="2.6" fill="currentColor"/>
+          |<circle cx="21" cy="19" r="2.6" fill="var(--accent)"/>
+          |<rect x="9" y="5.5" width="10" height="7" rx="2" fill="none" stroke="currentColor" stroke-width="2"/>""".stripMargin
+      case _ =>
+        """<circle cx="14" cy="14" r="9" fill="none" stroke="currentColor" stroke-width="2.5"/>
+          |<circle cx="14" cy="14" r="3" fill="var(--accent)"/>""".stripMargin
+    raw(
+      s"""<svg class="glyph" aria-hidden="true" focusable="false" viewBox="0 0 28 28">$mark</svg>"""
+    )
+
   private def aboutSection: Frag =
     section(cls := "about", id := "about")(
       h2("About me"),
@@ -192,9 +230,13 @@ object Pages:
       )
     )
 
-  private def layout(pageTitle: String, pageDescription: String, at: At, withScript: Boolean = false)(
-      sections: Frag*
-  ): String =
+  private def layout(
+      pageTitle: String,
+      pageDescription: String,
+      at: At,
+      withScript: Boolean = false,
+      canonical: String = ""
+  )(sections: Frag*): String =
     val fullTitle = if pageTitle == Site.author then pageTitle else s"$pageTitle · ${Site.domain}"
     doctype("html")(
       html(lang := "en")(
@@ -205,6 +247,18 @@ object Pages:
           meta(name := "description", content := pageDescription),
           meta(name := "author", content := Site.author),
           meta(name := "tdm-reservation", content := "1"),
+          // what a link preview shows; the image is absolute because scrapers resolve no relative
+          // URL, everything a browser loads below stays relative and preview-safe
+          meta(attr("property") := "og:type", content := "website"),
+          meta(attr("property") := "og:site_name", content := Site.domain),
+          meta(attr("property") := "og:title", content := fullTitle),
+          meta(attr("property") := "og:description", content := pageDescription),
+          meta(attr("property") := "og:url", content := s"https://${Site.domain}/$canonical"),
+          meta(attr("property") := "og:image", content := shareImage),
+          meta(attr("property") := "og:image:width", content := "1200"),
+          meta(attr("property") := "og:image:height", content := "630"),
+          meta(attr("property") := "og:image:alt", content := shareAlt),
+          meta(name := "twitter:card", content := "summary_large_image"),
           link(rel := "license", href := at("copyright.html")),
           link(rel := "icon", href := at("favicon.svg"), `type` := "image/svg+xml"),
           link(rel := "stylesheet", href := at("css/site.css")),
