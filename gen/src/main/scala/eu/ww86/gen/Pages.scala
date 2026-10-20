@@ -38,7 +38,7 @@ object Pages:
          |<path d="M-2 42 C 110 52, 250 30, 370 42 C 490 54, 590 32, 674 40"/>
          |<path d="M-2 26 C 140 14, 280 34, 420 24 C 540 16, 610 30, 674 22" stroke="var(--accent)" opacity="0.35"/>
          |</g>
-         |</svg>"""
+         |</svg>""".stripMargin
     )
 
   def landing: String =
