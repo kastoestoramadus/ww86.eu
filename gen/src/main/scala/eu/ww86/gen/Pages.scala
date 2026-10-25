@@ -19,14 +19,38 @@ private final case class At(depth: Int):
 /** Every page of the hub. Plain HTML: the pages work without JavaScript, widgets are opt-in. */
 object Pages:
 
+  /** The share card every page points its Open Graph image at; `static/share.svg` is its source. */
+  private val shareImage = s"https://${Site.domain}/share.png"
+  private val shareAlt   = s"The ${Site.domain} share card: ${Site.author}, ${Site.tagline}"
+
+  /** The hero's contour-line field: strata wandering like wind through grass, drawn in code in the
+    * site's own colours (no photography exists for the hub; this is honest code-native art).
+    * Decorative only: `aria-hidden`, no text, nothing to load.
+    */
+  private val fieldArt: Frag =
+    raw(
+      s"""<svg class="field" aria-hidden="true" focusable="false" viewBox="0 0 672 132">
+         |<g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+         |<path d="M-2 114 C 120 102, 260 120, 380 110 C 500 100, 590 114, 674 106"/>
+         |<path d="M-2 96 C 110 108, 250 88, 372 96 C 494 104, 588 86, 674 94"/>
+         |<path d="M-2 80 C 96 66, 210 90, 336 76 C 462 62, 570 88, 674 74" stroke="var(--accent)" stroke-width="2" opacity="0.55"/>
+         |<path d="M-2 58 C 130 46, 240 70, 360 58 C 480 46, 580 66, 674 56"/>
+         |<path d="M-2 42 C 110 52, 250 30, 370 42 C 490 54, 590 32, 674 40"/>
+         |<path d="M-2 26 C 140 14, 280 34, 420 24 C 540 16, 610 30, 674 22" stroke="var(--accent)" opacity="0.35"/>
+         |</g>
+         |</svg>""".stripMargin
+    )
+
   def landing: String =
     val at = At(0)
-    layout("Waldemar Wosiński", Site.description, at)(
+    layout("Waldemar Wosiński", Site.description, at, canonical = "")(
       section(cls := "hero")(
+        fieldArt,
         h1(Site.author),
         p(cls := "tagline")(Site.tagline),
         p(cls := "links")(
           a(href := Site.blogUrl)("Blog"),
+          a(href := Site.drogaUrl)("Droga"),
           a(href := at("lab/index.html"))("Lab"),
           a(href := Site.githubUrl)("GitHub"),
           a(href := Site.linkedInUrl)("LinkedIn")
@@ -42,7 +66,7 @@ object Pages:
 
   def labIndex: String =
     val at = At(1)
-    layout("Lab", "Demos, tools and experiments by Waldemar Wosiński.", at)(
+    layout("Lab", "Demos, tools and experiments by Waldemar Wosiński.", at, canonical = "lab/")(
       section(cls := "cards-section")(
         h1("Lab"),
         p(cls := "muted")("Working pages rather than screenshots."),
@@ -53,7 +77,7 @@ object Pages:
   def digits: String =
     val at   = At(2)
     val item = Catalog.items.find(_.slug == "digits").get
-    layout(item.title, item.blurb, at, withScript = true)(
+    layout(item.title, item.blurb, at, withScript = true, canonical = "lab/digits/")(
       section(cls := "page")(
         p(cls := "breadcrumb")(a(href := at("lab/index.html"))("← Lab")),
         h1(item.title),
@@ -105,7 +129,7 @@ object Pages:
 
   def copyright: String =
     val at = At(0)
-    layout("Copyright and terms of use", s"Who owns the pages of ${Site.domain} and what you may do with them.", at)(
+    layout("Copyright and terms of use", s"Who owns the pages of ${Site.domain} and what you may do with them.", at, canonical = "copyright.html")(
       section(cls := "page")(
         h1("Copyright and terms of use"),
         p(
@@ -145,13 +169,16 @@ object Pages:
         p(
           "Facts such as timetables, opening hours and addresses are not anyone's to own; each lab page links its sources. ",
           "Work by others keeps its own license: highlight.js under the BSD 3-Clause License, its notice kept in the pages that bundle it; ",
-          "fonts from Google Fonts under the SIL Open Font License; the first names on the digits page, from the PESEL register, under CC0."
+          "fonts from Google Fonts under the SIL Open Font License; the first names on the digits page, from the PESEL register, under CC0; ",
+          "the map on the Ursus page is drawn by Leaflet under the BSD 2-Clause License over map tiles from OpenStreetMap contributors, ",
+          "under the Open Database License, with the attribution the map itself keeps."
         )
       )
     )
 
   private def card(item: LabItem, at: At): Frag =
     a(cls := "card", href := at(item.path), attr("hreflang") := item.language.code)(
+      glyph(item.slug),
       h3(item.title),
       p(item.blurb),
       p(cls := "tech")(
@@ -168,6 +195,43 @@ object Pages:
       )
     )
 
+  /** One lab card exactly as the catalog pages show it; public with a plain depth so generator
+    * tests can render fixture items (a long title, a language) the same way the pages do.
+    */
+  def cardMarkup(item: LabItem, depth: Int): String = card(item, At(depth)).render
+
+  /** A small decorative monogram for a lab page, drawn in the site's own colours. Pure geometry:
+    * no text to localise, nothing to load, and `aria-hidden` keeps it out of the way. */
+  private def glyph(slug: String): Frag =
+    val mark = slug match
+      case "scala-to-java" =>
+        """<path d="M14 25 C 14 19, 14 12, 14 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+          |<path d="M14 14 C 12 8, 7 5.5, 3 6.5 C 4 12, 9 15.5, 14 14 Z" fill="var(--accent)"/>
+          |<path d="M14 11 C 16 6, 20.5 3.8, 25 4.8 C 24 10, 19 12.8, 14 11 Z" fill="currentColor"/>""".stripMargin
+      case "digits" =>
+        // a phyllotaxis: seeds on the golden-angle spiral a sunflower grows
+        """<g fill="currentColor">
+          |<circle cx="11.5" cy="16.3" r="1.5"/><circle cx="17.6" cy="18.7" r="1.6"/>
+          |<circle cx="7.3" cy="12.8" r="1.65"/><circle cx="11.8" cy="22" r="1.75"/>
+          |<circle cx="9.8" cy="6" r="1.8"/><circle cx="23" cy="17.3" r="1.85"/>
+          |<circle cx="4.6" cy="17.9" r="1.9"/><circle cx="18.5" cy="4.3" r="1.95"/>
+          |</g>
+          |<g fill="var(--accent)">
+          |<circle cx="14.4" cy="9.2" r="1.55"/><circle cx="20.4" cy="9.9" r="1.7"/>
+          |</g>""".stripMargin
+      case "ursus-by-train" =>
+        """<path d="M3.5 22.5 C 9 18, 8.5 12, 14 11.5 C 19.5 11, 20 15.5, 24.5 10.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+          |<circle cx="3.5" cy="22.5" r="2.1" fill="currentColor"/>
+          |<circle cx="8.75" cy="15.5" r="1.7" fill="currentColor"/>
+          |<circle cx="19.6" cy="12.7" r="1.7" fill="currentColor"/>
+          |<circle cx="24.5" cy="10.5" r="2.3" fill="var(--accent)"/>""".stripMargin
+      case _ =>
+        """<path d="M14 4.5 C 20.5 4.5, 24.5 9, 24.5 14.5 C 24.5 20.5, 19.5 23.5, 13.5 23.5 C 8 23.5, 3.5 19.5, 3.5 14 C 3.5 8.5, 8 4.5, 14 4.5 Z" fill="none" stroke="currentColor" stroke-width="2.2"/>
+          |<circle cx="10.5" cy="11.5" r="2.2" fill="var(--accent)"/>""".stripMargin
+    raw(
+      s"""<svg class="glyph" aria-hidden="true" focusable="false" viewBox="0 0 28 28">$mark</svg>"""
+    )
+
   private def aboutSection: Frag =
     section(cls := "about", id := "about")(
       h2("About me"),
@@ -179,15 +243,20 @@ object Pages:
       ),
       p(cls := "links")(
         a(href := Site.blogUrl)("Blog"),
+        a(href := Site.drogaUrl)("Droga"),
         a(href := Site.githubUrl)("GitHub"),
         a(href := Site.linkedInUrl)("LinkedIn"),
         a(href := Site.contactUrl)("Contact")
       )
     )
 
-  private def layout(pageTitle: String, pageDescription: String, at: At, withScript: Boolean = false)(
-      sections: Frag*
-  ): String =
+  private def layout(
+      pageTitle: String,
+      pageDescription: String,
+      at: At,
+      withScript: Boolean = false,
+      canonical: String = ""
+  )(sections: Frag*): String =
     val fullTitle = if pageTitle == Site.author then pageTitle else s"$pageTitle · ${Site.domain}"
     doctype("html")(
       html(lang := "en")(
@@ -198,6 +267,18 @@ object Pages:
           meta(name := "description", content := pageDescription),
           meta(name := "author", content := Site.author),
           meta(name := "tdm-reservation", content := "1"),
+          // what a link preview shows; the image is absolute because scrapers resolve no relative
+          // URL, everything a browser loads below stays relative and preview-safe
+          meta(attr("property") := "og:type", content := "website"),
+          meta(attr("property") := "og:site_name", content := Site.domain),
+          meta(attr("property") := "og:title", content := fullTitle),
+          meta(attr("property") := "og:description", content := pageDescription),
+          meta(attr("property") := "og:url", content := s"https://${Site.domain}/$canonical"),
+          meta(attr("property") := "og:image", content := shareImage),
+          meta(attr("property") := "og:image:width", content := "1200"),
+          meta(attr("property") := "og:image:height", content := "630"),
+          meta(attr("property") := "og:image:alt", content := shareAlt),
+          meta(name := "twitter:card", content := "summary_large_image"),
           link(rel := "license", href := at("copyright.html")),
           link(rel := "icon", href := at("favicon.svg"), `type` := "image/svg+xml"),
           link(rel := "stylesheet", href := at("css/site.css")),
@@ -209,16 +290,19 @@ object Pages:
             span(cls := "top-links")(
               a(href := at("lab/index.html"))("Lab"),
               a(href := at("index.html#about"))("About"),
-              a(href := Site.blogUrl)("Blog")
+              a(href := Site.blogUrl)("Blog"),
+              a(href := Site.drogaUrl)("Droga")
             )
           ),
           mainTag(sections),
           footerTag(
-            p(Site.rights(Language.English, Site.since), " ", a(href := at("copyright.html"))("Terms of use")),
+            p(Site.rights(Language.English, Site.since)),
             p(cls := "muted")(
               a(href := Site.blogUrl)("blog.ww86.eu"),
               " · ",
-              a(href := Site.githubUrl)("GitHub")
+              a(href := Site.githubUrl)("GitHub"),
+              " · ",
+              a(href := at("copyright.html"))("Terms of use")
             )
           )
         )
