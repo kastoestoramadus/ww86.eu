@@ -95,6 +95,11 @@ class PagesSuite extends munit.FunSuite:
     assert(html.contains("""hreflang="pl""""))
   }
 
+  test("the digits page says in a noscript that the calculator needs JavaScript, instead of loading forever") {
+    val widget = region(Pages.digits, """<div id="digits-widget">""", "</div>")
+    assert(widget.contains("<noscript>") && widget.contains("needs JavaScript"), widget)
+  }
+
   test("the digits page lists the special sums as bare numbers and never names a group") {
     val page = Pages.digits
     assert(page.contains("11 22 33 44 55 66 77 88 99 111 222 · 13 14 16 19 26 · 17 41 · 27"))
