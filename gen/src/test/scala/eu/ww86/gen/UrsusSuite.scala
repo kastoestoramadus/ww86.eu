@@ -262,3 +262,8 @@ class UrsusSuite extends munit.FunSuite:
     val wrong    = places.filter(p => seasonal.findFirstIn(p.text).isDefined && p.season.isEmpty).map(_.name)
     assertEquals(wrong, Nil)
   }
+
+  test("the filter drawer announces the result count itself: a modal dialog makes the bar's live count inert") {
+    val drawer = page.slice(page.indexOf("""<dialog class="fdrawer""""), page.indexOf("</dialog>"))
+    assert(drawer.nonEmpty && drawer.contains("""aria-live="polite""""), drawer.take(400))
+  }
