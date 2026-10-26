@@ -262,3 +262,9 @@ class UrsusSuite extends munit.FunSuite:
     val wrong    = places.filter(p => seasonal.findFirstIn(p.text).isDefined && p.season.isEmpty).map(_.name)
     assertEquals(wrong, Nil)
   }
+
+  test("the filter panel opens under the sticky bar, so opening it halfway down keeps the reader's place") {
+    val box = page.slice(page.indexOf("""<div class="fbox">"""), page.indexOf("""<figure class="routes-map""""))
+    assert(page.contains(".fbox{position:sticky") && box.contains("""id="f-toggle"""") && box.contains("""id="f-panel""""), box.take(400))
+    assert(!page.contains("scrollIntoView"), "opening the panel scrolls the page")
+  }
