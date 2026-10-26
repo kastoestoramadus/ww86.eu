@@ -83,7 +83,8 @@ object Pages:
         h1(item.title),
         p(cls := "muted")(item.blurb),
         div(id := "digits-widget")(
-          p(cls := "muted")("Loading the calculator…")
+          p(cls := "muted")("Loading the calculator…"),
+          tag("noscript")(p(cls := "muted")("If this stays on loading, JavaScript is off: the calculator needs JavaScript and runs entirely in your browser."))
         ),
         h2("How it works"),
         p(
