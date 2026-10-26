@@ -24,6 +24,7 @@ h1 .sub { font-size: .85rem; color: var(--dim); font-weight: 400; margin-left: .
 .head { display: flex; align-items: baseline; gap: .5rem; flex-wrap: wrap; }
 .dex { color: var(--accent); font-weight: 700; font-variant-numeric: tabular-nums; }
 .name { font-size: 1.05rem; margin: 0; }
+.closest { font-size: .75rem; opacity: .7; }
 .types { margin-left: auto; color: var(--dim); font-size: .78rem; }
 .slots { display: grid; grid-template-columns: repeat(3, 1fr); gap: .5rem; margin: .7rem 0; }
 .slot { min-width: 0; }

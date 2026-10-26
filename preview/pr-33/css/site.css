@@ -90,7 +90,8 @@ p { margin: var(--s2) 0; }
 /* the hero opens on a contour-line field: drawn in code, quiet as a horizon */
 .hero { padding-top: var(--s3); }
 .hero .field { display: block; width: 100%; height: auto; margin: 0 0 var(--s5); color: var(--border); }
-.links a { margin-right: var(--s3); }
+/* anchors sit side by side with no whitespace, so a flex row is what lets the row wrap on a phone */
+.links { display: flex; flex-wrap: wrap; gap: var(--s1) var(--s3); }
 
 .cards { display: grid; gap: var(--s4); grid-template-columns: 1fr; margin-top: var(--s4); }
 @media (min-width: 40rem) { .cards { grid-template-columns: 1fr 1fr; } }
