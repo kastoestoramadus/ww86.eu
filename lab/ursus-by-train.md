@@ -140,6 +140,9 @@ is that near; the nearest are Albatros (24 min), Mini Zoo (27), Kino ADA (28), S
   place still operates (the Ossów centre closed at the end of 2025; starekinomilanowek.pl became a parked
   domain). The Leroy Merlin canteens carry the user's own recommendation, in the first person like the
   rest of the page.
+- **Filters**: a one-row bar (toggle, selection summary, result count) and the chip panel under it are
+  sticky together. The panel starts folded where the viewport is 520 px or less tall or wide, and the
+  visitor's choice is remembered; opened halfway down it opens under the bar, with no jump in the page.
 
 ## Finding and checking places
 
@@ -284,5 +287,9 @@ misses a line or a station, draws a line the page no longer has, or a route no l
   Goraszewska; Glinianki in Zielonka, Zalew Żyrardowski, the Bzura beach in Sochaczew and Wake Family in
   Brwinów. Found: GIS's bathing service (sk.gis.gov.pl) asks for an hCaptcha, so the lists come from
   WSSE Warszawa's PDFs; Sochaczew's and Brwinów's sites were on the list for August only.
+- **2026-10-26, #31**: the filter chips fold into a panel under a one-row sticky bar: in phone landscape
+  the sticky filter block took 270–315 px of a 375–412 px viewport, the folded bar takes 47. Found: a
+  panel left in normal flow made opening it halfway down jump the page back to the top (scrollY 20394 to
+  560 at 667x375), so the bar and the panel are sticky together.
 - Not checked so far: GTFS counts against KOLEO or the printed timetable; walking routes other than from
   Szamoty (distances are straight lines).
