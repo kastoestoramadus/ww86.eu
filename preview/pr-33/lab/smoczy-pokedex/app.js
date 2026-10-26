@@ -40,6 +40,9 @@ function slotNode(variant, pokemon) {
       type: "button",
       onclick: () => openPrompt(pokemon, variant),
     }, "Podgląd promptu"));
+  } else if (variant.prompt_status === "ready" || variant.prompt_status === "partial") {
+    // the prompt exists but stays unpublished until the rights to the original characters are shown
+    meta.append(el("span", { class: "dim" }, "treść promptu niepublikowana"));
   } else {
     meta.append(el("span", { class: "missing" }, "prompt jeszcze niegotowy"));
   }
