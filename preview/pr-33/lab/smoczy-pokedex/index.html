@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head><meta name="robots" content="noindex, nofollow">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Smoczy: field guide in progress that re-imagines the 151 first-generation creatures as dragons: 453 ready prompts, illustrations still to come.">
+<title>Smoczy Pokedex — laboratorium (Gen I)</title>
+<link rel="stylesheet" href="styles.css">
+<meta name="author" content="Waldemar Wosiński">
+<meta name="tdm-reservation" content="1">
+<link rel="license" href="../../copyright.html">
+</head>
+<body>
+<header class="topbar">
+  <p class="back"><a href="../index.html">&larr; Lab</a></p>
+  <h1>Smoczy Pokédex <span class="sub">laboratorium · I generacja</span></h1>
+  <div class="controls">
+    <label for="q" class="visually-hidden">Szukaj po nazwie lub numerze</label>
+    <input id="q" type="search" placeholder="Szukaj: nazwa lub numer (np. 25)" autocomplete="off">
+    <button id="export" type="button" title="Pobierz cały katalog jako JSON">Eksport JSON</button>
+  </div>
+  <p id="summary" class="summary" aria-live="polite"></p>
+</header>
+<main>
+  <p class="notice">
+    Lab przygotowawczy: 453 prompty są gotowe. Ilustracje czekają na wygenerowanie.
+    Puste miejsce <strong>nie</strong> jest ukończoną ilustracją — stany są prawdziwe, nic nie jest udawane.
+    Głosowanie i komentarze są opcjonalne i obecnie wyłączone.
+  </p>
+  <ul id="grid" class="grid"></ul>
+  <p id="empty" class="empty" hidden>Brak wyników dla „<span id="empty-q"></span>”. Spróbuj innej nazwy albo numeru 1–151.</p>
+</main>
+<template id="card-tpl">
+  <li class="card">
+    <div class="head">
+      <span class="dex"></span>
+      <h2 class="name"></h2>
+      <span class="types"></span>
+    </div>
+    <div class="slots">
+      <div class="slot"><div class="ph"></div><div class="meta"></div></div>
+      <div class="slot"><div class="ph"></div><div class="meta"></div></div>
+      <div class="slot"><div class="ph"></div><div class="meta"></div></div>
+    </div>
+    <details class="adult">
+      <summary>Analiza wizualna (dla dorosłego)</summary>
+      <div class="analysis"></div>
+    </details>
+  </li>
+</template>
+<dialog id="prompt-dlg">
+  <h3>Prompt <span id="dlg-title"></span></h3>
+  <pre id="dlg-text"></pre>
+  <div class="dlg-actions">
+    <button id="dlg-copy" type="button">Kopiuj</button>
+    <button id="dlg-download" type="button">Pobierz .txt</button>
+    <button id="dlg-close" type="button">Zamknij</button>
+  </div>
+</dialog>
+<footer>
+  <p>Projekt fanowski, niekomercyjny. Pokémon © Nintendo / Creatures Inc. / GAME FREAK inc.
+  Dane: PokeAPI (CC BY-NC 4.0). Katalog: <code>data/catalog.json</code> generowany z rekordów kanonicznych.</p>
+<p>© 2026 Waldemar Wosiński. Wszelkie prawa zastrzeżone, również w zakresie eksploracji tekstów i danych (art. 26³ ustawy o prawie autorskim i prawach pokrewnych). Strona rozwijana z użyciem systemów agentowych. <a href="../../copyright.html">Zasady korzystania (po angielsku)</a></p>
+</footer>
+<script src="app.js"></script>
+</body>
+</html>
