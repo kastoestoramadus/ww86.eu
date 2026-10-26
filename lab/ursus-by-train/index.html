@@ -1272,9 +1272,9 @@ footer p{margin:0;max-width:90ch}
     else return;
     render();
   });
-  // Escape folds the open panel and gives focus back to its toggle.
-  document.getElementById('f-panel').addEventListener('keydown', function(ev){
-    if (ev.key !== 'Escape') return;
+  // Escape, on the toggle or on a chip, folds the open panel and gives focus back to its toggle.
+  document.querySelector('.fbox').addEventListener('keydown', function(ev){
+    if (ev.key !== 'Escape' || !state.open) return;
     state.open = false; render(); document.getElementById('f-toggle').focus();
   });
 
