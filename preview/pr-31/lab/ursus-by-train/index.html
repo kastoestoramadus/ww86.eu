@@ -47,13 +47,15 @@ header.top .zones{max-width:62ch;color:var(--muted);font-size:15px;margin:10px 0
 :root[data-theme="dark"] .badge{color:#0F1311}
 .tnum{font-variant-numeric:tabular-nums}
 
-/* Controls: only the compact bar is sticky; the chip groups sit in a collapsible panel in normal flow,
-   so reading the results never leaves a large filter area covering the screen (phone landscape included). */
-.controls{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);margin-top:36px;padding-block:8px;border-bottom:1px solid var(--rule);display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center}
+/* Controls: a compact bar and a foldable chip panel under it, sticky together. The panel starts folded on short
+   or narrow viewports, so reading the results never leaves a large filter area covering the screen, and when it is
+   opened halfway down it opens right under the bar instead of up at the top of the page. */
+.fbox{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);margin-top:36px}
+.controls{background:var(--bg);padding-block:8px;border-bottom:1px solid var(--rule);display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center}
 .controls .toggle::after{content:" ▾"}
 .controls .toggle[aria-expanded="true"]::after{content:" ▴"}
 .controls .summary{flex:1 1 120px;font-size:13px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.fpanel{display:flex;flex-wrap:wrap;gap:10px 22px;align-items:center;padding-block:2px 14px;border-bottom:1px solid var(--rule);scroll-margin-top:60px}
+.fpanel{display:flex;flex-wrap:wrap;gap:10px 22px;align-items:center;padding-block:2px 14px;border-bottom:1px solid var(--rule);padding-inline:3px;max-height:calc(100vh - 120px);max-height:calc(100dvh - 120px);overflow:auto;overscroll-behavior:contain}
 .group{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
 .group .lbl{font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-right:4px}
 .chip{font:inherit;font-size:14px;line-height:1;padding:7px 11px;border-radius:999px;border:1px solid var(--rule);background:var(--surface);color:var(--ink);cursor:pointer;display:inline-flex;gap:6px;align-items:center}
@@ -154,6 +156,7 @@ footer p{margin:0;max-width:90ch}
     <p class="zones"><strong>Strefy biletowe ZTM.</strong> Z Ursusa jedziesz w 1. strefie, czyli w Warszawie. Przerywana linia na trasie pokazuje, gdzie zaczyna się 2. strefa, a gdzie 3. Stacje graniczne, Ursus-Niedźwiadek, Gołąbki i Falenica, należą do obu stref, więc 2. strefa zaczyna się za nimi. Bilet na strefy 1 i 2 obowiązuje też w pociągach KM i SKM — do Pruszkowa (R1), Płochocina (R3) i Otwocka (S1). ZTM ma tylko dwie strefy; 3. strefą nazywam wszystko dalej, gdzie potrzebny jest bilet Kolei Mazowieckich.</p>
   </header>
 
+  <div class="fbox">
   <nav class="controls" aria-label="Filtry">
     <button class="chip toggle" id="f-toggle" aria-expanded="true" aria-controls="f-panel">Filtry</button>
     <span class="summary" id="f-summary"></span>
@@ -193,6 +196,7 @@ footer p{margin:0;max-width:90ch}
       <button class="chip" id="f-dist-all" data-dist="all" aria-pressed="true">Dowolne</button>
       <button class="chip" id="f-dist-at" data-dist="at" aria-pressed="false">Tuż obok</button>
     </div>
+  </div>
   </div>
 
   <figure class="routes-map" id="map-box">
@@ -1032,8 +1036,9 @@ footer p{margin:0;max-width:90ch}
   try { var saved = JSON.parse(localStorage.getItem('ursus-filters') || 'null'); if (saved) { state = Object.assign(state, saved); } } catch(e) {}
   // A remembered filter may name a category that no longer exists.
   if (state.cat !== 'all' && !CAT[state.cat]) state.cat = 'all';
-  // The panel starts folded on short viewports (phone landscape); the choice is then remembered.
-  if (typeof state.open !== 'boolean') state.open = window.innerHeight > 520;
+  // The panel starts folded on short or narrow viewports (phones), where the open panel would cover most of
+  // the screen; the choice is then remembered.
+  if (typeof state.open !== 'boolean') state.open = window.innerHeight > 520 && window.innerWidth > 520;
 
   function el(tag, cls, html){ var e = document.createElement(tag); if (cls) e.className = cls; if (html != null) e.innerHTML = html; return e; }
   function esc(s){ return String(s).replace(/[&<>"]/g, function(ch){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[ch]; }); }
@@ -1244,11 +1249,7 @@ footer p{margin:0;max-width:90ch}
 
     document.getElementById('count').textContent = total + ' ' + (total === 1 ? 'miejsce' : (total % 10 >= 2 && total % 10 <= 4 && (total % 100 < 12 || total % 100 > 14) ? 'miejsca' : 'miejsc'));
     document.getElementById('f-toggle').setAttribute('aria-expanded', String(state.open));
-    var panel = document.getElementById('f-panel');
-    var wasOpen = !panel.hidden;
-    panel.hidden = !state.open;
-    // Opening from halfway down the results: bring the panel into view, clear of the sticky bar.
-    if (state.open && !wasOpen) panel.scrollIntoView({ block:'nearest' });
+    document.getElementById('f-panel').hidden = !state.open;
     document.getElementById('f-summary').textContent =
       (state.line === 'all' ? 'wszystkie linie' : state.line.toUpperCase()) + ' · ' +
       (state.cat === 'all' ? 'wszystko' : CAT[state.cat]) + ' · ' +
@@ -1270,6 +1271,11 @@ footer p{margin:0;max-width:90ch}
     else if (b.dataset.dist) state.dist = b.dataset.dist;
     else return;
     render();
+  });
+  // Escape folds the open panel and gives focus back to its toggle.
+  document.getElementById('f-panel').addEventListener('keydown', function(ev){
+    if (ev.key !== 'Escape') return;
+    state.open = false; render(); document.getElementById('f-toggle').focus();
   });
 
   render();
