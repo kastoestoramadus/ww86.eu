@@ -44,6 +44,11 @@ class StyleSuite extends munit.FunSuite:
     assert(focus.exists(_.contains("outline-offset: 2px")))
   }
 
+  test("the link rows wrap: their anchors have no whitespace between them, so inline flow cannot break the line") {
+    val links = rule(".links").getOrElse(fail("no .links rule"))
+    assert(links.contains("display: flex") && links.contains("flex-wrap: wrap"), links)
+  }
+
   test("links in running text are underlined") {
     assert(
       rule("main p a, .breadcrumb a, footer a, .about .links a").exists(_.contains("text-decoration: underline"))
