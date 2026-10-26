@@ -21,3 +21,8 @@ class SmoczySuite extends munit.FunSuite:
     val images = Files.walk(dir).toArray.map(_.toString).filter(_.matches("(?i).*\\.(png|jpe?g|webp|gif|svg|avif)")).toList
     assertEquals(images, Nil)
   }
+
+  test("each creature name is captioned as the closest Pokémon, so it reads as a label and not as a Smoczy name") {
+    val html = Files.readString(dir.resolve("index.html"))
+    assert(html.contains("class=\"closest\">closest Pokémon<"), "card template has no closest-Pokémon caption")
+  }
