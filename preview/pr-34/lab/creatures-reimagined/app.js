@@ -148,7 +148,7 @@ async function renderOba() {
   const maps = keys.map((k, i) => [k, new Map(indexes[i].pokemon.map((p) => [p.pokemon_id, p]))]);
   const ref = indexes[0].pokemon; // id sets are equal (build check), ref order is the numeric order
   const head = $("#oba-head");
-  head.replaceChildren(el("div", {}), el("div", { class: "seg", text: ui.styles.styles[0].label }),
+  head.replaceChildren(el("div", { class: "seg", text: ui.styles.styles[0].label }),
     el("div", { class: "seg", text: ui.styles.styles[1] ? ui.styles.styles[1].label : "" }));
   const rows = $("#oba-rows");
   rows.replaceChildren();
@@ -162,10 +162,10 @@ async function renderOba() {
     shown += 1;
     const row = el("li", { class: "oba-row", "data-id": p.pokemon_id },
       el("div", { class: "lbl" }, `#${p.pokemon_id}`, el("span", { class: "nm", text: p.display_name })));
-    for (const [k, c] of cells) {
-      const variants = c ? c.variants : [null]; // no record for this style → one "brak danych" cell
-      variants.forEach((v, i) => row.append(obaCell(k, p.pokemon_id, c, v, i)));
-    }
+    const perStyle = cells.map(([k, c]) => ({ k, c, variants: c ? c.variants : [null] })); // no record → one "brak danych" cell
+    const depth = Math.max(...perStyle.map((s) => s.variants.length));
+    for (let i = 0; i < depth; i += 1) // a row of pairs: the same variant of each style, side by side
+      for (const s of perStyle) row.append(obaCell(s.k, p.pokemon_id, s.c, s.variants[i] || null, i));
     rows.append(row);
   }
   $("#oba-empty").hidden = shown > 0;
