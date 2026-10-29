@@ -4,6 +4,7 @@
 "use strict";
 
 const OBA = "oba";
+const DEFAULT_STYLE = "pojazdy"; // what a bare URL loads, when this key exists
 const state = { style: null, id: null, v: 1 };
 const ui = {
   styles: null,          // data/styles.json
@@ -34,15 +35,21 @@ async function fetchJson(url) {
 }
 
 async function styleIndex(key) {
-  if (!ui.indexes.has(key)) ui.indexes.set(key, await fetchJson(`assets/data/${key}.json`));
+  if (!ui.indexes.has(key)) ui.indexes.set(key, await fetchJson(`data/${key}.json`));
   return ui.indexes.get(key);
 }
 
 /* ---------- URL state ---------- */
 
+function defaultStyleKey() {
+  if (!ui.styles) return null;
+  const preferred = ui.styles.styles.find((s) => s.key === DEFAULT_STYLE);
+  return (preferred || ui.styles.styles[0] || {}).key || null;
+}
+
 function parseUrl() {
   const p = new URLSearchParams(location.search);
-  const style = p.get("style") || (ui.styles && ui.styles.styles[0] && ui.styles.styles[0].key) || null;
+  const style = p.get("style") || defaultStyleKey();
   const id = p.get("id");
   const v = Math.min(3, Math.max(1, parseInt(p.get("v") || "1", 10) || 1));
   return { style, id, v };
@@ -62,7 +69,7 @@ function applyState() {
   const { style, id, v } = parseUrl();
   state.style = style; state.id = id; state.v = v;
   const sel = $("#style");
-  const want = sel && (sel.querySelector(`option[value="${style}"]`) ? style : (ui.styles.styles[0] && ui.styles.styles[0].key));
+  const want = sel && (sel.querySelector(`option[value="${style}"]`) ? style : defaultStyleKey());
   state.style = want;
   if (sel) sel.value = want;
   render();
@@ -141,8 +148,8 @@ async function renderOba() {
   const maps = keys.map((k, i) => [k, new Map(indexes[i].pokemon.map((p) => [p.pokemon_id, p]))]);
   const ref = indexes[0].pokemon; // id sets are equal (build check), ref order is the numeric order
   const head = $("#oba-head");
-  head.replaceChildren(el("div", {}), el("div", { text: ui.styles.styles[0].label }),
-    el("div", { text: ui.styles.styles[1] ? ui.styles.styles[1].label : "" }));
+  head.replaceChildren(el("div", {}), el("div", { class: "seg", text: ui.styles.styles[0].label }),
+    el("div", { class: "seg", text: ui.styles.styles[1] ? ui.styles.styles[1].label : "" }));
   const rows = $("#oba-rows");
   rows.replaceChildren();
   const only = $("#only-img").checked;
@@ -155,23 +162,24 @@ async function renderOba() {
     shown += 1;
     const row = el("li", { class: "oba-row", "data-id": p.pokemon_id },
       el("div", { class: "lbl" }, `#${p.pokemon_id}`, el("span", { class: "nm", text: p.display_name })));
-    for (const [k, c] of cells) row.append(obaCell(k, p.pokemon_id, c));
+    for (const [k, c] of cells) {
+      const variants = c ? c.variants : [null]; // no record for this style → one "brak danych" cell
+      variants.forEach((v, i) => row.append(obaCell(k, p.pokemon_id, c, v, i)));
+    }
     rows.append(row);
   }
   $("#oba-empty").hidden = shown > 0;
   $("#summary").textContent = `Oba: ${shown} z ${ref.length} gatunków · pary łączone po pokemon_id`;
 }
 
-function obaCell(key, pid, p) {
-  const img = p ? firstImage(p) : null;
-  const cell = el("div", { class: "cell", tabindex: "0", role: "link", "data-style": key, "data-id": pid,
-    onclick: () => { state.style = key; openDetail(pid, 1, true); },
-    onkeydown: (e) => { if (e.key === "Enter") { state.style = key; openDetail(pid, 1, true); } } },
-    img ? el("img", { src: img.thumb_src, alt: `${key} ${pid}`, loading: "lazy", decoding: "async" })
-        : el("div", { class: "ph", text: p ? "Brak obrazka" : "brak danych" }),
-    el("div", {}, el("div", { class: "nm", text: p ? p.display_name : "—" }),
-      el("div", { class: "st", text: p ? `${p.image_count}/${p.variant_count} obrazków` : "brak rekordu" })));
-  return cell;
+function obaCell(key, pid, p, varr, vIdx) {
+  const img = varr && varr.image_status === "ready" && varr.thumb_src
+    ? el("img", { src: varr.thumb_src, alt: `${key} ${pid} — wariant ${vIdx + 1}`, loading: "lazy", decoding: "async" })
+    : null;
+  return el("div", { class: "cell", tabindex: "0", role: "link", "data-style": key, "data-id": pid,
+    onclick: () => { state.style = key; openDetail(pid, vIdx + 1, true); },
+    onkeydown: (e) => { if (e.key === "Enter") { state.style = key; openDetail(pid, vIdx + 1, true); } } }, img
+      || el("div", { class: "ph", text: p ? "Brak obrazka" : "brak danych" }));
 }
 
 /* ---------- detail view ---------- */
@@ -299,7 +307,7 @@ function wire() {
 }
 
 async function main() {
-  ui.styles = await fetchJson("assets/data/styles.json");
+  ui.styles = await fetchJson("data/styles.json");
   const sel = $("#style");
   sel.replaceChildren();
   for (const s of ui.styles.styles) sel.append(el("option", { value: s.key, text: `${s.label} (${s.images} obrazków)` }));
