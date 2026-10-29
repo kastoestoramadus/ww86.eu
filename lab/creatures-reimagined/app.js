@@ -35,7 +35,7 @@ async function fetchJson(url) {
 }
 
 async function styleIndex(key) {
-  if (!ui.indexes.has(key)) ui.indexes.set(key, await fetchJson(`data/${key}.json`));
+  if (!ui.indexes.has(key)) ui.indexes.set(key, await fetchJson(`assets/data/${key}.json`));
   return ui.indexes.get(key);
 }
 
@@ -307,7 +307,7 @@ function wire() {
 }
 
 async function main() {
-  ui.styles = await fetchJson("data/styles.json");
+  ui.styles = await fetchJson("assets/data/styles.json");
   const sel = $("#style");
   sel.replaceChildren();
   for (const s of ui.styles.styles) sel.append(el("option", { value: s.key, text: `${s.label} (${s.images} obrazków)` }));
