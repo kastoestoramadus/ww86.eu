@@ -2,8 +2,8 @@
  "format": "pokedex-galeria-style-index",
  "format_version": "1.0.0",
  "style": "smoki",
- "label": "Dragons",
- "generated": "2026-10-28T19:53:40+00:00",
+ "label": "Smoki",
+ "generated": "2026-10-29T22:48:58+00:00",
  "pokemon": [
   {
    "pokemon_id": "001",
@@ -186,9 +186,9 @@
     {
      "variant_id": "005-v3",
      "image_status": "ready",
-     "image_version": "1.0.0",
-     "image_src": "assets/img/smoki/005-v3_v1.0.0.jpg",
-     "thumb_src": "assets/img/smoki/thumb/005-v3_v1.0.0.jpg",
+     "image_version": "1.1.0",
+     "image_src": "assets/img/smoki/005-v3_v1.1.0.jpg",
+     "thumb_src": "assets/img/smoki/thumb/005-v3_v1.1.0.jpg",
      "concept_summary": "Smok z żaglowymi skrzydłami: dwie nogi i długie ostre skrzydła."
     }
    ]
@@ -261,9 +261,9 @@
     {
      "variant_id": "007-v3",
      "image_status": "ready",
-     "image_version": "1.0.0",
-     "image_src": "assets/img/smoki/007-v3_v1.0.0.jpg",
-     "thumb_src": "assets/img/smoki/thumb/007-v3_v1.0.0.jpg",
+     "image_version": "1.1.0",
+     "image_src": "assets/img/smoki/007-v3_v1.1.0.jpg",
+     "thumb_src": "assets/img/smoki/thumb/007-v3_v1.1.0.jpg",
      "concept_summary": "Muszlowy wiwern: błoniaste skrzydła i dwie tylne łapy pod okrągłym pancerzem."
     }
    ]
@@ -290,9 +290,9 @@
     {
      "variant_id": "008-v2",
      "image_status": "ready",
-     "image_version": "1.0.0",
-     "image_src": "assets/img/smoki/008-v2_v1.0.0.jpg",
-     "thumb_src": "assets/img/smoki/thumb/008-v2_v1.0.0.jpg",
+     "image_version": "1.1.0",
+     "image_src": "assets/img/smoki/008-v2_v1.1.0.jpg",
+     "thumb_src": "assets/img/smoki/thumb/008-v2_v1.1.0.jpg",
      "concept_summary": "Skrzydlaty zwój: pancerz między czterema płetwiastymi skrzydłami."
     },
     {
@@ -507,9 +507,9 @@
     {
      "variant_id": "014-v1",
      "image_status": "ready",
-     "image_version": "1.0.0",
-     "image_src": "assets/img/smoki/014-v1_v1.0.0.jpg",
-     "thumb_src": "assets/img/smoki/thumb/014-v1_v1.0.0.jpg",
+     "image_version": "1.1.0",
+     "image_src": "assets/img/smoki/014-v1_v1.1.0.jpg",
+     "thumb_src": "assets/img/smoki/thumb/014-v1_v1.1.0.jpg",
      "concept_summary": "Złoty strażnik: dwie nogi i szczelnie złożone skrzydła-płyty."
     },
     {
@@ -3393,9 +3393,9 @@
     {
      "variant_id": "091-v1",
      "image_status": "ready",
-     "image_version": "1.0.0",
-     "image_src": "assets/img/smoki/091-v1_v1.0.0.jpg",
-     "thumb_src": "assets/img/smoki/thumb/091-v1_v1.0.0.jpg",
+     "image_version": "1.1.0",
+     "image_src": "assets/img/smoki/091-v1_v1.1.0.jpg",
+     "thumb_src": "assets/img/smoki/thumb/091-v1_v1.1.0.jpg",
      "concept_summary": "Kolczasty smok pancerny: wysoka muszla chroni grzbiet czteronożnego strażnika."
     },
     {
@@ -3409,9 +3409,9 @@
     {
      "variant_id": "091-v3",
      "image_status": "ready",
-     "image_version": "1.0.0",
-     "image_src": "assets/img/smoki/091-v3_v1.0.0.jpg",
-     "thumb_src": "assets/img/smoki/thumb/091-v3_v1.0.0.jpg",
+     "image_version": "1.1.0",
+     "image_src": "assets/img/smoki/091-v3_v1.1.0.jpg",
+     "thumb_src": "assets/img/smoki/thumb/091-v3_v1.1.0.jpg",
      "concept_summary": "Morski smok kolczastego kołnierza: długi tułów pod wysoką rozetą muszli."
     }
    ]
