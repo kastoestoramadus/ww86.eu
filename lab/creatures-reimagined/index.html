@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Creatures reimagined — an unofficial fan gallery</title>
+<link rel="stylesheet" href="styles.css">
+<meta name="author" content="Waldemar Wosiński">
+<meta name="tdm-reservation" content="1">
+<link rel="license" href="../../copyright.html">
+</head>
+<body>
+<header class="topbar">
+  <h1>Creatures reimagined <span class="sub">laboratorium · I generacja</span></h1>
+  <div class="controls">
+    <label for="style">Styl</label>
+    <select id="style" aria-label="Wybór stylu"></select>
+    <label for="q" class="visually-hidden">Szukaj po nazwie lub numerze</label>
+    <input id="q" type="search" placeholder="Szukaj: nazwa lub numer (np. 25)" autocomplete="off">
+    <label class="toggle"><input type="checkbox" id="only-img"> Tylko z obrazkami</label>
+  </div>
+  <p id="summary" class="summary" aria-live="polite"></p>
+</header>
+<main>
+  <p class="notice">
+    Galeria statyczna: dwa style tych samych 151 gatunków. Puste miejsce <strong>nie</strong> jest
+    ukończonym obrazem — stany są prawdziwe, nic nie jest udawane.
+  </p>
+  <p class="notice">Nieoficjalny fan-work. Nie jest powiązany z Nintendo, Creatures, GAME FREAK ani The Pokémon Company i nie jest przez nie wspierany. Prawa do postaci i znaków towarowych stron trzecich pozostają przy ich właścicielach.</p>
+  <p class="notice">Unofficial fan work. Not affiliated with, endorsed by or sponsored by Nintendo, Creatures, GAME FREAK or The Pokémon Company. Third-party character and trademark rights remain with their owners.</p>
+  <section id="grid-view">
+    <ul id="grid" class="grid"></ul>
+    <p id="empty" class="empty" hidden>Brak wyników. Wyczyść wyszukiwanie albo wyłącz „Tylko z obrazkami”.</p>
+  </section>
+  <section id="oba-view" hidden>
+    <div class="oba-head" id="oba-head"></div>
+    <ul id="oba-rows" class="oba-rows"></ul>
+    <p id="oba-empty" class="empty" hidden>Brak wyników.</p>
+  </section>
+  <section id="detail-view" class="detail" hidden>
+    <div class="detail-bar">
+      <button id="prev" type="button" class="nav">‹ Poprzedni</button>
+      <a id="back" href="#" class="back">✕ Zamknij</a>
+      <button id="next" type="button" class="nav">Następny ›</button>
+    </div>
+    <div class="detail-card">
+      <p class="head"><span id="d-dex" class="dex"></span> <strong id="d-name"></strong>
+        <span id="d-types" class="types"></span></p>
+      <div id="d-stage" class="stage"><img id="d-img" alt=""><div id="d-ph" class="ph big" hidden>Brak obrazka</div></div>
+      <div class="variant-row" id="d-variants"></div>
+      <p id="d-summary" class="concept"></p>
+      <p class="hint">Strzałki ←/→ zmieniają gatunek, klawisze 1–3 wariant, Esc zamyka. Na telefonie: przesuń palcem.</p>
+    </div>
+  </section>
+</main>
+<footer>
+  <p>Projekt fanowski, niekomercyjny. Pokémon © Nintendo / Creatures Inc. / GAME FREAK inc.
+  Dane: PokeAPI (CC BY-NC 4.0). Katalogi: <code>assets/data/*.json</code> generowane z rekordów kanonicznych
+  (Smoki, Pojazdy). Obrazy: derivaty JPEG z wygenerowanych plików.</p>
+  <p><a href="../index.html">← lab ww86.eu</a></p>
+  <p>© 2026 Waldemar Wosiński. Wszelkie prawa zastrzeżone, również w zakresie eksploracji tekstów i danych (art. 26³ ustawy o prawie autorskim i prawach pokrewnych). Strona rozwijana z użyciem systemów agentowych. <a href="../../copyright.html">Zasady korzystania (po angielsku)</a></p>
+</footer>
+<script src="app.js"></script>
+</body>
+</html>

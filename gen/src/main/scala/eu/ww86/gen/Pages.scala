@@ -140,6 +140,13 @@ object Pages:
           a(href := Site.contactUrl)("contact on the blog"),
           "."
         ),
+        p(
+          "The creatures gallery at lab/creatures-reimagined/ is excepted: © 2026 Waldemar Wosiński, for original human-authored contributions and creative selection and arrangement, to the extent protected. ",
+          "All rights reserved in those contributions and any applicable database rights. Images are AI-generated fan interpretations. ",
+          "No claim is made to third-party characters or trademarks, or to exclusive copyright in purely AI-generated material. No open licence is granted. ",
+          "Reuse requiring permission under applicable law requires written permission. Text and data mining is expressly reserved to the extent permitted by law; statutory exceptions remain unaffected. ",
+          "See Terms of use and contact details."
+        ),
         h2("Without asking"),
         p(
           "Link to any page. Some uses need no permission under the law anyway, such as quoting a fragment with its author and source ",

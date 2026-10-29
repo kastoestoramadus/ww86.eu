@@ -31,6 +31,14 @@ object Catalog:
   /** Newest first - this order is what the pages show. */
   val items: List[LabItem] = List(
     LabItem(
+      slug = "creatures-reimagined",
+      title = "Creatures reimagined",
+      blurb = "Unofficial AI-generated fan interpretations of Pokémon as dragons and vehicles.",
+      tech = List("JavaScript"),
+      year = 2026,
+      language = Language.Polish
+    ),
+    LabItem(
       slug = "scala-to-java",
       title = "Thinking in Scala, writing Java",
       blurb = "35 idioms side by side in Scala and Java, 10 problems and 14 stream tasks solved in both with the output, and 22 traps that compile and still give the wrong answer. Handy for a live-coding interview or someone else's codebase, in both directions.",
