@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="description" content="Prompt dla rodzica: jak zapytać AI o grę, zanim ją kupisz. Z wykładu „Mądre granie”.">
+</head>
+<body>
+<nav style="font:14px/1.4 Arial,sans-serif;padding:12px max(16px,env(safe-area-inset-left,0px));display:flex;gap:16px;flex-wrap:wrap"><a href="../index.html">← ww86.eu lab</a><a href="index.html">Źródła wykładu</a></nav>
+<title>Mądre granie: prompt dla rodzica</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<style>
+/* Layout: one narrow phone-first column — what it is, the prompt in a box, one copy button, three steps. */
+:root{--bg:#F3F5F7;--card:#FFFFFF;--ink:#14213D;--muted:#4A5568;--acc:#0E7C66;--acc-ink:#FFFFFF;--line:#D5DCE3;
+  --ui:"Segoe UI","Helvetica Neue",Arial,sans-serif}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#10161D;--card:#18212B;--ink:#E8EEF4;--muted:#A9B6C2;--acc:#2BB08F;--acc-ink:#04201A;--line:#2C3642;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#10161D;--card:#18212B;--ink:#E8EEF4;--muted:#A9B6C2;--acc:#2BB08F;--acc-ink:#04201A;--line:#2C3642;color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--ui);font-size:17px;line-height:1.5}
+main{max-width:680px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:28px 48px;display:grid;gap:18px}
+.k{font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--acc);font-weight:700}
+h1{font-size:28px;line-height:1.2;margin:0;text-wrap:balance}
+p{margin:0}
+.muted{color:var(--muted)}
+ol{margin:0;padding-left:22px;display:grid;gap:6px}
+.box{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px;white-space:pre-wrap;font-size:16px;line-height:1.5;min-width:0;overflow-wrap:anywhere}
+button{font:inherit;font-weight:600;background:var(--acc);color:var(--acc-ink);border:0;border-radius:8px;padding:12px 18px;cursor:pointer;justify-self:start}
+button:focus-visible{outline:3px solid var(--ink);outline-offset:2px}
+#msg{font-size:14px;color:var(--muted);min-height:1.2em}
+footer{font-size:13px;color:var(--muted)}
+</style>
+<main>
+  <div class="k">Mądre granie · wykład 6.11.2026</div>
+  <h1>Zapytaj AI, zanim kupisz grę</h1>
+  <p class="muted">Nie chodzi o to, czy gra jest „dobra”, tylko czy daje dziecku coś, co zostanie poza ekranem — i czy nie jest zbudowana po to, żeby je przytrzymać.</p>
+  <ol>
+    <li>Skopiuj prompt poniżej.</li>
+    <li>Wklej go do dowolnego czatu AI.</li>
+    <li>Wpisz tytuł gry i wiek dziecka w nawiasach kwadratowych.</li>
+  </ol>
+  <div class="box" id="prompt">Jestem rodzicem i zastanawiam się nad grą „[TYTUŁ GRY]” dla dziecka w wieku [WIEK] lat. Pomóż mi ją mądrze ocenić.
+
+Cel oceny: czy ta gra daje dziecku trening, który przyda się w prawdziwym życiu, i czy nie jest zbudowana głównie po to, żeby je jak najdłużej przytrzymać. Dobra gra robi jedną rzecz bardzo dobrze, kiedyś się kończy, płaci się za nią raz i najlepiej grać w nią razem.
+
+Opowiedz mi o niej jak znajomy, który zna gry i zna dzieci:
+- Co ta gra robi najlepiej? Za co ludzie ją cenią?
+- Jakie umiejętności przy okazji rozwija i na ile różnorodne (logika, planowanie, współpraca, cierpliwość, kreatywność, refleks, język)? Co z tego dziecko może przenieść do życia?
+- Na ile zawiera sztuczne mechanizmy, które liczą na przywiązanie gracza: codzienne nagrody, serie dni, przepustki sezonowe, losowe skrzynki, waluty za pieniądze, liczniki „tylko dziś”, niekończący się postęp, powiadomienia? Które z nich są w tej grze i jak mocno?
+- Czy ma dobrą kampanię dla jednego gracza: z historią, początkiem i końcem, dopracowaną, a nie tylko dodatkiem do trybu sieciowego? Ile godzin zajmuje jej przejście (np. HowLongToBeat)?
+- Czy gra ma koniec albo naturalne miejsca, żeby przestać? Płacę raz, czy płacę dalej?
+- Czy da się grać we dwoje na jednym ekranie z rodzicem albo rodzeństwem?
+- Treść i wiek: PEGI i za co, czat z obcymi, co może być za trudne dla tego wieku.
+- Język: dla młodszego dziecka ważna jest polska wersja; starszemu angielski w grze może pomóc ćwiczyć język — oceń, co lepsze w tym wieku.
+
+Na końcu: werdykt w 2–3 zdaniach (polecam / z umową / odpuścić), jak w nią grać mądrze (z kim, ile, kiedy kończymy) i jedna lepsza alternatywa, jeśli taka jest.
+
+Pisz uczciwie: czego nie wiesz na pewno, napisz „nie wiem” i gdzie to sprawdzić (sklep, pegi.info, Common Sense Media). Nie zgaduj cen ani ocen. Nie potrzebujesz żadnych danych dziecka poza wiekiem i nie oceniaj dziecka — oceniasz grę.</div>
+  <button id="copy" type="button">Kopiuj prompt</button>
+  <p id="msg" aria-live="polite"></p>
+  <p class="muted">AI potrafi się mylić, zwłaszcza przy cenach i kategorii wiekowej. Cenę i PEGI sprawdź jeszcze w sklepie i na pegi.info.</p>
+  <footer>Nie wpisuj imienia ani innych danych dziecka — wystarczy wiek.</footer>
+</main>
+<script>
+document.getElementById('copy').addEventListener('click', async () => {
+  const t = document.getElementById('prompt').innerText, m = document.getElementById('msg');
+  try { await navigator.clipboard.writeText(t); m.textContent = 'Skopiowane. Wklej w czacie AI.'; }
+  catch (e) { const r = document.createRange(); r.selectNodeContents(document.getElementById('prompt')); const s = getSelection(); s.removeAllRanges(); s.addRange(r); m.textContent = 'Tekst zaznaczony — skopiuj go (Kopiuj).'; }
+});
+</script>
+
+</body>
+</html>
