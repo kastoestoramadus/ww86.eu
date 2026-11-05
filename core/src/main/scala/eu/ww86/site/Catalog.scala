@@ -33,7 +33,7 @@ object Catalog:
     LabItem(
       slug = "madre-granie",
       title = "Smart play: sources and a parent's prompt",
-      blurb = "Material for a talk for parents on guiding children through video games (Warsaw, November 2026): every source behind it, searchable, about 1,600 studies, reports, rating services and store pages, and a prompt for asking an AI about a game before buying it.",
+      blurb = "Material for a talk for parents on guiding children through video games (Warsaw, November 2026): the talk slides, every source behind them, searchable, about 1,600 studies, reports, rating services and store pages, and a prompt for asking an AI about a game before buying it.",
       tech = List("JavaScript", "drafted with Claude"),
       year = 2026,
       language = Language.Polish
