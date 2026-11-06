@@ -13,10 +13,9 @@
 <title>Mądre granie: prompty dla rodzica</title>
 <style>
 /* Layout: one narrow phone-first column — what it is, the prompt in a box, one copy button, three steps. */
-:root{--bg:#F3F5F7;--card:#FFFFFF;--ink:#14213D;--muted:#4A5568;--acc:#0E7C66;--acc-ink:#FFFFFF;--line:#D5DCE3;
-  --ui:"Segoe UI","Helvetica Neue",Arial,sans-serif}
-@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#10161D;--card:#18212B;--ink:#E8EEF4;--muted:#A9B6C2;--acc:#2BB08F;--acc-ink:#04201A;--line:#2C3642;color-scheme:dark}}
-:root[data-theme="dark"]{--bg:#10161D;--card:#18212B;--ink:#E8EEF4;--muted:#A9B6C2;--acc:#2BB08F;--acc-ink:#04201A;--line:#2C3642;color-scheme:dark}
+:root{--bg:#10161D;--card:#18212B;--ink:#E8EEF4;--muted:#A9B6C2;--acc:#2BB08F;--acc-ink:#04201A;--line:#2C3642;
+  --ui:"Segoe UI","Helvetica Neue",Arial,sans-serif;color-scheme:dark}
+:root[data-theme="light"]{--bg:#F3F5F7;--card:#FFFFFF;--ink:#14213D;--muted:#4A5568;--acc:#0E7C66;--acc-ink:#FFFFFF;--line:#D5DCE3;color-scheme:light}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--ui);font-size:17px;line-height:1.5}
 main{max-width:680px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:28px 48px;display:grid;gap:18px}
