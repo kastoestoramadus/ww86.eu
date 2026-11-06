@@ -32,8 +32,8 @@ object Catalog:
   val items: List[LabItem] = List(
     LabItem(
       slug = "madre-granie",
-      title = "Smart play: slides, sources and a parent's prompt",
-      blurb = "Material for a talk for parents on guiding children through video games (Warsaw, November 2026): the talk slides, every source behind them, searchable, about 1,600 studies, reports, rating services and store pages, and a prompt for asking an AI about a game before buying it.",
+      title = "Smart play: slides, sources and prompts for parents",
+      blurb = "Material for a talk for parents on guiding children through video games (Warsaw, November 2026): the talk slides, every source behind them, searchable, about 1,600 studies, reports, rating services and store pages, and seven prompts for asking an AI about games: before buying, free games, money, ending a session and talking after play.",
       tech = List("JavaScript"),
       year = 2026,
       language = Language.Polish
