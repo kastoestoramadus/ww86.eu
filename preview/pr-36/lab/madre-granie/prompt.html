@@ -7,10 +7,10 @@
 <meta name="author" content="Waldemar Wosiński">
 <meta name="tdm-reservation" content="1">
 <link rel="license" href="../../copyright.html">
+<title>Mądre granie: prompty dla rodzica</title>
 </head>
 <body>
 <nav style="font:14px/1.4 Arial,sans-serif;padding:12px max(16px,env(safe-area-inset-left,0px));display:flex;gap:16px;flex-wrap:wrap"><a href="../index.html">← ww86.eu lab</a><a href="index.html">Źródła wykładu</a></nav>
-<title>Mądre granie: prompty dla rodzica</title>
 <style>
 /* Layout: one narrow phone-first column — what it is, the prompt in a box, one copy button, three steps. */
 :root{--bg:#10161D;--card:#18212B;--ink:#E8EEF4;--muted:#A9B6C2;--acc:#2BB08F;--acc-ink:#04201A;--line:#2C3642;
@@ -43,8 +43,8 @@ footer{font-size:13px;color:var(--muted)}
   <section class="p" id="ocena">
     <div class="k">1 · Zanim kupisz</div>
     <h2>Oceń grę dla dziecka</h2>
-    <p class="muted">Ten z pierwszego kodu QR na wykładzie. Wpisz tytuł gry i wiek dziecka. Odpowiedź AI to materiał do decyzji — cenę i PEGI sprawdź jeszcze w sklepie i na pegi.info.</p>
-    <div class="box">Jestem rodzicem i zastanawiam się nad grą „[TYTUŁ GRY]” dla dziecka w wieku [WIEK] lat. Pomóż mi ją mądrze ocenić.
+    <p class="muted">Ten z pierwszego kodu QR na wykładzie. Wpisz tytuł gry, wiek dziecka i sprzęt. Odpowiedź AI to materiał do decyzji — cenę i PEGI sprawdź jeszcze w sklepie i na pegi.info.</p>
+    <div class="box">Jestem rodzicem i zastanawiam się nad grą „[TYTUŁ GRY]” dla dziecka w wieku [WIEK] lat. Gramy na: [PC / PlayStation / Xbox / Switch / telefon]. Pomóż mi ją mądrze ocenić.
 
 Cel oceny: czy ta gra daje dziecku trening, który przyda się w prawdziwym życiu, i czy nie jest zbudowana głównie po to, żeby je jak najdłużej przytrzymać. Dobra gra robi jedną rzecz bardzo dobrze, kiedyś się kończy, płaci się za nią raz i najlepiej grać w nią razem.
 
@@ -69,7 +69,7 @@ Pisz uczciwie: czego nie wiesz na pewno, napisz „nie wiem” i gdzie to sprawd
     <h2>Pełne gry za darmo, na stałe — tylko te warte czasu</h2>
     <p class="muted">Z drugiego kodu QR. Wpisz wiek dziecka i platformę. Działa najlepiej w czacie z wyszukiwaniem w internecie; można go ustawić jako zadanie co tydzień, np. w zaplanowanych działaniach Gemini.</p>
     <div class="box">Jestem rodzicem. Znajdź pełne, normalnie płatne gry, które można teraz odebrać bezpłatnie NA STAŁE i które mają sens dla dziecka w wieku [WIEK] lat. Gramy na: [Windows / Android]. Po polsku.
-Gdzie szukać: Epic Games Store (PC i Android), Steam, GOG, Google Play, itch.io, sklepy wydawców. Sprawdź ostatnie 14 dni i oferty nadal aktywne. Korzystaj z aktualnego wyszukiwania; jeśli nie masz dostępu do internetu, powiedz to wprost i nie twórz raportu.
+Gdzie szukać: Epic Games Store (PC i Android), Steam, GOG, Google Play, itch.io, sklepy wydawców. Sprawdź ostatnie 14 dni i oferty nadal aktywne. Korzystaj z aktualnego wyszukiwania; jeśli nie masz dostępu do internetu, powiedz to wprost i nie twórz raportu. Wtedy podaj mi w 3 punktach, gdzie i kiedy samemu sprawdzać takie darmowe gry i jak nie przegapić kolejnej.
 Pomijaj: dema, darmowe weekendy, wersje próbne, gry free-to-play, DLC, kosmetyki i waluty. Oferty wymagające płatnej subskrypcji podaj osobno, z tym warunkiem.
 Wybieraj jak wybredny krytyk: najlepsze w swoim gatunku, nie przeciętne. Lepiej jedna świetna gra niż sześć „na zapas”. Opieraj się na recenzjach krytyków (podaj serwis i ocenę), oceny graczy traktuj jako dodatkowy sygnał.
 Przy każdej grze napisz:
@@ -80,7 +80,7 @@ Przy każdej grze napisz:
 5. PEGI i za co; czy jest czat z obcymi.
 6. Język polski (interfejs, napisy) i czy da się grać we dwoje na jednym ekranie.
 7. Werdykt: „odbierz i zagrajcie razem”, „odbierz na później” albo „odpuść” — jednym zdaniem dlaczego.
-Nie zgaduj: „nie potwierdzono” jest lepsze niż wymyślony szczegół. Jeśli w tym tygodniu nie ma nic wartościowego, napisz to jednym zdaniem.</div>
+Nie zgaduj: „nie potwierdzono” jest lepsze niż wymyślony szczegół. Jeśli w tych 14 dniach nie ma nic wartościowego, napisz to jednym zdaniem.</div>
     <button type="button" class="copy">Kopiuj prompt</button>
     <p class="msg" aria-live="polite"></p>
   </section>
@@ -98,7 +98,7 @@ Do każdej gry napisz:
 - PEGI, język i orientacyjną cenę (zaznacz, jeśli nie jesteś pewien dzisiejszej ceny);
 - czy jest w niej coś, na co trzeba uważać (frustracja, trudny moment, rywalizacja).
 Na końcu: od której zacząć i dlaczego, jak zagrać pierwszy wieczór (kto co robi, kiedy kończymy) i jedna planszówka „na stół”, która rozwija to samo co wybrana gra.
-Nie zmyślaj tytułów ani ocen. Jeśli czegoś nie wiesz na pewno, napisz „nie wiem” i gdzie to sprawdzić (sklep, pegi.info, Common Sense Media).</div>
+Nie zmyślaj tytułów ani ocen — także planszówki: podaj taką, którą łatwo kupić w Polsce, a ceny podawaj orientacyjnie. Jeśli czegoś nie wiesz na pewno, napisz „nie wiem” i gdzie to sprawdzić (sklep, pegi.info, Common Sense Media).</div>
     <button type="button" class="copy">Kopiuj prompt</button>
     <p class="msg" aria-live="polite"></p>
   </section>
