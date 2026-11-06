@@ -3,14 +3,14 @@
 <head><meta name="robots" content="noindex, nofollow">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="description" content="Prompt dla rodzica: jak zapytać AI o grę, zanim ją kupisz. Z wykładu „Mądre granie”.">
+<meta name="description" content="Prompty dla rodzica: jak zapytać AI o grę przed zakupem, o darmowe gry, dopłaty, koniec sesji i rozmowę po grze. Z wykładu „Mądre granie”.">
 <meta name="author" content="Waldemar Wosiński">
 <meta name="tdm-reservation" content="1">
 <link rel="license" href="../../copyright.html">
 </head>
 <body>
 <nav style="font:14px/1.4 Arial,sans-serif;padding:12px max(16px,env(safe-area-inset-left,0px));display:flex;gap:16px;flex-wrap:wrap"><a href="../index.html">← ww86.eu lab</a><a href="slajdy.html">Slajdy wykładu</a><a href="index.html">Źródła wykładu</a></nav>
-<title>Mądre granie: prompt dla rodzica</title>
+<title>Mądre granie: prompty dla rodzica</title>
 <style>
 /* Layout: one narrow phone-first column — what it is, the prompt in a box, one copy button, three steps. */
 :root{--bg:#F3F5F7;--card:#FFFFFF;--ink:#14213D;--muted:#4A5568;--acc:#0E7C66;--acc-ink:#FFFFFF;--line:#D5DCE3;
@@ -28,19 +28,24 @@ ol{margin:0;padding-left:22px;display:grid;gap:6px}
 .box{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px;white-space:pre-wrap;font-size:16px;line-height:1.5;min-width:0;overflow-wrap:anywhere}
 button{font:inherit;font-weight:600;background:var(--acc);color:var(--acc-ink);border:0;border-radius:8px;padding:12px 18px;cursor:pointer;justify-self:start}
 button:focus-visible{outline:3px solid var(--ink);outline-offset:2px}
-#msg{font-size:14px;color:var(--muted);min-height:1.2em}
+.msg{font-size:14px;color:var(--muted);min-height:1.2em}
+h2{font-size:21px;line-height:1.25;margin:0}
+.p{display:grid;gap:10px;padding-top:14px;border-top:1px solid var(--line)}
+.toc{margin:0;padding-left:22px;display:grid;gap:4px}
+a{color:var(--acc)}
 footer{font-size:13px;color:var(--muted)}
 </style>
 <main>
   <div class="k">Mądre granie · wykład 6.11.2026</div>
-  <h1>Zapytaj AI, zanim kupisz grę</h1>
+  <h1>Prompty dla rodzica: zapytaj AI o grę</h1>
   <p class="muted">Nie chodzi o to, czy gra jest „dobra”, tylko czy daje dziecku coś, co zostanie poza ekranem — i czy nie jest zbudowana po to, żeby je przytrzymać.</p>
-  <ol>
-    <li>Skopiuj prompt poniżej.</li>
-    <li>Wklej go do dowolnego czatu AI.</li>
-    <li>Wpisz tytuł gry i wiek dziecka w nawiasach kwadratowych.</li>
-  </ol>
-  <div class="box" id="prompt">Jestem rodzicem i zastanawiam się nad grą „[TYTUŁ GRY]” dla dziecka w wieku [WIEK] lat. Pomóż mi ją mądrze ocenić.
+  <p>Skopiuj prompt, wklej go do dowolnego czatu AI i uzupełnij to, co jest w nawiasach kwadratowych.</p>
+  <ol class="toc"><li><a href="#ocena">Oceń grę dla dziecka</a></li><li><a href="#darmowe">Pełne gry za darmo, na stałe</a></li><li><a href="#razem">Trzy gry dla rodzica i dziecka na jednym ekranie</a></li><li><a href="#trening">Co ta gra trenuje — i czego nie</a></li><li><a href="#pieniadze">Sprawdź dopłaty i pay-to-win przed zakupem</a></li><li><a href="#koniec">Umowa o końcu gry, która sama się nie kończy</a></li><li><a href="#rozmowa">Rozmowa z dzieckiem po grze</a></li></ol>
+  <section class="p" id="ocena">
+    <div class="k">1 · Zanim kupisz</div>
+    <h2>Oceń grę dla dziecka</h2>
+    <p class="muted">Ten z kodu QR na wykładzie. Wpisz tytuł gry i wiek dziecka.</p>
+    <div class="box">Jestem rodzicem i zastanawiam się nad grą „[TYTUŁ GRY]” dla dziecka w wieku [WIEK] lat. Pomóż mi ją mądrze ocenić.
 
 Cel oceny: czy ta gra daje dziecku trening, który przyda się w prawdziwym życiu, i czy nie jest zbudowana głównie po to, żeby je jak najdłużej przytrzymać. Dobra gra robi jedną rzecz bardzo dobrze, kiedyś się kończy, płaci się za nią raz i najlepiej grać w nią razem.
 
@@ -57,17 +62,90 @@ Opowiedz mi o niej jak znajomy, który zna gry i zna dzieci:
 Na końcu: werdykt w 2–3 zdaniach (polecam / z umową / odpuścić), jak w nią grać mądrze (z kim, ile, kiedy kończymy) i jedna lepsza alternatywa, jeśli taka jest.
 
 Pisz uczciwie: czego nie wiesz na pewno, napisz „nie wiem” i gdzie to sprawdzić (sklep, pegi.info, Common Sense Media). Nie zgaduj cen ani ocen. Nie potrzebujesz żadnych danych dziecka poza wiekiem i nie oceniaj dziecka — oceniasz grę.</div>
-  <button id="copy" type="button">Kopiuj prompt</button>
-  <p id="msg" aria-live="polite"></p>
+    <button type="button" class="copy">Kopiuj prompt</button>
+    <p class="msg" aria-live="polite"></p>
+  </section>
+  <section class="p" id="darmowe">
+    <div class="k">2 · Darmowe gry</div>
+    <h2>Pełne gry za darmo, na stałe</h2>
+    <p class="muted">Też z kodu QR. Wpisz platformę i wiek dziecka. Można ustawić jako zadanie co tydzień, np. w Gemini (zaplanowane działania).</p>
+    <div class="box">Przygotuj po polsku listę pełnych, normalnie płatnych gier, które można teraz odebrać bezpłatnie NA STAŁE. Platformy: [Windows / Android]. Dziecko: [WIEK] lat.
+Sprawdź ostatnie 14 dni i oferty nadal aktywne: Epic Games Store (PC i Android), Steam, GOG, Google Play, itch.io, sklepy wydawców.
+Pomijaj: dema, darmowe weekendy, gry free-to-play, DLC, kosmetyki, waluty. Oferty wymagające płatnej subskrypcji podaj osobno, z tym warunkiem.
+Przy każdej grze sprawdź: czy ma koniec; czy to pełna gra, czy wersja z dopłatami; PEGI wobec wieku dziecka; czy jest po polsku; czy da się grać we dwoje na jednym ekranie.
+Podaj tylko gry, które przechodzą: płacisz raz (tu: zero), bez haczyka na dopłaty. Wybieraj najlepsze w gatunku, nie przeciętne.
+Format: maks. 6 pozycji: gra · platforma · do kiedy (czas polski) · PEGI · dlaczego warto · link do odbioru.
+Nie zgaduj: „nie potwierdzono” jest lepsze niż zmyślony szczegół. Jeśli nic wartościowego nie ma, napisz to jednym zdaniem.</div>
+    <button type="button" class="copy">Kopiuj prompt</button>
+    <p class="msg" aria-live="polite"></p>
+  </section>
+  <section class="p" id="razem">
+    <div class="k">3 · Na jednej kanapie</div>
+    <h2>Trzy gry dla rodzica i dziecka na jednym ekranie</h2>
+    <div class="box">Podaj 3 gry dla rodzica i dziecka w wieku [N] lat, granych razem na jednym ekranie
+(local co-op / split-screen / hot-seat), na [PLATFORMA], w cenie do [BUDŻET] zł.
+Warunki: płatna raz na początku, bez mikropłatności, po polsku lub bez potrzeby czytania.
+Do każdej gry: dlaczego jest dobra do wspólnej gry, co ćwiczy, czy ma koniec, cena orientacyjna.
+Jeśli czegoś nie masz pewności (język, cena dziś), napisz to wprost.
+Na końcu: którą zacząć i jak sprawdzić ją przed zakupem (sklep, pegi.info).</div>
+    <button type="button" class="copy">Kopiuj prompt</button>
+    <p class="msg" aria-live="polite"></p>
+  </section>
+  <section class="p" id="trening">
+    <div class="k">4 · Po co ta gra</div>
+    <h2>Co ta gra trenuje — i czego nie</h2>
+    <div class="box">Rozłóż grę [TYTUŁ] na części. Najpierw: co realnie ćwiczy (planowanie, logika, refleks,
+współpraca, czytanie, kreatywność) — dla każdego wpisu powiedz, skąd to wiesz, i odróżnij
+twarde dowody z badań od „prawdopodobnie, bo taka mechanika". Potem: czego NIE ćwiczy
+i co w niej jest puste albo tylko bawi. Na końcu jedna rada: jak zagrać w nią z dzieckiem,
+żeby to, co dobre, przeniosło się poza ekran (wspólne wyzwania, własne cele, rozmowa o emocjach).</div>
+    <button type="button" class="copy">Kopiuj prompt</button>
+    <p class="msg" aria-live="polite"></p>
+  </section>
+  <section class="p" id="pieniadze">
+    <div class="k">5 · Pieniądze</div>
+    <h2>Sprawdź dopłaty i pay-to-win przed zakupem</h2>
+    <div class="box">Sprawdź grę [TYTUŁ] pod kątem pieniędzy. Odpowiedz punktami:
+1. Ile kosztuje na start i na jakiej platformie (podaj cenę z oficjalnego sklepu)?
+2. Czy są zakupy w trakcie gry: DLC, waluty, skrzynki losowe, karnety sezonowe, subskrypcje? Ile łącznie?
+3. Czy można wygrać za pieniądze (pay-to-win) albo gra naciska na dopłacanie (energia, FOMO, oferty czasowe)?
+4. Czy od czerwca 2026 ma PEGI 16/18 za „paid random items"?
+Zaznacz, czego nie potwierdziłeś. Jeśli wszystko czyste, napisz to też.</div>
+    <button type="button" class="copy">Kopiuj prompt</button>
+    <p class="msg" aria-live="polite"></p>
+  </section>
+  <section class="p" id="koniec">
+    <div class="k">6 · Koniec sesji</div>
+    <h2>Umowa o końcu gry, która sama się nie kończy</h2>
+    <div class="box">Pomóż mi ustalić z dzieckiem ([WIEK] lat) koniec sesji w grze [TYTUŁ], która sama się nie kończy
+([brak końca / tryb endless / jedna kolejka pociąga kolejną]). Zaproponuj:
+1. trzy sposoby naturalnego punktu zapisu w tej konkretnej grze;
+2. jedno zdanie, którym powiem, że gra nie ucieknie, bo rzeczywistość ma pierwszeństwo;
+3. małą nagrodę albo następny apetyczny punkt, na który umówimy się na jutro.
+Bez moralizowania. Krótko, do rozmowy z dzieckiem, nie do wykładu.</div>
+    <button type="button" class="copy">Kopiuj prompt</button>
+    <p class="msg" aria-live="polite"></p>
+  </section>
+  <section class="p" id="rozmowa">
+    <div class="k">7 · Po grze</div>
+    <h2>Rozmowa z dzieckiem po grze</h2>
+    <div class="box">Daj mi 5 krótkich pytań na rozmowę z dzieckiem ([WIEK] lat) po zagraniu w [TYTUŁ]:
+o emocje (co zaskoczyło, co frustrowało), o decyzje (co byś zrobił inaczej),
+o pomysł na własne wyzwanie na następny raz. Pytania mają być konkretne do tej gry,
+nie ogólne. Ostatnie pytanie ma łączyć grę z prawdziwym życiem (to, co ćwiczy, w domu albo na dworze).</div>
+    <button type="button" class="copy">Kopiuj prompt</button>
+    <p class="msg" aria-live="polite"></p>
+  </section>
+
   <p class="muted">AI potrafi się mylić, zwłaszcza przy cenach i kategorii wiekowej. Cenę i PEGI sprawdź jeszcze w sklepie i na pegi.info.</p>
   <footer>Nie wpisuj imienia ani innych danych dziecka — wystarczy wiek.<br>© 2026 Waldemar Wosiński. Wszelkie prawa zastrzeżone, również w zakresie eksploracji tekstów i danych (art. 26³ ustawy o prawie autorskim i prawach pokrewnych). Strona rozwijana z użyciem systemów agentowych. <a href="../../copyright.html">Warunki korzystania</a></footer>
 </main>
 <script>
-document.getElementById('copy').addEventListener('click', async () => {
-  const t = document.getElementById('prompt').innerText, m = document.getElementById('msg');
-  try { await navigator.clipboard.writeText(t); m.textContent = 'Skopiowane. Wklej w czacie AI.'; }
-  catch (e) { const r = document.createRange(); r.selectNodeContents(document.getElementById('prompt')); const s = getSelection(); s.removeAllRanges(); s.addRange(r); m.textContent = 'Tekst zaznaczony — skopiuj go (Kopiuj).'; }
-});
+document.querySelectorAll('.copy').forEach(b => b.addEventListener('click', async () => {
+  const sec = b.closest('section'), box = sec.querySelector('.box'), m = sec.querySelector('.msg');
+  try { await navigator.clipboard.writeText(box.innerText); m.textContent = 'Skopiowane. Wklej w czacie AI.'; }
+  catch (e) { const r = document.createRange(); r.selectNodeContents(box); const s = getSelection(); s.removeAllRanges(); s.addRange(r); m.textContent = 'Tekst zaznaczony — skopiuj go ręcznie.'; }
+}));
 </script>
 
 </body>
