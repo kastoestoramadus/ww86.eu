@@ -14,17 +14,11 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Rubik:wght@500;600&family=Nunito+Sans:wght@400;600;700&display=swap">
 <style>
 /* Layout: one reading column; curated list first, full searchable base below */
-:root{
-  --bg:#F3F5F7; --surface:#FFFFFF; --ink:#14213D; --muted:#4A5568; --line:#D5DCE3;
-  --accent:#0E7C66; --accent-soft:#E2F2EE; --warn:#C2410C;
-  --display:'Rubik',Arial,sans-serif; --body:'Nunito Sans',Arial,sans-serif;
-}
-@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
-  --bg:#0F1A2E; --surface:#16233B; --ink:#E8EDF3; --muted:#A9B6C6; --line:#2A3A55;
-  --accent:#4FC7AA; --accent-soft:#173A36; --warn:#F09A6B; color-scheme:dark}}
-:root[data-theme="dark"]{
-  --bg:#0F1A2E; --surface:#16233B; --ink:#E8EDF3; --muted:#A9B6C6; --line:#2A3A55;
-  --accent:#4FC7AA; --accent-soft:#173A36; --warn:#F09A6B; color-scheme:dark}
+:root{--bg:#0F1A2E; --surface:#16233B; --ink:#E8EDF3; --muted:#A9B6C6; --line:#2A3A55;
+  --accent:#4FC7AA; --accent-soft:#173A36; --warn:#F09A6B;
+  --display:'Rubik',Arial,sans-serif; --body:'Nunito Sans',Arial,sans-serif;color-scheme:dark}
+:root[data-theme="light"]{--bg:#F3F5F7; --surface:#FFFFFF; --ink:#14213D; --muted:#4A5568; --line:#D5DCE3;
+  --accent:#0E7C66; --accent-soft:#E2F2EE; --warn:#C2410C;color-scheme:light}
 body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.5}
 .wrap{max-width:980px;margin:0 auto;padding-block:40px 64px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:40px}
 header{display:flex;flex-direction:column;gap:10px}
