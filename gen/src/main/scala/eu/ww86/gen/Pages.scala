@@ -227,6 +227,11 @@ object Pages:
           |<g fill="var(--accent)">
           |<circle cx="14.4" cy="9.2" r="1.55"/><circle cx="20.4" cy="9.9" r="1.7"/>
           |</g>""".stripMargin
+      case "madre-granie" =>
+        // a gamepad: a cross on the left, two buttons on the right
+        """<path d="M8 4.5 C 3.5 4.5, 2 9, 2.5 14 C 3 19, 5.5 21.5, 8 21.5 C 10 21.5, 11 18.5, 14 18.5 C 17 18.5, 18 21.5, 20 21.5 C 22.5 21.5, 25 19, 25.5 14 C 26 9, 24.5 4.5, 20 4.5 Z" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/>
+          |<path d="M8.5 9.5 v6 M5.5 12.5 h6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          |<circle cx="18" cy="13.8" r="1.6" fill="var(--accent)"/><circle cx="21.2" cy="10.6" r="1.6" fill="currentColor"/>""".stripMargin
       case "ursus-by-train" =>
         """<path d="M3.5 22.5 C 9 18, 8.5 12, 14 11.5 C 19.5 11, 20 15.5, 24.5 10.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
           |<circle cx="3.5" cy="22.5" r="2.1" fill="currentColor"/>
