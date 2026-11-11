@@ -238,6 +238,12 @@ object Pages:
           |<circle cx="8.75" cy="15.5" r="1.7" fill="currentColor"/>
           |<circle cx="19.6" cy="12.7" r="1.7" fill="currentColor"/>
           |<circle cx="24.5" cy="10.5" r="2.3" fill="var(--accent)"/>""".stripMargin
+      case "polityka-polska" =>
+        // chapter bars over a baseline: a report read domain by domain
+        """<path d="M5 19.5 V 13.5" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/>
+          |<path d="M14 19.5 V 4.5" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/>
+          |<path d="M23 19.5 V 10" stroke="var(--accent)" stroke-width="2.6" stroke-linecap="round"/>
+          |<path d="M2.5 22.5 H 25.5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>""".stripMargin
       case _ =>
         """<path d="M14 4.5 C 20.5 4.5, 24.5 9, 24.5 14.5 C 24.5 20.5, 19.5 23.5, 13.5 23.5 C 8 23.5, 3.5 19.5, 3.5 14 C 3.5 8.5, 8 4.5, 14 4.5 Z" fill="none" stroke="currentColor" stroke-width="2.2"/>
           |<circle cx="10.5" cy="11.5" r="2.2" fill="var(--accent)"/>""".stripMargin
