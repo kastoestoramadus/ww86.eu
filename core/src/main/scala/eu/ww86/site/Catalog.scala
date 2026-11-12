@@ -31,6 +31,14 @@ object Catalog:
   /** Newest first - this order is what the pages show. */
   val items: List[LabItem] = List(
     LabItem(
+      slug = "polityka-polska",
+      title = "Poland explained, chapter by chapter",
+      blurb = "Polish public policy from public data, chapter by chapter: baselines for eight domains, appraisals of options in six portfolios, a city-class comparison, and a robustness re-ranking under three weight vectors. Every number carries its source; no ranking is presented as objective. In Polish.",
+      tech = List("Markdown", "public data APIs"),
+      year = 2026,
+      language = Language.Polish
+    ),
+    LabItem(
       slug = "madre-granie",
       title = "Smart play: sources and prompts for parents",
       blurb = "Material for a talk for parents on guiding children through video games (Warsaw, November 2026): every source behind it, searchable, about 1,600 studies, reports, rating services and store pages, and four prompts for asking an AI about games: before buying, free games worth the time, playing together, and ending a session and talking after play.",
