@@ -1,0 +1,22 @@
+{
+ "format": "pokedex-galeria-styles-out",
+ "format_version": "1.0.0",
+ "generated": "2026-10-29T11:32:09+00:00",
+ "pairing_ok": true,
+ "styles": [
+  {
+   "key": "smoki",
+   "label": "Dragons",
+   "count": 151,
+   "with_images": 151,
+   "images": 453
+  },
+  {
+   "key": "pojazdy",
+   "label": "Vehicles",
+   "count": 151,
+   "with_images": 151,
+   "images": 453
+  }
+ ]
+}
