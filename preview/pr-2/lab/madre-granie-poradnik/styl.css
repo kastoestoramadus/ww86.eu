@@ -1,0 +1,108 @@
+/* Mądre granie — jeden wspólny arkusz. Bez zewnętrznych zasobów, działa offline. */
+* { box-sizing: border-box; }
+html { font-size: 17px; }
+body {
+  margin: 0 auto;
+  max-width: 46rem;
+  padding: 0 1rem 3rem;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  line-height: 1.55;
+  color: #1f2430;
+  background: #fbfaf7;
+}
+header.top {
+  border-bottom: 3px solid #2f6f4f;
+  padding: 0.8rem 0 0.6rem;
+  margin-bottom: 1.2rem;
+}
+header.top .brand {
+  display: inline-block;
+  background: #2f6f4f;
+  color: #fff;
+  font-weight: 700;
+  padding: 0.15rem 0.6rem;
+  border-radius: 4px;
+  letter-spacing: 0.02em;
+}
+header.top p.tagline { margin: 0.5rem 0 0; font-size: 1.05rem; }
+h1 { font-size: 1.55rem; line-height: 1.25; margin: 0 0 0.6rem; }
+h2 { font-size: 1.2rem; margin: 1.6rem 0 0.5rem; border-left: 4px solid #2f6f4f; padding-left: 0.5rem; }
+h3 { font-size: 1.02rem; margin: 1.1rem 0 0.3rem; }
+p, li { max-width: 42rem; }
+ul, ol { padding-left: 1.2rem; }
+li { margin: 0.25rem 0; }
+nav.menu { margin: 0.8rem 0 0; display: flex; flex-wrap: wrap; gap: 0.4rem; }
+nav.menu a {
+  text-decoration: none;
+  background: #eef3ef;
+  color: #22563d;
+  border: 1px solid #cfdcd3;
+  border-radius: 999px;
+  padding: 0.25rem 0.7rem;
+  font-size: 0.92rem;
+}
+nav.menu a:hover, nav.menu a:focus { background: #dcebe1; }
+footer.stopka {
+  margin-top: 2.2rem;
+  border-top: 1px solid #cfdcd3;
+  padding-top: 0.7rem;
+  font-size: 0.9rem;
+  color: #4c5566;
+}
+footer.stopka nav { display: flex; flex-wrap: wrap; gap: 0.3rem 0.9rem; }
+a { color: #22563d; }
+.sl {
+  background: #f3f0e4;
+  border: 1px dashed #b8ad84;
+  border-radius: 6px;
+  padding: 0.55rem 0.8rem;
+  margin: 1.4rem 0 0;
+  font-weight: 600;
+}
+.sl::before { content: "Na slajd: "; color: #7a6a2f; }
+.sila { font-size: 0.85rem; color: #56606f; }
+.uwaga {
+  background: #fdf3f0;
+  border-left: 4px solid #b35b3e;
+  padding: 0.5rem 0.8rem;
+  border-radius: 4px;
+}
+table { border-collapse: collapse; width: 100%; margin: 0.6rem 0; font-size: 0.95rem; }
+th, td { border: 1px solid #cfd6de; padding: 0.35rem 0.5rem; text-align: left; vertical-align: top; }
+th { background: #eef1f4; }
+.pytanie {
+  background: #eef3ef;
+  border: 1px solid #cfdcd3;
+  border-radius: 8px;
+  padding: 0.7rem 0.9rem;
+  margin: 0.7rem 0;
+}
+.pytanie h3 { margin-top: 0; }
+pre.prompt {
+  background: #1f2430;
+  color: #e8e6df;
+  padding: 0.7rem 0.9rem;
+  border-radius: 6px;
+  overflow-x: auto;
+  white-space: pre-wrap;
+  font-size: 0.85rem;
+  line-height: 1.45;
+}
+.gry { list-style: none; padding: 0; }
+.gry li {
+  border: 1px solid #cfdcd3;
+  border-radius: 8px;
+  padding: 0.6rem 0.8rem;
+  margin: 0.5rem 0;
+  background: #fff;
+}
+.gry b.nazwa { font-size: 1.02rem; }
+@media (max-width: 430px) {
+  html { font-size: 16px; }
+  table { font-size: 0.88rem; }
+  th, td { padding: 0.25rem 0.35rem; }
+}
+@media print {
+  nav.menu, footer.stopka nav { display: none; }
+  body { max-width: none; }
+}

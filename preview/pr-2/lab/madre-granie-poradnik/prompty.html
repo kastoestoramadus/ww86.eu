@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head><meta name="robots" content="noindex, nofollow">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI dla rodzica: prompty, które pracują</title>
+<link rel="stylesheet" href="styl.css">
+<meta name="author" content="Waldemar Wosiński">
+<meta name="tdm-reservation" content="1">
+<link rel="license" href="../../copyright.html">
+</head>
+<body>
+<nav style="font:14px/1.4 Arial,sans-serif;padding:8px 16px"><a href="../index.html">← ww86.eu lab</a></nav>
+
+<header class="top">
+  <span class="brand">Mądre granie</span>
+  <nav class="menu">
+    <a href="index.html">Start</a>
+    <a href="sklad-gry.html">Skład gry</a>
+    <a href="gry.html">Gry</a>
+    <a href="pieniadze.html">Pieniądze</a>
+    <a href="kontrola-rodzicielska.html">Kontrola rodzicielska</a>
+    <a href="recenzje.html">Recenzje i darmowe</a>
+    <a href="kanaly.html">Kanały wideo</a>
+    <a href="zrodla.html">Źródła</a>
+  </nav>
+</header>
+
+<main>
+<h1>AI dla rodzica: gotowe prompty</h1>
+<p>Sztuczna inteligencja świetnie pomaga <em>zaplanować</em> granie w rodzinie: umowę, rozmowę, wybór gry.
+Nie jest źródłem prawdy o grach: ceny, modele płatności i wiek sprawdzaj w sklepie, a odpowiedzi AI
+traktuj jako szkic do przeczytania krytycznie. Zasady bezpieczeństwa: <strong>nigdy nie wklejaj do czatu
+imion ani zdjęć dziecka</strong> — same obserwacje, liczby i przykłady bez danych osobowych.</p>
+
+<h2>Prompt 1: wybierz grę dla TEGO dziecka</h2>
+<pre class="prompt">Pomóż mi wybrać jedną grę dla mojego dziecka. Wiek: [WIEK]; zainteresowania poza grami: [CO LUBI];
+gry, które uwielbiało i czemu: [JAKIE]; platformy w domu: [SPRZĘT]; budżet: [KWOTA].
+Zasady rodzinne, których gra musi dotrzymać: kończy się lub ma naturalne punkty zakończenia;
+płatność raz, bez zakupów w grze i reklam; da się grać razem na jednym ekranie; bez gry online z obcymi.
+Podaj dokładnie 5 kandydatów. Dla każdego: tytuł, platforma, dlaczego pasuje do TEGO dziecka (jedno zdanie
+powiązane z profilem), co ćwiczy (jedno zdanie, obserwowalne), jak zwykle kończy się sesja, model płatności.
+Na końcu: którą kupiłbyś najpierw i co zmieniłoby Twoją decyzję. Nie polecaj gier, których nie jesteś pewien;
+mów otwarcie, gdy nie wiesz.</pre>
+
+<h2>Prompt 2: oceń konkretną grę przed zakupem</h2>
+<pre class="prompt">Oceń grę [TYTUŁ] ([PLATFORMA]) dla dziecka w wieku [WIEK] lat. Odpowiedz na każdej osi, zaznaczając
+„NIE WIEM", gdy nie możesz zweryfikować: 1. Co ćwiczy z tego, czego szkoła rzadko uczy? 2. Czy robi jedną
+rzecz dobrze, czy wypełnia czas pętlami codziennych nagród i eventami „tylko dziś"? 3. Model płatności
+w oficjalnym sklepie dziś (cena, dodatki, abonament, reklamy, losowe skrzynki). 4. Czy się kończy?
+Jak wygląda naturalne zakończenie sesji; czy jest pauza i zapis w dowolnym momencie? 5. Gra wspólna
+na jednym ekranie? Przekazywanie padów? Obcy online, czat? 6. Strategia i współpraca, czy pompowanie ego?
+Werdykt: kupić / poczekać na obniżkę / odpuścić, z jednym rozstrzygającym powodem. Wypisz, czego
+nie udało Ci się zweryfikować.</pre>
+
+<h2>Prompt 3: umowa tygodniowa pisana z dzieckiem</h2>
+<pre class="prompt">Zredaguj tygodniową umowę o graniu dla dziecka w wieku [WIEK] lat. Kontekst: dni szkolne [DNI];
+obowiązki, które muszą być wykonane [OBOWIĄZKI]; bieżący problem [NP. AWANTURA PRZY WYŁĄCZANIU].
+Umowę dziecko współpodpisuje, więc napisz ją jako NASZĄ umowę z 3 lukami, które dziecko samo uzupełnia
+(wyboru obowiązku przed grą, jednego weekendowego pomysłu poza ekranem, jednego własnego punktu).
+Ujęj: kiedy granie wypada w zwykłym tygodniu (przy jakich wydarzeniach-kotwicach, nie gołe godziny);
+jak kończy się sesja (ostrzeżenie 10 minut przed, stop przy zapisie); co się dzieje, gdy umowa pęknie
+(jedna łagodna konsekwencja, potem rozmowa o zmianie — konfiskata nie jako pierwsza reakcja);
+jak dziecko ZARABIA elastyczność (np. dwa czyste tygodnie = wybór slotu weekendowego); data miesięcznego
+przeglądu. Maksymalnie jedna strona, prostymi słowami.</pre>
+
+<h2>Prompt 4: koniec sesji bez awantury</h2>
+<pre class="prompt">Moje dziecko ([WIEK] lat) przy każdym kończeniu sesji targuje się („jeszcze jedną", „nie mogę zapisać!").
+Gra: [TYTUŁ]; jak działa w niej zapis: [ZAPIS]. Napisz mi: (1) dwa zdania do powiedzenia 10 minut
+przed umówionym końcem, powiązane z tym, jak TA gra się zapisuje; (2) dokładne zdanie zakończenia — spokojne,
+bez zapraszania do dyskusji, uznające, że trudno przerwać w emocjach; (3) jedną kwestię rytuału kończenia,
+który dziecko wybiera samo (np. zapisanie miejsca, plan pierwszego ruchu na jutro); (4) co robię, gdy targi
+się pojawią: jedno empatyczne zdanie + trzymanie granicy, i czego NIE mówię. Maksymalnie 200 słów.</pre>
+
+<h2>Prompt 5: rozmowa o emocjach po grze</h2>
+<pre class="prompt">Moje dziecko ([WIEK] lat) skończyło sesję w grze [TYTUŁ]. Stan, który widziałem: [NP. TRZASNĄŁ PADem
+PO PRZEGRANEJ / SKAKAŁO Z RADOŚCI / BYŁO CICHE]. Daj mi: (1) jedno zdanie otwierające, które nazywa
+to, co widziałem, bez oceniania; (2) trzy pytania o uczucie w grze (frustracja? duma? bezradność?),
+dopasowane do wieku; (3) listę 6 słów na ten stan wykraczających poza „zły/dobry"; (4) jedno zdanie
+potwierdzające uczucie (jeśli zachowanie było złe — o zachowaniu powiem osobno, spokojnie); (5) po czym
+poznać, że dziecko potrzebuje teraz ciszy, nie rozmowy. Maksymalnie 250 słów.</pre>
+
+<h2>Prompt 6: obserwacja, nie diagnoza</h2>
+<pre class="prompt">Opiszę zachowanie mojego dziecka z OSTATNICH 4 TYGODNI samymi obserwacjami (bez etykiet):
+[OBSERWACJE: sen, szkoła, obowiązki, kończenie sesji, nastrój, ukrywanie, pieniądze].
+Zadania: (1) pogrupuj na: zwykłe targowanie się, osuwanie się umowy (do naprawienia w rodzinie),
+wzorce do pokazania specjaliście — opisowo, bez diagnoz i słów typu „uzależniony". (2) Powiedz, czego
+wymaga opis WHO dotyczący zaburzenia z grania (utrata kontroli, granie ważniejsze niż życie, trwanie mimo
+szkody, zwykle ok. roku) i porównaj z moimi obserwacjami BEZ wyciągania wniosku. (3) Dwa kroki rodzinne
+na [CZAS] i dokładny znak, że idziemy w tym miesiącu do pediatry lub psychologa dziecięcego. (4) Jedno
+zdanie, jak powiedzieć dziecku o zmianie tak, żeby nie stało się „problemem".</pre>
+
+<h2>A gry z AI? Jeszcze nie</h2>
+<p>Gier ze sztuczną inteligencją w środku (NPC rozmawiające po polsku, generowane światy) jeszcze nie
+sprawdziliśmy na tej stronie; traktuj je wyłącznie jako temat dodatkowy, dopóki ktoś ich nie wypróbuje
+i nie opisze. Na dziś uczciwa odpowiedź brzmi: brak danych.</p>
+<p class="sl">AI do planowania, sklep do faktów: umowa, rozmowa i wybór gry — tak, diagnozy i ceny — nie.</p>
+</main>
+
+<footer class="stopka">
+  <nav>
+    <a href="index.html">Start</a> ·
+    <a href="sklad-gry.html">Skład gry</a> ·
+    <a href="gry.html">Gry</a> ·
+    <a href="pieniadze.html">Pieniądze</a> ·
+    <a href="kontrola-rodzicielska.html">Kontrola</a> ·
+    <a href="recenzje.html">Recenzje i darmowe</a> ·
+    <a href="kanaly.html">Kanały</a> ·
+    <a href="zrodla.html">Źródła</a>
+  </nav>
+  <p>Prompty to pomoc w redagowaniu (konstrukcja praktyczna), nie dowód skuteczności; nie wklejać danych osobowych dziecka.</p>
+</footer>
+<div style="font:13px/1.5 Arial,sans-serif;color:#4A5568;padding:16px;border-top:1px solid #ddd">© 2026 Waldemar Wosiński. Wszelkie prawa zastrzeżone, również w zakresie eksploracji tekstów i danych (art. 26³ ustawy o prawie autorskim i prawach pokrewnych). Strona rozwijana z użyciem systemów agentowych. <a href="../../copyright.html">Warunki korzystania</a></div>
+</body>
+</html>
